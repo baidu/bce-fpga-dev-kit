@@ -4933,7 +4933,7 @@ static struct xdma_char * create_xvc_interface(struct xdma_dev *lro)
 
 	/* bring character device live */
     /*XXX what the fuck? XDMA_MINOR_COUNT*/
-	rc = cdev_add(&lro_char->cdev, lro_char->cdevno, XDMA_MINOR_COUNT);
+	rc = cdev_add(&lro_char->cdev, lro_char->cdevno, 1);
 	if (rc < 0) {
 		dbg_init("cdev_add() = %d\n", rc);
 		goto fail_add;
@@ -5970,7 +5970,7 @@ static struct xdma_char *create_sg_char(struct xdma_dev *lro, int bar,
 	}
 
 	/* bring character device live */
-	rc = cdev_add(&lro_char->cdev, lro_char->cdevno, XDMA_MINOR_COUNT);
+	rc = cdev_add(&lro_char->cdev, lro_char->cdevno, 1);
 	if (rc < 0) {
 		dbg_init("cdev_add() = %d\n", rc);
 		goto fail_add;
