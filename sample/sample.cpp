@@ -30,16 +30,16 @@ int main(int argc, char **argv) {
     assert(ret == 0);
 
     /* wr reg float_a_addr */
-    ret = reg_write_32(0, 64 * 1024 + 4, float_a_addr / 32);
+    ret = reg_write_32(0, 64 * 1024 + 4, float_a_addr);
     assert(ret == 0);
     /* wr reg float_b_addr */
-    ret = reg_write_32(0, 64 * 1024 + 8, float_b_addr / 32);
+    ret = reg_write_32(0, 64 * 1024 + 8, float_b_addr);
     assert(ret == 0);
     /* wr reg float_c_addr */
-    ret = reg_write_32(0, 64 * 1024 + 12, float_c_addr / 32);
+    ret = reg_write_32(0, 64 * 1024 + 12, float_c_addr);
     assert(ret == 0);
     /* wr reg float_array_len */
-    ret = reg_write_32(0, 64 * 1024 + 16, 1);
+    ret = reg_write_32(0, 64 * 1024 + 16, 8);
     assert(ret == 0);
     /* wr reg start_pe */
     ret = reg_write_32(0, 64 * 1024, 1);
