@@ -27,7 +27,7 @@
 #include <linux/version.h>
 #include <linux/uio.h>
 
-#include "xvc_pcie_driver.h"
+#include "xvc-pcie-driver.h"
 
 /* SECTION: Preprocessor switches */
 
