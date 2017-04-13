@@ -52,7 +52,7 @@ struct pcie_user_config {
 static const struct pcie_user_config user_config = {
 	.config_space 	= AUTO,
 	.bar_index      = 0x0,
-	.bar_offset 	= 0x0,
+	.bar_offset 	= 0x20000,
 };
 
 #endif /* _XVC_PCIE_USER_CONFIG_H */

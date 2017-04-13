@@ -50,7 +50,7 @@ long setup_xvc_algo(struct xdma_dev *lro)
             } else {
                 // XXX: add user specified BAR offset to base address of mapping,
                 // modify it accordingly
-                algo->offset.bar = lro->bar[0] + user_config.bar_offset;
+                algo->offset.bar = lro->bar[user_config.bar_index] + user_config.bar_offset;
                 /*
                  *algo->offset.bar =
                  *        pci_iomap(xvc_char->pci_dev, bar_index, map_len) + user_config.bar_offset;
