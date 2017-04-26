@@ -2,14 +2,17 @@
 CC ?= gcc
 CXX ?= g++
 
-all: sample
+all: sample sample_user_irq
 
 sample: sample.o fpga_cloud.o
+	$(CXX) -lrt -lpthread -o $@ $^ -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGE_FILE_SOURCE
+
+sample_user_irq: sample_user_irq.o fpga_cloud.o
 	$(CXX) -lrt -lpthread -o $@ $^ -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGE_FILE_SOURCE
 
 %.o: %.cpp
 	$(CXX) -c -std=c++0x -o $@ $< -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGE_FILE_SOURCE
 
 clean:
-	rm -rf *.o sample
+	rm -rf *.o sample sample_user_irq
 
