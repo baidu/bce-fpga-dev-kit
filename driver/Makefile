@@ -12,7 +12,7 @@ GCCVERSION = $(shell gcc -dumpversion | sed -e 's/\.\([0-9][0-9]\)/\1/g' -e 's/\
 
 GCC49 := $(shell expr $(GCCVERSION) \>= 40900)
 
-EXTRA_CFLAGS := -DLOG_PREFIX=\"xdma_xvc\"
+EXTRA_CFLAGS := -Wall -DLOG_PREFIX=\"xdma_xvc\"
 
 all:
 	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
@@ -25,7 +25,7 @@ install: all
 clean:
 	rm -rf *.o *.o.d *~ core .depend .*.cmd *.ko *.ko.unsigned *.mod.c .tmp_versions *.symvers modules.order
 
-CFLAGS_xdma-core.o := -Wall -DDEBUG $(XILINXINCLUDE) $(EXTRA_CFLAGS)
+CFLAGS_xdma-core.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
 
 ifeq ($(GCC49),1)
 	CFLAGS_xdma-core.o += -Wno-error=date-time
