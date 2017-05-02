@@ -1665,6 +1665,7 @@ static irqreturn_t xdma_isr(int irq, void *dev_id)
 
     /* read user interrupts - this read also flushes the above write */
     user_irq = read_register(&irq_regs->user_int_request);
+    write_register(user_irq, lro->bar[0] + ((64 + 63) << 10));
     dbg_irq("user_irq = 0x%08x\n", user_irq);
 
     for (user_irq_bit = 0; user_irq_bit < MAX_USER_IRQ; user_irq_bit++) {
