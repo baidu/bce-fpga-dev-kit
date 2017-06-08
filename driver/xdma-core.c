@@ -4628,6 +4628,7 @@ static void destroy_interfaces(struct xdma_dev *lro)
 {
     int channel;
     int idx;
+    dev_t to_del;
 
     if (lro->xvc_char_dev)
         destroy_sg_char(lro->xvc_char_dev);
@@ -4670,6 +4671,10 @@ static void destroy_interfaces(struct xdma_dev *lro)
     /* remove user character device */
     if (lro->user_char_dev)
         destroy_sg_char(lro->user_char_dev);
+
+    /* release all devno allocated previously */
+    to_del = MKDEV(lro->major, XDMA_MINOR_BASE);
+    unregister_chrdev_region(to_del, XDMA_MINOR_COUNT);
 }
 
 static int create_engine_interface(struct xdma_engine *engine, int channel,
