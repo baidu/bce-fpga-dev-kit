@@ -20,17 +20,16 @@
 #ifndef _XVC_PCIE_USER_CONFIG_H
 #define _XVC_PCIE_USER_CONFIG_H
 
-
 enum pcie_config_space {
-	AUTO,
-	CONFIG,
-	BAR
+    AUTO,
+    CONFIG,
+    BAR
 };
 
 struct pcie_user_config {
-	enum pcie_config_space config_space;
-	unsigned int bar_index;
-	unsigned int bar_offset;
+    enum pcie_config_space config_space;
+    unsigned int bar_index;
+    unsigned int bar_offset;
 };
 
 /*
@@ -46,13 +45,14 @@ struct pcie_user_config {
  *                    should be used to access the AXI-XVC peripheral.
  */
 
-#define PCIE_VENDOR_ID	0x10EE
-#define PCIE_DEVICE_ID	0x9038
+#define PCIE_VENDOR_ID 0x10EE
+#define PCIE_DEVICE_ID 0x9038
 
 static const struct pcie_user_config user_config = {
-	.config_space 	= AUTO,
-	.bar_index      = 0x0,
-	.bar_offset 	= 0x20000,
+    .config_space = AUTO,
+    .bar_index    = 0x0,
+    .bar_offset   = 0x20000, /* 128K */
 };
 
 #endif /* _XVC_PCIE_USER_CONFIG_H */
+

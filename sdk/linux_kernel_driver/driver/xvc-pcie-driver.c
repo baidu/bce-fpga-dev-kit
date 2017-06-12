@@ -19,18 +19,15 @@
 
 #include <linux/pci.h>
 #include <linux/mod_devicetable.h>
-
 #include <linux/types.h>
 #include <linux/kdev_t.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
 #include <linux/slab.h>
-
-#include <asm/uaccess.h>
-
 #include <linux/spinlock.h>
 #include <linux/platform_device.h>
 #include <linux/list.h>
+#include <asm/uaccess.h>
 
 #ifdef INCLUDE_CUSTOM_MMCONFIG
 #include "xvc-mmconfig.h"
@@ -40,7 +37,7 @@
 
 static const size_t XVC_VSEC_ID = 0x0008;
 
-#define VALID_OFFSET(a) (a < 0x1000 && a >= 0x100)
+#define VALID_OFFSET(a) ((a < 0x1000) && (a >= 0x100))
 
 struct xvc_offsets {
     size_t debug_id_reg_offset;
@@ -64,10 +61,9 @@ static const struct xvc_offsets xvc_offsets[] = {
 #define TDO_REG_OFFSET      (xvc_offsets[algo->type].tdo_reg_offset)
 #define CONTROL_REG_OFFSET  (xvc_offsets[algo->type].control_reg_offset)
 
-int pci_read32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 *value) {
-
-    switch(algo->type)
-    {
+int pci_read32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 *value)
+{
+    switch(algo->type) {
         case XVC_ALGO_BAR:
             *value = ioread32(algo->offset.bar + offset);
             return 0;
@@ -85,13 +81,12 @@ int pci_read32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 *va
     return -1;
 }
 
-int pci_write32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 value) {
-
-    switch(algo->type)
-    {
+int pci_write32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 value)
+{
+    switch(algo->type) {
         case XVC_ALGO_BAR:
             iowrite32(value, algo->offset.bar + offset);
-            return (0);
+            return 0;
         case XVC_ALGO_CFG:
 #ifndef INCLUDE_CUSTOM_MMCONFIG
             // Use this function for use with 32-bit systems
@@ -124,7 +119,7 @@ static int xil_xvc_shift_bits(struct pci_dev *pci_dev, struct xvc_algo_t *algo, 
     }
 
     // poll status to wait for completion
-    if (algo->type == XVC_ALGO_BAR)	{
+    if (algo->type == XVC_ALGO_BAR) {
         // Enable shift operation
         status = pci_write32(pci_dev, algo, CONTROL_REG_OFFSET, 0x01);
         if (status != 0) {
@@ -137,12 +132,12 @@ static int xil_xvc_shift_bits(struct pci_dev *pci_dev, struct xvc_algo_t *algo, 
             if (status != 0) {
                 return status;
             }
-            if ((control_reg_data & 0x01) == 0)	{
+            if ((control_reg_data & 0x01) == 0) {
                 break;
             }
             count--;
         }
-        if (count == 0)	{
+        if (count == 0) {
             printk(KERN_ERR LOG_PREFIX "XVC bar transaction timed out (%0X)\n", control_reg_data);
             return -ETIMEDOUT;
         }
@@ -185,7 +180,7 @@ ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const ch
     num_bytes = (num_bits + 7) / 8;
 
     // Allocate and copy data into temporary buffers
-    tms_buf_temp = (char*) kmalloc(num_bytes, GFP_KERNEL);
+    tms_buf_temp = (char*)kmalloc(num_bytes, GFP_KERNEL);
     if (tms_buf_temp == NULL) {
         status = -ENOMEM;
         goto cleanup;
@@ -194,7 +189,7 @@ ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const ch
         goto cleanup;
     }
 
-    tdi_buf_temp = (char*) kmalloc(num_bytes, GFP_KERNEL);
+    tdi_buf_temp = (char*)kmalloc(num_bytes, GFP_KERNEL);
     if (tdi_buf_temp == NULL) {
         status = -ENOMEM;
         goto cleanup;
@@ -204,7 +199,7 @@ ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const ch
     }
 
     // Allocate TDO buffer
-    tdo_buf_temp = (char*) kmalloc(num_bytes, GFP_KERNEL);
+    tdo_buf_temp = (char*)kmalloc(num_bytes, GFP_KERNEL);
     if (tdo_buf_temp == NULL) {
         status = -ENOMEM;
         goto cleanup;
@@ -294,8 +289,7 @@ int xil_xvc_get_offset(struct pci_dev *pci_dev, size_t *offset) {
         .offset.cfg = 0
     };
 
-    while (VALID_OFFSET(i))
-    {
+    while (VALID_OFFSET(i)) {
         unsigned word = 0x0;
         unsigned id;
 
@@ -321,15 +315,13 @@ int xil_xvc_get_offset(struct pci_dev *pci_dev, size_t *offset) {
         i = word >> 20;
     }
 
-    if (VALID_OFFSET(i))
-    {
+    if (VALID_OFFSET(i)) {
         // found capability
         if (offset) *offset = i;
-    }
-    else
-    {
+    } else {
         status = -ENXIO;
     }
 
     return status;
 }
+

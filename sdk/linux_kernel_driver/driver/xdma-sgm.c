@@ -70,7 +70,7 @@ struct sg_mapping_t *sg_create_mapper(unsigned long max_len)
     pr_debug("sg_mapping_t *sgm=0x%p\n", sgm);
     pr_debug("sgm->pages=0x%p\n", sgm->pages);
     return sgm;
-};
+}
 
 /*
  * sg_destroy_mapper() - Destroy a mapper for virtual memory to scatterlist.
@@ -88,7 +88,7 @@ void sg_destroy_mapper(struct sg_mapping_t *sgm)
     /* free mapper handle */
     kfree(sgm);
     pr_debug("Freed page pointer and scatterlist.\n");
-};
+}
 
 /*
  * sgm_map_user_pages() - Get user pages and build a scatterlist.
@@ -135,8 +135,7 @@ int sgm_get_user_pages(struct sg_mapping_t *sgm, const char *start, size_t count
     sg_init_table(sgl, nr_pages);
 
     pr_debug("pages=0x%p\n", pages);
-    pr_debug("start = 0x%llx.\n",
-            (unsigned long long)start);
+    pr_debug("start = 0x%llx.\n", (unsigned long long)start);
     pr_debug("first = %lu, last = %lu\n", first, last);
 
     for (i = 0; i < nr_pages - 1; i++) {
@@ -288,8 +287,7 @@ int sgm_kernel_pages(struct sg_mapping_t *sgm, const char *start, size_t count, 
     sg_init_table(sgl, nr_pages);
 
     pr_debug("pages=0x%p\n", pages);
-    pr_debug("start = 0x%llx.\n",
-            (unsigned long long)start);
+    pr_debug("start = 0x%llx.\n", (unsigned long long)start);
     pr_debug("first = %lu, last = %lu\n", first, last);
 
     /* get pages belonging to vmalloc()ed space */

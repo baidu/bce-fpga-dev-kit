@@ -1,5 +1,6 @@
 #include <linux/ioctl.h>
 #include <linux/types.h>
+
 #include "xdma-ioctl.h"
 #include "xdma-core.h"
 #include "xdma-sgm.h"
@@ -91,8 +92,7 @@ static long xvc_ioctl(struct file *file_p, unsigned int cmd, unsigned long arg) 
     spin_lock(&file_p->f_path.dentry->d_inode->i_lock);
     /*spin_lock_irqsave(&file_p->f_path.dentry->d_inode->i_lock, pci_config_lock_flags);*/
 
-    switch (cmd)
-    {
+    switch (cmd) {
         case XDMA_IOCXVC:
             status = xil_xvc_ioctl(lro->pci_dev, &xvc_char->xvc_algo, (void __user *)arg);
             break;
@@ -122,7 +122,8 @@ static int xvc_open(struct inode *inode, struct file *file)
 }
 
 struct file_operations xil_xvc_ioc_ops = {
-    .owner = THIS_MODULE,
-    .open = xvc_open,
+    .owner          = THIS_MODULE,
+    .open           = xvc_open,
     .unlocked_ioctl = xvc_ioctl,
 };
+

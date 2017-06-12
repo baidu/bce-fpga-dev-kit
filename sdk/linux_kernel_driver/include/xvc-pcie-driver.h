@@ -20,29 +20,29 @@
 #ifndef _XVC_PCIE_DRIVER_H
 #define _XVC_PCIE_DRIVER_H
 
-
 #include "xvc-pcie-ioctl.h"
 
 enum xvc_algo_type {
-	XVC_ALGO_NULL,
-	XVC_ALGO_CFG,
-	XVC_ALGO_BAR
+    XVC_ALGO_NULL,
+    XVC_ALGO_CFG,
+    XVC_ALGO_BAR
 };
 
 struct xvc_algo_t {
-	enum xvc_algo_type type;
-	union offset_t {
-		void* __iomem bar;
-		size_t cfg;
-	} offset;
+    enum xvc_algo_type type;
+    union offset_t {
+        void* __iomem bar;
+        size_t cfg;
+    } offset;
 };
 
 struct xil_xvc_char {
-	struct pci_dev *pci_dev;
-	struct xvc_algo_t xvc_algo;
+    struct pci_dev *pci_dev;
+    struct xvc_algo_t xvc_algo;
 };
 
 ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const char __user *arg);
 int xil_xvc_get_offset(struct pci_dev *pci_dev, size_t *offset);
 
 #endif /* _XVC_PCIE_DRIVER_H */
+

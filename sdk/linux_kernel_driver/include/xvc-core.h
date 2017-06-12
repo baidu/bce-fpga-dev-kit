@@ -10,3 +10,4 @@
 long setup_xvc_algo(struct xdma_dev *lro);
 
 extern struct file_operations xil_xvc_ioc_ops;
+

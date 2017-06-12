@@ -50,36 +50,33 @@ static inline u32 MCapRegRead(struct xdma_dev *mdev, int offset)
     return value;
 }
 
-
-#define IsResetSet(mdev)			\
-    (MCapRegRead(mdev, MCAP_CONTROL) &	\
+#define IsResetSet(mdev)                \
+    (MCapRegRead(mdev, MCAP_CONTROL) &  \
      MCAP_CTRL_RESET_MASK ? 1 : 0)
 
-#define IsModuleResetSet(mdev)			\
-    (MCapRegRead(mdev, MCAP_CONTROL) &	\
+#define IsModuleResetSet(mdev)          \
+    (MCapRegRead(mdev, MCAP_CONTROL) &  \
      MCAP_CTRL_MOD_RESET_MASK ? 1 : 0)
 
-#define IsConfigureMCapReqSet(mdev)		\
-    (MCapRegRead(mdev, MCAP_STATUS) &	\
+#define IsConfigureMCapReqSet(mdev)     \
+    (MCapRegRead(mdev, MCAP_STATUS) &   \
      MCAP_STS_CFG_MCAP_REQ_MASK ? 1 : 0)
 
-#define IsErrSet(mdev)				\
-    (MCapRegRead(mdev, MCAP_STATUS) &	\
+#define IsErrSet(mdev)                  \
+    (MCapRegRead(mdev, MCAP_STATUS) &   \
      MCAP_STS_ERR_MASK ? 1 : 0)
 
-#define IsRegReadComplete(mdev)			\
-    (MCapRegRead(mdev, MCAP_STATUS) &	\
+#define IsRegReadComplete(mdev)         \
+    (MCapRegRead(mdev, MCAP_STATUS) &   \
      MCAP_STS_REG_READ_CMP_MASK ? 1 : 0)
 
-#define IsFifoOverflow(mdev)			\
-    (MCapRegRead(mdev, MCAP_STATUS) &	\
+#define IsFifoOverflow(mdev)            \
+    (MCapRegRead(mdev, MCAP_STATUS) &   \
      MCAP_STS_FIFO_OVERFLOW_MASK ? 1 : 0)
 
-#define GetRegReadCount(mdev)			\
-    ((MCapRegRead(mdev, MCAP_STATUS) &	\
+#define GetRegReadCount(mdev)           \
+    ((MCapRegRead(mdev, MCAP_STATUS) &  \
       MCAP_STS_REG_READ_COUNT_MASK) >> 5)
-
-
 
 static int MCapClearRequestByConfigure(struct xdma_dev *mdev, u32 *restore)
 {
@@ -111,15 +108,13 @@ static int MCapClearRequestByConfigure(struct xdma_dev *mdev, u32 *restore)
     return 0;
 }
 
-
-static int Checkforcompletion(struct xdma_dev *mdev)
+static int CheckForCompletion(struct xdma_dev *mdev)
 {
     unsigned long retry_count = 0;
     int sr, i;
 
     sr = MCapRegRead(mdev, MCAP_STATUS);
     while (!(sr & MCAP_STS_EOS_MASK)) {
-
         msleep(2000);
         for (i=0 ; i < EMCAP_EOS_LOOP_COUNT; i++) {
             MCapRegWrite(mdev, MCAP_DATA, EMCAP_NOOP_VAL);
@@ -150,8 +145,7 @@ static int MCapFullReset(struct xdma_dev *mdev)
         MCAP_CTRL_RESET_MASK | MCAP_CTRL_MOD_RESET_MASK;
     MCapRegWrite(mdev, MCAP_CONTROL, set);
 
-    if (IsErrSet(mdev) || !(IsModuleResetSet(mdev)) ||
-            !(IsResetSet(mdev))) {
+    if (IsErrSet(mdev) || !(IsModuleResetSet(mdev)) || !(IsResetSet(mdev))) {
         printk(KERN_ERR "Failed to Full Reset\n");
         MCapRegWrite(mdev, MCAP_CONTROL, restore);
         return -EIO;
@@ -168,7 +162,7 @@ static int wait_for_done(struct xdma_dev *lro)
     u32 w;
     int i = 0;
 
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
     for (i = 0; i < 10; i++) {
         udelay(5);
         w = read_register(lro->bar[lro->user_bar_idx] + XHWICAP_SR);
@@ -179,7 +173,6 @@ static int wait_for_done(struct xdma_dev *lro)
     printk(KERN_DEBUG "%d us timeout waiting for FPGA after bitstream download\n", 5 * 10);
     return -EIO;
 }
-
 
 static int hwicapWrite(struct xdma_dev *lro, const u32 *word_buf, int size)
 {
@@ -199,7 +192,6 @@ static int hwicapWrite(struct xdma_dev *lro, const u32 *word_buf, int size)
         if ((value & 0x1) == 0)
             return 0;
         ndelay(50);
-
     }
     printk(KERN_DEBUG "%d us timeout waiting for FPGA after writing %d dwords\n", 50 * 10, size);
     return -EIO;
@@ -227,12 +219,11 @@ static int bitstream_parse_header(const unsigned char *Data, unsigned int Size, 
     /* Read in "magic" */
     for (I = 0; I < Header->MagicLength - 1; I++) {
         Tmp = Data[Index++];
-        if (I%2 == 0 && Tmp != XHI_EVEN_MAGIC_BYTE)
+        if (I % 2 == 0 && Tmp != XHI_EVEN_MAGIC_BYTE)
             return -1;   /* INVALID_FILE_HEADER_ERROR */
 
-        if (I%2 == 1 && Tmp != XHI_ODD_MAGIC_BYTE)
+        if (I % 2 == 1 && Tmp != XHI_ODD_MAGIC_BYTE)
             return -1;   /* INVALID_FILE_HEADER_ERROR */
-
     }
 
     /* Read null end of magic data. */
@@ -244,15 +235,12 @@ static int bitstream_parse_header(const unsigned char *Data, unsigned int Size, 
 
     /* Check the "0x01" half word */
     if (Tmp != 0x01)
-        return -1;	 /* INVALID_FILE_HEADER_ERROR */
-
-
+        return -1; /* INVALID_FILE_HEADER_ERROR */
 
     /* Read 'a' */
     Tmp = Data[Index++];
     if (Tmp != 'a')
-        return -1;	  /* INVALID_FILE_HEADER_ERROR	*/
-
+        return -1;  /* INVALID_FILE_HEADER_ERROR */
 
     /* Get Design Name length */
     Len = Data[Index++];
@@ -265,15 +253,13 @@ static int bitstream_parse_header(const unsigned char *Data, unsigned int Size, 
     for (I = 0; I < Len; I++)
         Header->DesignName[I] = Data[Index++];
 
-
     if (Header->DesignName[Len-1] != '\0')
         return -1;
 
     /* Read 'b' */
     Tmp = Data[Index++];
     if (Tmp != 'b')
-        return -1;	/* INVALID_FILE_HEADER_ERROR */
-
+        return -1;  /* INVALID_FILE_HEADER_ERROR */
 
     /* Get Part Name length */
     Len = Data[Index++];
@@ -292,8 +278,7 @@ static int bitstream_parse_header(const unsigned char *Data, unsigned int Size, 
     /* Read 'c' */
     Tmp = Data[Index++];
     if (Tmp != 'c')
-        return -1;	/* INVALID_FILE_HEADER_ERROR */
-
+        return -1;  /* INVALID_FILE_HEADER_ERROR */
 
     /* Get date length */
     Len = Data[Index++];
@@ -312,7 +297,7 @@ static int bitstream_parse_header(const unsigned char *Data, unsigned int Size, 
     /* Read 'd' */
     Tmp = Data[Index++];
     if (Tmp != 'd')
-        return -1;	/* INVALID_FILE_HEADER_ERROR  */
+        return -1;  /* INVALID_FILE_HEADER_ERROR  */
 
     /* Get time length */
     Len = Data[Index++];
@@ -331,7 +316,7 @@ static int bitstream_parse_header(const unsigned char *Data, unsigned int Size, 
     /* Read 'e' */
     Tmp = Data[Index++];
     if (Tmp != 'e')
-        return -1;	/* INVALID_FILE_HEADER_ERROR */
+        return -1;  /* INVALID_FILE_HEADER_ERROR */
 
     /* Get byte length of bitstream */
     Header->BitstreamLength = Data[Index++];
@@ -437,7 +422,7 @@ long bitstream_clear_icap(struct xdma_dev *lro)
     const char *buffer;
     unsigned length;
 
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
     buffer = lro->stash.clear_bitstream;
     if (!buffer)
         return 0;
@@ -478,15 +463,15 @@ static long bitstream_ioctl_icap(struct xdma_dev *lro, const char __user *bit_bu
         goto free_buffers;
     }
 
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
-    //	printk(KERN_DEBUG "bitstream pointer %p length %lu\n", bit_buf, length);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "bitstream pointer %p length %lu\n", bit_buf, length);
 
     if (copy_from_user(buffer, bit_buf, DMA_HWICAP_BITFILE_BUFFER_SIZE)) {
         err = -EFAULT;
         goto free_buffers;
     }
 
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
 
     if (bitstream_parse_header(buffer, DMA_HWICAP_BITFILE_BUFFER_SIZE, &bit_header)) {
         err = -EINVAL;
@@ -500,7 +485,7 @@ static long bitstream_ioctl_icap(struct xdma_dev *lro, const char __user *bit_bu
 
     bit_buf += bit_header.HeaderLength;
 
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
 
     for (byte_read = 0; byte_read < bit_header.BitstreamLength; byte_read += numCharsRead) {
         numCharsRead = bit_header.BitstreamLength - byte_read;
@@ -515,7 +500,7 @@ static long bitstream_ioctl_icap(struct xdma_dev *lro, const char __user *bit_bu
         if (bitstream_icap_helper(lro, (u32 *)buffer, numCharsRead / 4))
             goto free_buffers;
     }
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
 
     if (wait_for_done(lro)) {
         err = -EIO;
@@ -529,7 +514,7 @@ free_buffers:
     kfree(bit_header.PartName);
     kfree(bit_header.Date);
     kfree(bit_header.Time);
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
     return err;
 }
 
@@ -543,8 +528,7 @@ static long bitstream_mcap_setup(struct xdma_dev *lro, u32 *restore, bool design
     if (err)
         return err;
 
-    if (IsErrSet(lro) || IsRegReadComplete(lro) ||
-            IsFifoOverflow(lro)) {
+    if (IsErrSet(lro) || IsRegReadComplete(lro) || IsFifoOverflow(lro)) {
         printk(KERN_ERR "Failed to initialize configuring FPGA\n");
         MCapRegWrite(lro, MCAP_CONTROL, *restore);
         err = -EIO;
@@ -553,12 +537,10 @@ static long bitstream_mcap_setup(struct xdma_dev *lro, u32 *restore, bool design
 
     /* Set 'Mode', 'In Use by PCIe' and 'Data Reg Protect' bits */
     set = MCapRegRead(lro, MCAP_CONTROL);
-    set |= MCAP_CTRL_MODE_MASK | MCAP_CTRL_IN_USE_MASK |
-        MCAP_CTRL_DATA_REG_PROT_MASK;
+    set |= MCAP_CTRL_MODE_MASK | MCAP_CTRL_IN_USE_MASK | MCAP_CTRL_DATA_REG_PROT_MASK;
 
     /* Clear 'Reset', 'Module Reset' and 'Register Read' bits */
-    set &= ~(MCAP_CTRL_RESET_MASK | MCAP_CTRL_MOD_RESET_MASK |
-            MCAP_CTRL_REG_READ_MASK);
+    set &= ~(MCAP_CTRL_RESET_MASK | MCAP_CTRL_MOD_RESET_MASK | MCAP_CTRL_REG_READ_MASK);
     if (design_switch)
         set &= ~MCAP_CTRL_DESIGN_SWITCH_MASK;
 
@@ -594,7 +576,7 @@ long bitstream_clear_mcap(struct xdma_dev *lro)
     unsigned length;
     XHwIcap_Bit_Header bit_header;
 
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
     buffer = lro->stash.clear_bitstream;
     if (!buffer)
         return 0;
@@ -697,7 +679,7 @@ static long bitstream_ioctl_mcap(struct xdma_dev *lro, const void __user *bit_bu
         bitstream_mcap_helper(lro, (u32 *)buffer, numCharsRead / 4);
     }
 
-    err = Checkforcompletion(lro);
+    err = CheckForCompletion(lro);
 
     if (err || IsErrSet(lro) || IsFifoOverflow(lro)) {
         printk(KERN_ERR "Failed to Write Bitstream\n");
@@ -936,7 +918,7 @@ long bitstream_mcap(struct xdma_dev *lro, const char *buffer, unsigned length)
     bitstream_mcap_helper(lro, data, len);
 
     /* Check for Completion */
-    err = Checkforcompletion(lro);
+    err = CheckForCompletion(lro);
 
     if (err || IsErrSet(lro) || IsFifoOverflow(lro)) {
         printk(KERN_ERR "Failed to Write Bitstream\n");
@@ -958,5 +940,6 @@ free_buffers:
     kfree(bit_header.Time);
     return err;
 }
+
 #endif /* SD_ACCEL */
 

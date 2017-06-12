@@ -8,7 +8,7 @@
 
 #include "perfmon_parameters.h"
 
-#define XILINX_VENDOR_ID 0x10EE
+#define XILINX_VENDOR_ID        0x10EE
 
 //parameters for HWICAP, Flash and APM on PCIe BAR
 #define OCL_CTLR_OFFSET         0x000000
@@ -71,17 +71,18 @@
 #define XHWICAP_WFV             HWICAP_OFFSET+0x114
 #define XHWICAP_RFO             HWICAP_OFFSET+0x118
 #define XHWICAP_ASR             HWICAP_OFFSET+0x11c
+
 /**
 * This typedef contains bitstream header information.
 */
 typedef struct {
-  unsigned int HeaderLength;     /* Length of header in 32 bit words */
-  unsigned int BitstreamLength;  /* Length of bitstream to read in bytes*/
-  unsigned char *DesignName;     /* Design name read from bitstream header */
-  unsigned char *PartName;       /* Part name read from bitstream header */
-  unsigned char *Date;           /* Date read from bitstream header */
-  unsigned char *Time;           /* Bitstream creation time read from header */
-  unsigned int MagicLength;      /* Length of the magic numbers in header */
+    unsigned int HeaderLength;     /* Length of header in 32 bit words */
+    unsigned int BitstreamLength;  /* Length of bitstream to read in bytes*/
+    unsigned char *DesignName;     /* Design name read from bitstream header */
+    unsigned char *PartName;       /* Part name read from bitstream header */
+    unsigned char *Date;           /* Date read from bitstream header */
+    unsigned char *Time;           /* Bitstream creation time read from header */
+    unsigned int MagicLength;      /* Length of the magic numbers in header */
 } XHwIcap_Bit_Header;
 
 /*

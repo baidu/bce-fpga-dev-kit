@@ -35,26 +35,27 @@
 
 /* Static virtual mapping of the MMCONFIG aperture */
 struct mmcfg_virt {
-	struct acpi_mcfg_allocation *cfg;
-	char __iomem *virt;
+    struct acpi_mcfg_allocation *cfg;
+    char __iomem *virt;
 };
+
 static struct mmcfg_virt *pci_mmcfg_virt;
 
 static char __iomem *get_virt(unsigned int seg, unsigned bus)
 {
-	struct acpi_mcfg_allocation *cfg;
-	int cfg_num;
+    struct acpi_mcfg_allocation *cfg;
+    int cfg_num;
 
-	for (cfg_num = 0; cfg_num < pci_mmcfg_config_num; cfg_num++) {
-		cfg = pci_mmcfg_virt[cfg_num].cfg;
-        if (cfg->pci_segment == seg &&
+    for (cfg_num = 0; cfg_num < pci_mmcfg_config_num; cfg_num++) {
+        cfg = pci_mmcfg_virt[cfg_num].cfg;
+        if ((cfg->pci_segment == seg) &&
                 (cfg->start_bus_number <= bus) &&
                 (cfg->end_bus_number >= bus))
             return pci_mmcfg_virt[cfg_num].virt;
     }
 
-	/* Fall back to type 0 */
-	return NULL;
+    /* Fall back to type 0 */
+    return NULL;
 }
 
 static char __iomem *pci_dev_base(unsigned int seg, unsigned int bus, unsigned int devfn)
@@ -186,5 +187,6 @@ int __section(.text) pci_mmcfg_arch_init(void)
 
 void __section(.text) pci_mmcfg_arch_free(void)
 {
-	arch_cleanup();
+    arch_cleanup();
 }
+

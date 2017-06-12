@@ -25,12 +25,12 @@
 #include <linux/pci.h>
 #include <linux/vmalloc.h>
 
-
 #include "xdma-core.h"
 #include "xdma-ioctl.h"
 #include "xbar_sys_parameters.h"
 
 #if SD_ACCEL
+
 /*
  * Precomputed table with divide and divide_fractional values together
  * with target frequency. The steps are 25 MHz apart, the fractional
@@ -75,7 +75,6 @@ static int reinit(struct xdma_dev *lro)
     return rc;
 }
 
-
 static unsigned compute_unit_busy(struct xdma_dev *lro)
 {
     int i = 0;
@@ -94,19 +93,18 @@ static unsigned compute_unit_busy(struct xdma_dev *lro)
     return result;
 }
 
-
 void freezeAXIGate(struct xdma_dev *lro)
 {
     u8 w = 0x0;
     u32 t;
 
     BUG_ON(lro->axi_gate_frozen);
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
     t = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
-    //	printk("Register %x\n", t);
+    //printk("Register %x\n", t);
     iowrite8(w, lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET);
     t = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
-    //	printk("Register %x\n", t);
+    //printk("Register %x\n", t);
     lro->axi_gate_frozen = 1;
     printk(KERN_DEBUG "%s: Froze AXI gate\n", DRV_NAME);
 }
@@ -121,31 +119,31 @@ void freeAXIGate(struct xdma_dev *lro)
     u32 t;
 
     BUG_ON(!lro->axi_gate_frozen);
-    //	printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
+    //printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
     t = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
-    //	printk("Register %x\n", t);
+    //printk("Register %x\n", t);
     iowrite8(w, lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET);
     ndelay(500);
 
     w = 0x0;
     t = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
-    //	printk("Register %x\n", t);
+    //printk("Register %x\n", t);
     iowrite8(w, lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET);
     ndelay(500);
 
     w = 0x2;
     t = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
-    //	printk("Register %x\n", t);
+    //printk("Register %x\n", t);
     iowrite8(w, lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET);
     ndelay(500);
 
     w = 0x3;
     t = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
-    //	printk("Register %x\n", t);
+    //printk("Register %x\n", t);
     iowrite8(w, lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET);
     ndelay(500);
     t = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
-    //	printk("Register %x\n", t);
+    //printk("Register %x\n", t);
     lro->axi_gate_frozen = 0;
     printk(KERN_DEBUG "%s: Un-froze AXI gate\n", DRV_NAME);
 }
@@ -204,7 +202,7 @@ static u64 get_ocl_frequency(const struct xdma_dev *lro)
         printk(KERN_ERR "%s: ClockWiz Invalid divider 0\n", DRV_NAME);
         return 0;
     }
-    freq = (input * mul0)/div0;
+    freq = (input * mul0) / div0;
     printk(KERN_INFO "%s: ClockWiz OCL Frequency %lld\n", DRV_NAME, freq);
     return freq;
 }
@@ -260,7 +258,6 @@ static long reset_ocl_ioctl(struct xdma_char *lro_char)
     return compute_unit_busy(lro) ? -EBUSY : 0;
 }
 
-
 /**
  * Simple implementation of device reset using PCIe hot reset
  * Toggle a special bit in the PCI_MIN_GNT config byte of connected
@@ -309,7 +306,7 @@ static long reset_hot_ioctl(struct xdma_char *lro_char)
     /* Save the card's PCIe config space */
 
     for (i = 0; i < 0x100; i += 4) {
-        pci_read_config_dword(pdev, i, &pci_cfg[i/4]);
+        pci_read_config_dword(pdev, i, &pci_cfg[i / 4]);
     }
 
     pci_read_config_byte(pdev->bus->self, PCI_MIN_GNT, &hot);
@@ -325,16 +322,16 @@ static long reset_hot_ioctl(struct xdma_char *lro_char)
 
     /* Restore the card's PCIe config space */
     for (i = 0; i < 0x100; i += 4)
-        pci_write_config_dword(pdev, i, pci_cfg[i/4]);
+        pci_write_config_dword(pdev, i, pci_cfg[i / 4]);
 
     ssleep(1);
 
     /* Verify we were able to restore card's PCIe config space */
     for (i = 0; i < 0x100; i += 4) {
-        pci_read_config_dword(pdev, i, &pci_cfg2[i/4]);
-        if (pci_cfg2[i/4] != pci_cfg[i/4])
+        pci_read_config_dword(pdev, i, &pci_cfg2[i / 4]);
+        if (pci_cfg2[i / 4] != pci_cfg[i / 4])
             printk(KERN_WARNING "%s: Unable to restore config dword at %x (%x->%x) for card %d in slot %s:%02x:%1x\n",
-                    DRV_NAME, i, pci_cfg[i/4], pci_cfg2[i/4], lro->instance, ep_name, PCI_SLOT(pdev->devfn),
+                    DRV_NAME, i, pci_cfg[i / 4], pci_cfg2[i / 4], lro->instance, ep_name, PCI_SLOT(pdev->devfn),
                     PCI_FUNC(pdev->devfn));
     }
 
@@ -430,7 +427,6 @@ done:
     return err;
 }
 
-
 long char_ctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 {
     struct xdma_dev *lro;
@@ -482,7 +478,6 @@ long char_ctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
     }
     return 0;
 }
-
 
 long reset_device_if_running(struct xdma_dev *lro)
 {
