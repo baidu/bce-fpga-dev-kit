@@ -1,4 +1,3 @@
-# d52cbaca0ef8cf4fd3d6354deb5066970fb6511d02d18d15835e6014ed847fb0
 CC ?= gcc
 CXX ?= g++
 
