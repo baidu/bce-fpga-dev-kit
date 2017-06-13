@@ -1,0 +1,47 @@
+{
+   guistr: "# # String gsaved with Nlview 6.6.5b  2016-09-06 bk=1.3687 VDI=39 GEI=35 GUI=JA:1.6
+#  -string -flagsOSRD
+preplace port s_axi_aclk -pg 1 -y 730 -defaultsOSRD
+preplace port S_AXI_LITE -pg 1 -y 340 -defaultsOSRD
+preplace port S_AXI -pg 1 -y 690 -defaultsOSRD
+preplace port s_axi_aresetn -pg 1 -y 750 -defaultsOSRD
+preplace port usr_clk -pg 1 -y 880 -defaultsOSRD
+preplace port i_soft_rst_n -pg 1 -y 620 -defaultsOSRD
+preplace portBus usr_irq_req -pg 1 -y 370 -defaultsOSRD
+preplace portBus usr_irq_ack -pg 1 -y 360 -defaultsOSRD
+preplace inst axi_bram_ctrl_0_bram -pg 1 -lvl 5 -y 800 -defaultsOSRD
+preplace inst util_vector_logic_0 -pg 1 -lvl 1 -y 630 -defaultsOSRD
+preplace inst usr_counter_0 -pg 1 -lvl 1 -y 880 -defaultsOSRD
+preplace inst example_0 -pg 1 -lvl 2 -y 180 -defaultsOSRD
+preplace inst system_ila2 -pg 1 -lvl 2 -y 550 -defaultsOSRD
+preplace inst axi_interconnect_1 -pg 1 -lvl 3 -y 780 -defaultsOSRD
+preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 1 -y 400 -defaultsOSRD
+preplace inst axi_bram_ctrl_0 -pg 1 -lvl 4 -y 800 -defaultsOSRD
+preplace netloc S_AXI_LITE_1 1 0 1 NJ
+preplace netloc i_soft_rst_n_1 1 0 1 NJ
+preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 1 1 440
+preplace netloc s_axi_aclk_1 1 0 4 0J 770 420 770 830 930 1130
+preplace netloc s_axi_aresetn_1 1 0 4 10 750 NJ 750 820 940 1140
+preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 1 5 390J 370 NJ 370 NJ 370 NJ 370 N
+preplace netloc axi_bram_ctrl_0_BRAM_PORTA 1 4 1 N
+preplace netloc usr_irq_ack_1 1 0 2 0J 250 400
+preplace netloc example_0_ap_done 1 0 2 20 80 470
+preplace netloc axislave_cu_apctrl_0_ap_start 1 1 1 480
+preplace netloc axi_bram_ctrl_0_BRAM_PORTB 1 4 1 N
+preplace netloc util_vector_logic_0_Res 1 1 1 430
+preplace netloc example_0_m_axi_a_V 1 2 1 830
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 1 1 500
+preplace netloc S00_AXI_1 1 0 3 NJ 690 380J 730 820J
+preplace netloc example_0_ap_idle 1 0 2 30J 100 NJ
+preplace netloc usr_clk_1 1 0 1 NJ
+preplace netloc example_0_ap_ready 1 0 2 40 120 410
+preplace netloc axislave_cu_apctrl_0_array_len 1 1 1 490
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 1 1 460
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 1 1 510
+preplace netloc axi_interconnect_1_M00_AXI 1 3 1 N
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 1 1 520
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 1 1 450
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 1 1 380
+levelinfo -pg 1 -20 210 670 990 1270 1510 1630 -top -10 -bot 1560
+",
+}

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:component xmlns:xilinx="http://www.xilinx.com" xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>xilinx.com</spirit:vendor>
+  <spirit:library>customized_ip</spirit:library>
+  <spirit:name>ddr4_temp</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:choices>
+    <spirit:choice>
+      <spirit:name>choice_list_09ec3310</spirit:name>
+      <spirit:enumeration>Single</spirit:enumeration>
+      <spirit:enumeration>Dual</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_26805873</spirit:name>
+      <spirit:enumeration>Components</spirit:enumeration>
+      <spirit:enumeration>UDIMMs</spirit:enumeration>
+      <spirit:enumeration>SODIMMs</spirit:enumeration>
+      <spirit:enumeration>RDIMMs</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_c89503c8</spirit:name>
+      <spirit:enumeration>ROW_BANK_COLUMN</spirit:enumeration>
+      <spirit:enumeration>BANK_ROW_COLUMN</spirit:enumeration>
+      <spirit:enumeration>ROW_COLUMN_BANK</spirit:enumeration>
+      <spirit:enumeration>ROW_COLUMN_BANK_INTLV</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_ed30197c</spirit:name>
+      <spirit:enumeration>TDM</spirit:enumeration>
+      <spirit:enumeration>ROUND_ROBIN</spirit:enumeration>
+      <spirit:enumeration>RD_PRI_REG</spirit:enumeration>
+      <spirit:enumeration>RD_PRI_REG_STARVE_LIMIT</spirit:enumeration>
+      <spirit:enumeration>WRITE_PRIORITY_REG</spirit:enumeration>
+      <spirit:enumeration>WRITE_PRIORITY</spirit:enumeration>
+    </spirit:choice>
+  </spirit:choices>
+  <spirit:description>ddr4 parameters</spirit:description>
+  <spirit:parameters>
+    <spirit:parameter>
+      <spirit:name>Component_Name</spirit:name>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Component_Name" spirit:order="1">ddr4_temp</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>TIMEPERIOD_PS</spirit:name>
+      <spirit:displayName>Timeperiod Ps</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.TIMEPERIOD_PS"/>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>MEMORY_TYPE</spirit:name>
+      <spirit:displayName>Memory Type</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.MEMORY_TYPE" spirit:choiceRef="choice_list_26805873">Components</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>MEMORY_PART</spirit:name>
+      <spirit:displayName>Memory Part</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.MEMORY_PART"/>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CUSTOM_PARTS</spirit:name>
+      <spirit:displayName>Custom Parts</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.CUSTOM_PARTS"/>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>DATA_WIDTH</spirit:name>
+      <spirit:displayName>Data Width</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.DATA_WIDTH"/>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>SLOT</spirit:name>
+      <spirit:displayName>Slot</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.SLOT" spirit:choiceRef="choice_list_09ec3310">Single</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CS_ENABLED</spirit:name>
+      <spirit:displayName>Enable Chip Select Pin</spirit:displayName>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.CS_ENABLED">true</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>DATA_MASK_ENABLED</spirit:name>
+      <spirit:displayName>Data Mask</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.DATA_MASK_ENABLED">NONE</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>MEM_ADDR_MAP</spirit:name>
+      <spirit:displayName>Memory Address Map</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.MEM_ADDR_MAP" spirit:choiceRef="choice_list_c89503c8">ROW_BANK_COLUMN</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>BURST_LENGTH</spirit:name>
+      <spirit:displayName>Burst Length</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.BURST_LENGTH">8</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>AXI_ARBITRATION_SCHEME</spirit:name>
+      <spirit:displayName>Arbitration Scheme</spirit:displayName>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.AXI_ARBITRATION_SCHEME" spirit:choiceRef="choice_list_ed30197c">TDM</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CAS_LATENCY</spirit:name>
+      <spirit:displayName>Cas Latency</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.CAS_LATENCY">13</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
+      <spirit:name>CAS_WRITE_LATENCY</spirit:name>
+      <spirit:displayName>Cas Write Latency</spirit:displayName>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.CAS_WRITE_LATENCY">9</spirit:value>
+    </spirit:parameter>
+  </spirit:parameters>
+  <spirit:vendorExtensions>
+    <xilinx:coreExtensions>
+      <xilinx:displayName>ddr4</xilinx:displayName>
+      <xilinx:coreRevision>1</xilinx:coreRevision>
+      <xilinx:tags>
+        <xilinx:tag xilinx:name="nopcore"/>
+      </xilinx:tags>
+    </xilinx:coreExtensions>
+    <xilinx:packagingInfo>
+      <xilinx:xilinxVersion>2015.3.0</xilinx:xilinxVersion>
+    </xilinx:packagingInfo>
+  </spirit:vendorExtensions>
+</spirit:component>

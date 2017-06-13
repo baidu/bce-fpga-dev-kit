@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xd:acceleratorMap xmlns:xd="http://www.xilinx.com/xidane" xd:functionName="example" xd:componentRef="example" xd:initiationInterval="271875" xd:clockPeriod="4.000000" xd:sequential="true" xd:hostMachine="64" xd:reset="control">
+  <xd:controlReg xd:name="control" xd:interfaceRef="ap_ctrl" xd:busTypeRef="acc_handshake" xd:type="acc_handshake"/>
+  <xd:arg xd:name="*(a)" xd:originalName="a" xd:direction="inout" xd:interfaceRef="m_axi_a_V" xd:busTypeRef="aximm" xd:arraySize="512" xd:dataWidth="256" xd:bufferDirection="inout"/>
+  <xd:arg xd:name="n" xd:originalName="n" xd:direction="in" xd:interfaceRef="n_V" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="16"/>
+  <xd:arg xd:name="a_addr" xd:originalName="a_addr" xd:direction="in" xd:interfaceRef="a_addr" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="32"/>
+  <xd:arg xd:name="b_addr" xd:originalName="b_addr" xd:direction="in" xd:interfaceRef="b_addr" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="32"/>
+  <xd:arg xd:name="c_addr" xd:originalName="c_addr" xd:direction="in" xd:interfaceRef="c_addr" xd:busTypeRef="register" xd:handshakeRef="ap_vld" xd:dataWidth="32"/>
+  <xd:latencyEstimates xd:best-case="2" xd:worst-case="271874" xd:average-case="undef"/>
+  <xd:resourceEstimates xd:LUT="3588" xd:FF="5032" xd:BRAM="40" xd:DSP="16"/>
+</xd:acceleratorMap>

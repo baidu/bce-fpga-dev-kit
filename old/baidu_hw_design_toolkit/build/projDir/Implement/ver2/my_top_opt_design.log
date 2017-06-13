@@ -1,0 +1,80 @@
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xcku115'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xcku115'
+Attempting to get a license: PartialReconfiguration
+Feature available: PartialReconfiguration
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 8 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:05 ; elapsed = 00:00:02 . Memory (MB): peak = 3126.477 ; gain = 98.035 ; free physical = 52248 ; free virtual = 86320
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Starting Logic Optimization Task
+
+Phase 1 Generate And Synthesize Debug Cores
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/opt/Vivado/2016.4/data/ip'.
+INFO: [IP_Flow 19-3806] Processing IP xilinx.com:ip:xsdbm:2.0 for cell xsdbm_CV.
+Netlist sorting complete. Time (s): cpu = 00:00:00.26 ; elapsed = 00:00:00.27 . Memory (MB): peak = 3267.469 ; gain = 0.000 ; free physical = 52109 ; free virtual = 86183
+Phase 1 Generate And Synthesize Debug Cores | Checksum: 1918a32bf
+
+Time (s): cpu = 00:01:41 ; elapsed = 00:01:44 . Memory (MB): peak = 3267.469 ; gain = 12.016 ; free physical = 52110 ; free virtual = 86184
+Implement Debug Cores | Checksum: 229ecb898
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+
+Phase 2 Retarget
+INFO: [Opt 31-138] Pushed 29 inverter(s) to 1508 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 2 Retarget | Checksum: 1b388e49c
+
+Time (s): cpu = 00:02:27 ; elapsed = 00:02:14 . Memory (MB): peak = 3279.469 ; gain = 24.016 ; free physical = 52078 ; free virtual = 86152
+
+Phase 3 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+INFO: [Opt 31-10] Eliminated 410 cells.
+Phase 3 Constant propagation | Checksum: 16d175f6b
+
+Time (s): cpu = 00:02:38 ; elapsed = 00:02:25 . Memory (MB): peak = 3279.469 ; gain = 24.016 ; free physical = 52074 ; free virtual = 86148
+
+Phase 4 Sweep
+INFO: [Opt 31-12] Eliminated 2643 unconnected nets.
+INFO: [Opt 31-11] Eliminated 587 unconnected cells.
+Phase 4 Sweep | Checksum: 1eb9b1592
+
+Time (s): cpu = 00:02:56 ; elapsed = 00:02:43 . Memory (MB): peak = 3279.469 ; gain = 24.016 ; free physical = 52074 ; free virtual = 86148
+
+Phase 5 BUFG optimization
+INFO: [Opt 31-264] Inserting BUFG_GT_SYNC for bufg: static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/gt_top_i/phy_clk_i/bufg_gt_coreclk
+INFO: [Opt 31-264] Inserting BUFG_GT_SYNC for bufg: static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/gt_top_i/phy_clk_i/bufg_gt_pclk
+INFO: [Opt 31-264] Inserting BUFG_GT_SYNC for bufg: static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/gt_top_i/phy_clk_i/bufg_gt_userclk
+INFO: [Opt 31-264] Inserting BUFG_GT_SYNC for bufg: static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/gt_top_i/bufg_mcap_clk
+INFO: [Opt 31-264] Inserting BUFG_GT_SYNC for bufg: static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/bufg_gt_sysclk
+INFO: [Opt 31-12] Eliminated 0 unconnected nets.
+INFO: [Opt 31-11] Eliminated 75 unconnected cells.
+Phase 5 BUFG optimization | Checksum: 2258472de
+
+Time (s): cpu = 00:03:16 ; elapsed = 00:03:03 . Memory (MB): peak = 3279.469 ; gain = 24.016 ; free physical = 52073 ; free virtual = 86148
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00.32 ; elapsed = 00:00:00.33 . Memory (MB): peak = 3279.469 ; gain = 0.000 ; free physical = 52073 ; free virtual = 86148
+Ending Logic Optimization Task | Checksum: 22346195d
+
+Time (s): cpu = 00:03:22 ; elapsed = 00:03:09 . Memory (MB): peak = 3279.469 ; gain = 24.016 ; free physical = 52073 ; free virtual = 86148
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Pwropt 34-232] Skipping BRAM gating because all BRAMs are in high frequency (i.e. period < 3.12 ns) clock domains.
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 19 BRAM(s) out of a total of 89 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+Ending Power Optimization Task | Checksum: 22346195d
+
+Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 3351.469 ; gain = 72.000 ; free physical = 52018 ; free virtual = 86093
+INFO: [Common 17-83] Releasing license: Implementation
+22 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+opt_design: Time (s): cpu = 00:03:57 ; elapsed = 00:03:25 . Memory (MB): peak = 3351.469 ; gain = 333.027 ; free physical = 52018 ; free virtual = 86093

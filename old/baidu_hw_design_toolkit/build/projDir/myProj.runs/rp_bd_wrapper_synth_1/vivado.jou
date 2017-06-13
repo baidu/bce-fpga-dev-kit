@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2016.4 (64-bit)
+# SW Build 1733598 on Wed Dec 14 22:35:42 MST 2016
+# IP Build 1731160 on Wed Dec 14 23:47:21 MST 2016
+# Start of session at: Thu May 11 16:27:12 2017
+# Process ID: 14312
+# Current directory: /home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.runs/rp_bd_wrapper_synth_1
+# Command line: vivado -log rp_bd_wrapper.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source rp_bd_wrapper.tcl
+# Log file: /home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.runs/rp_bd_wrapper_synth_1/rp_bd_wrapper.vds
+# Journal file: /home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.runs/rp_bd_wrapper_synth_1/vivado.jou
+#-----------------------------------------------------------
+source rp_bd_wrapper.tcl -notrace

@@ -1,0 +1,169 @@
+Command: pr_verify -initial ../common_files/static_fix_dcp/my_top_route_design.dcp -additional ./projDir/Implement/ver2/my_top_route_design.dcp
+INFO: [Netlist 29-17] Analyzing 601 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2016.4
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc] for cell 'rp_bd_i/rp_bd_i/axislave_cu_apctrl_v1_0_0/inst'
+INFO: [Vivado 12-3520] Assignment of 'vector_add_interrpt_i_4, finish_cnt_reg[1], GND, finish_cnt_reg[13], usr_interrpt_clr[0]_i_3, finish_cnt_reg[14], finish_cnt_reg[3], usr_interrpt_clr_reg[0], vector_add_interrpt_i_2, usr_interrpt_clr[0]_i_4, finish_cnt_reg[0], axislave_cu_apctrl_v1_0_S00_AXI_inst, finish_cnt_reg[9], finish_cnt[15]_i_1, finish_cnt_reg[4], finish_cnt0_carry, finish_cnt_reg[11], finish_cnt[15]_i_2, finish_cnt_reg[6], finish_cnt_reg[12], ap_working_r_i_1, ap_start_r_i_3, finish_cnt_reg[7], ap_working_r_reg, finish_cnt[15]_i_7, finish_cnt_reg[10], finish_cnt_reg[8], vector_add_interrpt_reg, GND_1, finish_cnt[15]_i_6, vector_add_interrpt_i_6, finish_cnt[0]_i_1, finish_cnt_reg[15], finish_cnt0_carry__0, finish_cnt[15]_i_5, finish_cnt[15]_i_3, finish_cnt_reg[5], finish_cnt[15]_i_4, vector_add_interrpt_i_5, ap_start_r_i_2, finish_cnt_reg[2], ap_start_r_reg, vector_add_interrpt_i_3, and VCC' to a pblock 'rp_bd_i_rp_bd_i_axislave_cu_apctrl_v1_0_0_inst_axislave_cu' means that all children of 'inst' are in the pblock. Changing the pblock assignment to 'inst'. [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc:2]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc] for cell 'rp_bd_i/rp_bd_i/axislave_cu_apctrl_v1_0_0/inst'
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_system_ila2_0/bd_0/ip/ip_0/ila_v6_2/constraints/ila.xdc] for cell 'rp_bd_i/rp_bd_i/system_ila2/inst/ila_lib/inst'
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_system_ila2_0/bd_0/ip/ip_0/ila_v6_2/constraints/ila.xdc] for cell 'rp_bd_i/rp_bd_i/system_ila2/inst/ila_lib/inst'
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_board.xdc]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_board.xdc]
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_early.xdc]
+INFO: [Timing 38-35] Done setting XDC timing constraints. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/projDir/myProj.srcs/sources_1/bd/static_bd/ip/static_bd_clk_wiz_0_0/static_bd_clk_wiz_0_0.xdc:57]
+INFO: [Timing 38-2] Deriving generated clocks [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/projDir/myProj.srcs/sources_1/bd/static_bd/ip/static_bd_clk_wiz_0_0/static_bd_clk_wiz_0_0.xdc:57]
+get_clocks: Time (s): cpu = 00:00:18 ; elapsed = 00:00:06 . Memory (MB): peak = 5563.312 ; gain = 0.000 ; free physical = 49516 ; free virtual = 83969
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_early.xdc]
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/common_files/constraints/rp_bd_wrapper_ooc.xdc] for cell 'rp_bd_i'
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/common_files/constraints/rp_bd_wrapper_ooc.xdc] for cell 'rp_bd_i'
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top.xdc]
+INFO: [Constraints 18-4422] SNAPPING_MODE is set so implementation will use the DERVIVED_RANGE which may be different then the GRID_RANGE. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/my_top.xdc:31]
+WARNING: [Vivado 12-4775] These ranges will be aligned to a tile boundary: IOB_X2Y337:IOB_X2Y363, IOB_X2Y312:IOB_X2Y323 [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/my_top.xdc:31]
+INFO: [Constraints 18-4421] A LAGUNA range, without usable sites, was added to DERIVED_RANGE for purposes of keeping the Programmable Unit together within the reconfigurable pblock. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/my_top.xdc:31]
+WARNING: [Constraints 18-619] A clock with name 's_axi_aclk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/rp_bd_wrapper_ooc.xdc:9]
+WARNING: [Constraints 18-619] A clock with name 'pe_clk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/rp_bd_wrapper_ooc.xdc:10]
+WARNING: [Constraints 18-619] A clock with name 'sys_clk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/my_top.xdc:2]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top.xdc]
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_late.xdc]
+INFO: [Timing 38-2] Deriving generated clocks [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/projDir/myProj.srcs/sources_1/bd/static_bd/ip/static_bd_cfg_flash_interface_0_0/src/status_data_fifo/status_data_fifo/status_data_fifo_clocks.xdc:60]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_late.xdc]
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 5563.312 ; gain = 0.000 ; free physical = 49517 ; free virtual = 83969
+Restored from archive | CPU: 9.120000 secs | Memory: 98.564720 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 5563.312 ; gain = 0.000 ; free physical = 49517 ; free virtual = 83969
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_lnk_up_cdc'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_lnk_up_cdc'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_reset_cdc'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_reset_cdc'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[0].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[0].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[10].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[10].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[11].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[11].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[12].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[12].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[13].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[13].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[14].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[14].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[15].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[15].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[1].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[1].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[2].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[2].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[3].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[3].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[4].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[4].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[5].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[5].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[6].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[6].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[7].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[7].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[8].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[8].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[9].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[9].xpm_cdc_single_inst'
+INFO: [Project 1-604] Checkpoint was created with Vivado v2016.4 (64-bit) build 1733598
+INFO: [Vivado 12-3501] pr_verify ../common_files/static_fix_dcp/my_top_route_design.dcp ./projDir/Implement/ver2/my_top_route_design.dcp
+INFO: [Netlist 29-17] Analyzing 505 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2016.4
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc] for cell 'rp_bd_i/rp_bd_i/axislave_cu_apctrl_v1_0_0/inst'
+INFO: [Vivado 12-3520] Assignment of 'finish_cnt_reg[0], finish_cnt_reg[10], finish_cnt_reg[11], finish_cnt_reg[12], finish_cnt_reg[13], finish_cnt_reg[14], finish_cnt_reg[15], finish_cnt_reg[15]_i_3, finish_cnt_reg[1], finish_cnt_reg[2], finish_cnt_reg[3], finish_cnt_reg[4], finish_cnt_reg[5], finish_cnt_reg[6], finish_cnt_reg[7], finish_cnt_reg[8], finish_cnt_reg[8]_i_1, finish_cnt_reg[9], usr_interrpt_clr[0]_i_3, usr_interrpt_clr[0]_i_4, usr_interrpt_clr_reg[0], vector_add_interrpt_i_2, vector_add_interrpt_i_3, vector_add_interrpt_i_4, vector_add_interrpt_i_5, vector_add_interrpt_i_6, vector_add_interrpt_reg, GND, GND_1, axislave_cu_apctrl_v1_0_S00_AXI_inst, VCC, ap_start_r_i_2, ap_start_r_i_3, ap_working_r_reg, ap_start_r_reg, ap_working_r_i_1, finish_cnt[15]_i_1, finish_cnt[15]_i_2, finish_cnt[0]_i_1, finish_cnt[15]_i_4, finish_cnt[15]_i_5, finish_cnt[15]_i_6, finish_cnt[15]_i_7, and finish_cnt[15]_i_8' to a pblock 'rp_bd_i_rp_bd_i_axislave_cu_apctrl_v1_0_0_inst_axislave_cu' means that all children of 'axislave_cu_apctrl_v1_0_0' are in the pblock. Changing the pblock assignment to 'axislave_cu_apctrl_v1_0_0'. [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc:2]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc] for cell 'rp_bd_i/rp_bd_i/axislave_cu_apctrl_v1_0_0/inst'
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_system_ila2_0/bd_0/ip/ip_0/ila_v6_2/constraints/ila.xdc] for cell 'rp_bd_i/rp_bd_i/system_ila2/inst/ila_lib/inst'
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_system_ila2_0/bd_0/ip/ip_0/ila_v6_2/constraints/ila.xdc] for cell 'rp_bd_i/rp_bd_i/system_ila2/inst/ila_lib/inst'
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_board.xdc]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_board.xdc]
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_early.xdc]
+INFO: [Timing 38-35] Done setting XDC timing constraints. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/projDir/myProj.srcs/sources_1/bd/static_bd/ip/static_bd_clk_wiz_0_0/static_bd_clk_wiz_0_0.xdc:57]
+INFO: [Timing 38-2] Deriving generated clocks [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/projDir/myProj.srcs/sources_1/bd/static_bd/ip/static_bd_clk_wiz_0_0/static_bd_clk_wiz_0_0.xdc:57]
+get_clocks: Time (s): cpu = 00:00:17 ; elapsed = 00:00:06 . Memory (MB): peak = 5613.332 ; gain = 50.020 ; free physical = 49528 ; free virtual = 83968
+CRITICAL WARNING: [Vivado 12-795] Pblock 'rp_bd_i_rp_bd_i_axislave_cu_apctrl_v1_0_0_inst_axislave_cu' already exists. [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc:1]
+INFO: [Constraints 18-4422] SNAPPING_MODE is set so implementation will use the DERVIVED_RANGE which may be different then the GRID_RANGE. [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.srcs/sources_1/bd/rp_bd/ip/rp_bd_axislave_cu_apctrl_v1_0_0_0/axislave_cu_apctrl.xdc:1]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_early.xdc]
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/common_files/constraints/rp_bd_wrapper_ooc.xdc] for cell 'rp_bd_i'
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/common_files/constraints/rp_bd_wrapper_ooc.xdc] for cell 'rp_bd_i'
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top.xdc]
+WARNING: [Vivado 12-4775] These ranges will be aligned to a tile boundary: IOB_X2Y337:IOB_X2Y363, IOB_X2Y312:IOB_X2Y323 [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/my_top.xdc:31]
+INFO: [Constraints 18-4421] A LAGUNA range, without usable sites, was added to DERIVED_RANGE for purposes of keeping the Programmable Unit together within the reconfigurable pblock. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/my_top.xdc:31]
+WARNING: [Constraints 18-619] A clock with name 's_axi_aclk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/rp_bd_wrapper_ooc.xdc:9]
+WARNING: [Constraints 18-619] A clock with name 'pe_clk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/rp_bd_wrapper_ooc.xdc:10]
+WARNING: [Constraints 18-619] A clock with name 'sys_clk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/constraints/my_top.xdc:2]
+WARNING: [Constraints 18-619] A clock with name 's_axi_aclk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/common_files/constraints/rp_bd_wrapper_ooc.xdc:9]
+WARNING: [Constraints 18-619] A clock with name 'pe_clk' already exists, overwriting the previous clock with the same name. [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/common_files/constraints/rp_bd_wrapper_ooc.xdc:10]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top.xdc]
+Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_late.xdc]
+INFO: [Timing 38-2] Deriving generated clocks [/home/ruanyuan/CLOUD/xvc_bd_design_0504_MCAP_pr/xvc_hw/axiXvc_03_pr_ku115/projDir/myProj.srcs/sources_1/bd/static_bd/ip/static_bd_cfg_flash_interface_0_0/src/status_data_fifo/status_data_fifo/status_data_fifo_clocks.xdc:60]
+Finished Parsing XDC File [/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/.Xil/Vivado-13966-BBhost_test1514/dcp_2/my_top_late.xdc]
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 5613.332 ; gain = 0.000 ; free physical = 49525 ; free virtual = 83966
+Restored from archive | CPU: 8.920000 secs | Memory: 98.490540 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 5613.332 ; gain = 0.000 ; free physical = 49525 ; free virtual = 83965
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_lnk_up_cdc'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_lnk_up_cdc'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_reset_cdc'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_async_rst.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/pcie3_ip_i/inst/user_reset_cdc'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[0].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[0].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[10].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[10].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[11].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[11].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[12].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[12].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[13].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[13].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[14].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[14].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[15].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[15].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[1].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[1].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[2].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[2].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[3].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[3].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[4].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[4].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[5].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[5].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[6].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[6].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[7].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[7].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[8].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[8].xpm_cdc_single_inst'
+Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[9].xpm_cdc_single_inst'
+Finished Sourcing Tcl File [/home/opt/Vivado/2016.4/data/ip/xpm/xpm_cdc/tcl/xpm_cdc_single.tcl] for cell 'static_bd_i/static_bd_i/xdma_0/inst/dma_top/base/IRQ_INST/usr_irq_xpm_cdc/single_array[9].xpm_cdc_single_inst'
+INFO: [Project 1-604] Checkpoint was created with Vivado v2016.4 (64-bit) build 1733598
+INFO: [Constraints 18-1020] PR Verify Summary:
+DCP1: ../common_files/static_fix_dcp/my_top_route_design.dcp
+  Number of reconfigurable modules compared = 1
+  Number of partition pins compared         = 1181
+  Number of static tiles compared           = 635789
+  Number of static sites compared           = 4636
+  Number of static cells compared           = 56128
+  Number of static routed nodes compared    = 859710
+  Number of static routed pips compared     = 808932
+
+DCP2: ./projDir/Implement/ver2/my_top_route_design.dcp
+  Number of reconfigurable modules compared = 1
+  Number of partition pins compared         = 1181
+  Number of static tiles compared           = 635789
+  Number of static sites compared           = 4636
+  Number of static cells compared           = 56128
+  Number of static routed nodes compared    = 859710
+  Number of static routed pips compared     = 808932
+INFO: [Vivado 12-3253] PR_VERIFY: check points ../common_files/static_fix_dcp/my_top_route_design.dcp and ./projDir/Implement/ver2/my_top_route_design.dcp are compatible
+pr_verify: Time (s): cpu = 00:05:04 ; elapsed = 00:04:24 . Memory (MB): peak = 5613.332 ; gain = 50.020 ; free physical = 49776 ; free virtual = 83970
