@@ -1,13 +1,9 @@
-
 CC = gcc
-
 CFLAGS = -Wall
-
 BINDIR = bin
-
 TARGET = xvc_pcie
-
 OBJDIR := obj
+
 OBJS := $(addprefix $(OBJDIR)/,xvc_pcie.o xvcserver.o)
 
 $(OBJDIR)/%.o : %.c
@@ -22,6 +18,6 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)
 	@mkdir -p $(BINDIR)
 
-clean: 
+clean:
 	@$(RM) -r $(OBJDIR)
 	@$(RM) -r $(BINDIR)

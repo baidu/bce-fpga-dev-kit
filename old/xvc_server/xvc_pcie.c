@@ -34,6 +34,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <assert.h>
@@ -41,53 +42,48 @@
 #include "xvc_pcie_ioctl.h"
 #include <unistd.h>
 
- #include <sys/time.h>
 
 #ifndef _WINDOWS
 // TODO: Windows build support
 //    sys/ioctl.h is linux only header file
 //    it is included for ioctl
-#include <sys/ioctl.h>
- #include <errno.h>
+# include <sys/ioctl.h>
+# include <errno.h>
 #endif
 
 typedef struct {
-  int fd;       // open file descriptor 
+    int fd; // open file descriptor
 } pcie_reg_t;
 
 int verbose = 0;
 
 static int open_port(void *client_data, XvcClient *c) {
-   pcie_reg_t* pcie = (pcie_reg_t*)client_data;
-   
-   char dev_node [32];
-   strcpy(dev_node, "/dev/xil_xvc/cfg_ioc0");
-   
-   const char* env = getenv ("DEVICE_NODE");
-   
-   env = getenv ("VERBOSE");
-   if (env) {
-      verbose = 1;
-   } else {
-      printf ("Enable verbose by setting VERBOSE env var.\n");
-   }
-   
-   printf ("Opening %s.\n", dev_node);
+    pcie_reg_t *pcie = (pcie_reg_t *)client_data;
+    char dev_node[32] = "/dev/xil_xvc/cfg_ioc0";
+    const char *env = getenv("DEVICE_NODE");
 
-   pcie->fd = open(dev_node, O_RDWR | O_SYNC);
-   if (pcie->fd < 1) {
-      fprintf(stderr,"Failed to Open Device\n");
-      return (-1);
-   }
+    env = getenv("VERBOSE");
+    if (env) {
+        verbose = 1;
+    } else {
+        printf ("Enable verbose by setting VERBOSE env var.\n");
+    }
 
-   return (0);
+    printf("Opening %s.\n", dev_node);
+    pcie->fd = open(dev_node, O_RDWR | O_SYNC);
+    if (pcie->fd < 1) {
+        fprintf(stderr, "Failed to Open Device\n");
+        return (-1);
+    }
+
+    return (0);
 }
 
 static void close_port(void *client_data) {
-   pcie_reg_t* pcie = (pcie_reg_t*)client_data;
-   if (pcie->fd >= 1) {
-      close(pcie->fd);
-   }
+    pcie_reg_t *pcie = (pcie_reg_t *)client_data;
+    if (pcie->fd >= 1) {
+        close(pcie->fd);
+    }
 }
 
 static void set_tck(void *client_data, unsigned long nsperiod, unsigned long *result) {
@@ -95,13 +91,12 @@ static void set_tck(void *client_data, unsigned long nsperiod, unsigned long *re
 }
 
 static void shift_tms_tdi(
-    void *client_data,
-    unsigned long bitcount,
-    unsigned char *tms_buf,
-    unsigned char *tdi_buf,
-    unsigned char *tdo_buf) {
-
-    pcie_reg_t* pcie = (pcie_reg_t*)client_data;
+        void *client_data,
+        unsigned long bitcount,
+        unsigned char *tms_buf,
+        unsigned char *tdi_buf,
+        unsigned char *tdo_buf) {
+    pcie_reg_t *pcie = (pcie_reg_t *)client_data;
     struct timeval stop, start;
 
     if (verbose) {
@@ -117,16 +112,15 @@ static void shift_tms_tdi(
     xvc_ioc.tdo_buf = tdo_buf;
 
     int ret = ioctl(pcie->fd, XDMA_IOCXVC, &xvc_ioc);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         int errsv = errno;
         printf("IOC Error %d\n", errsv);
     }
 
-
     if (verbose) {
         gettimeofday(&stop, NULL);
-        printf("IOC shift internal took %lu u-seconds with %lu bits. Return value %d\n", stop.tv_usec - start.tv_usec, bitcount, ret);
+        printf("IOC shift internal took %lu u-seconds with %lu bits. Return value %d\n",
+                stop.tv_usec - start.tv_usec, bitcount, ret);
     }
 }
 
@@ -169,3 +163,4 @@ int main(int argc, char **argv) {
 
     return xvcserver_start(url, &pcie_reg, &handlers);
 }
+

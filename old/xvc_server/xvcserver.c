@@ -33,32 +33,32 @@
 #include <malloc.h>
 
 #ifdef _WIN32
-#undef UNICODE
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0501
-#endif
-#include <winsock2.h>
-#include <ws2tcpip.h>
-#include <iphlpapi.h>
+# undef UNICODE
+# ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0501
+# endif
+# include <winsock2.h>
+# include <ws2tcpip.h>
+# include <iphlpapi.h>
 
-#if defined(_MSC_VER)
+# if defined(_MSC_VER)
 typedef unsigned __int8 uint8_t;
+# else
+#  include <inttypes.h>
+# endif
+
+# pragma comment(lib, "Ws2_32.lib")
+
+# define snprintf _snprintf
 #else
-#include <inttypes.h>
-#endif
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/tcp.h>
+# include <netdb.h>
+# include <unistd.h>
+# include <string.h>
 
-#pragma comment(lib, "Ws2_32.lib")
-
-#define snprintf _snprintf
-#else
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/tcp.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <string.h>
-
-#include <sys/time.h>
+# include <sys/time.h>
 #endif
 
 #include "xvcserver.h"
@@ -69,7 +69,7 @@ typedef unsigned __int8 uint8_t;
 #define tostr(X) tostr2(X)
 
 #ifndef XVC_VERSION
-#define XVC_VERSION 10
+# define XVC_VERSION 10
 #endif
 
 static unsigned max_packet_len = MAX_PACKET_LEN;
@@ -77,7 +77,7 @@ static unsigned max_packet_len = MAX_PACKET_LEN;
 struct XvcClient {
     unsigned buf_len;
     unsigned buf_max;
-    uint8_t * buf;
+    uint8_t *buf;
     int fd;
     XvcServerHandlers *handlers;
     void *client_data;
@@ -119,12 +119,12 @@ static int closesocket(int sock)
 }
 #endif
 
-static int open_server(const char * host, const char * port) {
+static int open_server(const char *host, const char *port) {
     int err = 0;
     int sock = -1;
     struct addrinfo hints;
-    struct addrinfo * reslist = NULL;
-    struct addrinfo * res = NULL;
+    struct addrinfo *reslist = NULL;
+    struct addrinfo *res = NULL;
 
     memset(&hints, 0, sizeof hints);
     hints.ai_family = PF_INET;
@@ -157,8 +157,8 @@ static int open_server(const char * host, const char * port) {
     return sock;
 }
 
-static unsigned get_uint_le(void * buf, int len) {
-    unsigned char * p = (unsigned char *)buf;
+static unsigned get_uint_le(void *buf, int len) {
+    unsigned char *p = (unsigned char *)buf;
     unsigned value = 0;
 
     while (len-- > 0) {
@@ -167,8 +167,8 @@ static unsigned get_uint_le(void * buf, int len) {
     return value;
 }
 
-static void set_uint_le(void * buf, int len, unsigned value) {
-    unsigned char * p = (unsigned char *)buf;
+static void set_uint_le(void *buf, int len, unsigned value) {
+    unsigned char *p = (unsigned char *)buf;
 
     while (len-- > 0) {
         *p++ = (unsigned char)value;
@@ -177,8 +177,8 @@ static void set_uint_le(void * buf, int len, unsigned value) {
 }
 
 #if XVC_VERSION >= 11
-static unsigned get_uleb128(unsigned char** buf, void *bufend) {
-    unsigned char * p = (unsigned char *)*buf;
+static unsigned get_uleb128(unsigned char **buf, void *bufend) {
+    unsigned char *p = (unsigned char *)*buf;
     unsigned value = 0;
     int i = 0;
     unsigned n;
@@ -191,7 +191,7 @@ static unsigned get_uleb128(unsigned char** buf, void *bufend) {
     return value;
 }
 
-static void reply_status(XvcClient * c) {
+static void reply_status(XvcClient *c) {
     if (reply_len < max_packet_len)
         reply_buf[reply_len] = (c->pending_error[0] != '\0');
     reply_len++;
@@ -213,7 +213,7 @@ static void reply_uleb128(unsigned value) {
     reply_len += pos;
 }
 
-void xvcserver_set_error(XvcClient * c, const char *fmt, ...) {
+void xvcserver_set_error(XvcClient *c, const char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(c->pending_error, sizeof c->pending_error, fmt, ap);
@@ -222,21 +222,19 @@ void xvcserver_set_error(XvcClient * c, const char *fmt, ...) {
 }
 #endif
 
-static int send_packet(XvcClient * c, const void * buf, unsigned len) {
+static int send_packet(XvcClient *c, const void *buf, unsigned len) {
     int rval = send(c->fd, buf, len, 0);
     return rval;
 }
 
-static void consume_packet(XvcClient * c, unsigned len) {
+static void consume_packet(XvcClient *c, unsigned len) {
     assert(len <= c->buf_len);
     c->buf_len -= len;
     memmove(c->buf, c->buf + len, c->buf_len);
 }
 
 #ifdef LOG_PACKET
-static void dumphex(
-    void *buf, size_t len)
-{
+static void dumphex(void *buf, size_t len) {
     unsigned char *p = (unsigned char *)buf;
     size_t i;
 
@@ -255,13 +253,12 @@ static void dumphex(
 }
 #endif
 
-static void read_packet(XvcClient * c) {
-    unsigned char * cbuf;
-    unsigned char * cend;
+static void read_packet(XvcClient *c) {
+    unsigned char *cbuf;
+    unsigned char *cend;
     unsigned fill;
 
     reply_buf_size(max_packet_len);
-
 
     struct timeval stop, start;
 
@@ -276,8 +273,8 @@ read_more:
     fill = 0;
     reply_len = 0;
     for (;;) {
-        unsigned char * p = cbuf;
-        unsigned char * e = p + 30 < cend ? p + 30 : cend;
+        unsigned char *p = cbuf;
+        unsigned char *e = p + 30 < cend ? p + 30 : cend;
         unsigned len;
 
         while (p < e && *p != ':') {
@@ -297,7 +294,7 @@ read_more:
 
         if (len == 8 && memcmp(cbuf, "getinfo:", len) == 0) {
             snprintf((char *)reply_buf + reply_len, 100, "xvcServer_v%u.%u:%u\n",
-                     XVC_VERSION / 10, XVC_VERSION % 10, c->buf_max);
+                    XVC_VERSION / 10, XVC_VERSION % 10, c->buf_max);
             reply_len += strlen((char *)reply_buf + reply_len);
             goto reply;
         }
@@ -321,8 +318,8 @@ read_more:
 
         if (len == 10 && memcmp(cbuf, "configure:", len) == 0) {
             unsigned bytes = get_uleb128(&p, cend);
-            unsigned char * pktend = p + bytes;
-            char * s = (char *)p;
+            unsigned char *pktend = p + bytes;
+            char *s = (char *)p;
             int oldc;
 
             if (cend < pktend) {
@@ -334,8 +331,8 @@ read_more:
             oldc = *pktend;
             *pktend = '\0';
             while (*s != '\0' && !c->pending_error[0]) {
-                char * config = get_field(&s, ',');
-                char * assign = strchr(config, '=');
+                char *config = get_field(&s, ',');
+                char *assign = strchr(config, '=');
                 int enable = -1;
                 if (assign) {
                     *assign++ = '\0';
@@ -421,7 +418,6 @@ read_more:
         }
 #endif
 
-
         if (len == 6 && memcmp(cbuf, "shift:", len) == 0) {
 
             gettimeofday(&start, NULL);
@@ -444,7 +440,6 @@ read_more:
 
             if (!c->pending_error[0]) {
                 // fprintf(stdout, "bits received %d %d %x %x\n", bits, bytes, p[0], p[bytes]);
-        
                 c->handlers->shift_tms_tdi(c->client_data, bits, p, p + bytes, reply_buf + reply_len);
             }
             if (c->pending_error[0]) {
@@ -483,9 +478,9 @@ read_more:
 
 #if XVC_VERSION >= 11
         if (len == 8 &&
-                 (cbuf[0] == 'i' || cbuf[0] == 'd') &&
-                 memcmp(cbuf + 1, "rshift:", len - 1) == 0 &&
-                 c->handlers->register_shift) {
+                (cbuf[0] == 'i' || cbuf[0] == 'd') &&
+                memcmp(cbuf + 1, "rshift:", len - 1) == 0 &&
+                c->handlers->register_shift) {
             unsigned int flags = get_uleb128(&p, cend);
             unsigned int state = get_uleb128(&p, cend);
             unsigned long count = get_uleb128(&p, cend);
@@ -498,8 +493,8 @@ read_more:
             }
             if (!c->pending_error[0])
                 c->handlers->register_shift(
-                    c->client_data, (cbuf[0] == 'i'), flags, state,
-                    count, tdibytes ? p : NULL, tdobytes ? reply_buf + reply_len : NULL);
+                        c->client_data, (cbuf[0] == 'i'), flags, state,
+                        count, tdibytes ? p : NULL, tdobytes ? reply_buf + reply_len : NULL);
             if (c->pending_error[0])
                 memset(reply_buf + reply_len, 0, tdobytes);
             reply_len += tdobytes;
@@ -526,14 +521,14 @@ read_more:
         fprintf(stderr, "protocol error: received %.*s\n", (int)len, cbuf);
         goto error;
 
-    reply_with_optional_status:
+reply_with_optional_status:
         // printf("Here2\n");
         if (!c->enable_status) goto reply;
 #if XVC_VERSION >= 11
-    reply_with_status:
+reply_with_status:
         reply_status(c);
 #endif
-    reply:
+reply:
         cbuf = p;
     }
 
@@ -547,11 +542,11 @@ read_more:
 #endif
         if (send_packet(c, reply_buf, reply_len) < 0) goto error;
         consume_packet(c, cbuf - c->buf);
-        
+
         gettimeofday(&stop, NULL);
         // if (start.tv_usec != 0)
         //     printf("Shift send packet %lu u-seconds\n", stop.tv_usec - start.tv_usec);
-        
+
         if (c->buf_len && !fill) goto read_more;
     }
 
@@ -570,24 +565,23 @@ error:
 }
 
 int xvcserver_start(
-    const char * url,
-    void * client_data,
-    XvcServerHandlers * handlers)
-{
-    XvcClient * c = &xvc_client;
+        const char *url,
+        void *client_data,
+        XvcServerHandlers *handlers) {
+    XvcClient *c = &xvc_client;
     int sock;
     int fd;
-    char * url_copy = strdup(url);
-    char * p = url_copy;
-    const char * transport;
-    const char * host;
-    const char * port;
+    char *url_copy = strdup(url);
+    char *p = url_copy;
+    const char *transport;
+    const char *host;
+    const char *port;
 
     transport = get_field(&p, ':');
     if ((transport[0] == 'T' || transport[0] == 't') &&
-        (transport[1] == 'C' || transport[1] == 'c') &&
-        (transport[2] == 'P' || transport[2] == 'p') &&
-        transport[3] == '\0') {
+            (transport[1] == 'C' || transport[1] == 'c') &&
+            (transport[2] == 'P' || transport[2] == 'p') &&
+            transport[3] == '\0') {
         host = get_field(&p, ':');
     } else if (strchr(p, ':') == NULL) {
         host = transport;
@@ -651,3 +645,4 @@ int xvcserver_start(
     free(url_copy);
     return 0;
 }
+
