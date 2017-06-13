@@ -1621,6 +1621,7 @@ static irqreturn_t xdma_isr(int irq, void *dev_id)
 
     /* read user interrupts - this read also flushes the above write */
     user_irq = read_register(&irq_regs->user_int_request);
+    /* to clear already triggered user interrupts */
     write_register(user_irq, lro->bar[0] + ((64 + 63) << 10));
     dbg_irq("user_irq = 0x%08x\n", user_irq);
 
@@ -1825,6 +1826,7 @@ static void identify_bars(struct xdma_dev *lro, int *bar_id_list, int num_bars, 
             if (config_bar_pos == 0) {
                 lro->bypass_bar_idx = bar_id_list[1];
             } else if (config_bar_pos == 1) {
+                /* XXX we are here */
                 lro->user_bar_idx = bar_id_list[0];
             } else {
                 dbg_init("case 2\n");
@@ -4944,7 +4946,7 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
     reg = lro->bar[lro->config_bar_idx];
     w = read_register(reg);
     stream = (w & 0x8000U) ? 1 : 0;
-    if (enable_credit_mp & stream ) {
+    if (enable_credit_mp & stream) {
         printk(KERN_DEBUG "Design in Steaming mode enable Credit feature \n");
         enable_credit_feature(lro);
     }
@@ -4975,8 +4977,7 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
         memcpy(&lro->stash, clear_contr, sizeof(struct xdma_bitstream_container));
         kfree(clear_contr);
         clear_contr = NULL;
-    }
-    else {
+    } else {
         lro->stash.magic = 0xBBBBBBBBUL;
     }
 
