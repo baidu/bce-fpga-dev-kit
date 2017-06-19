@@ -1,0 +1,64 @@
+# Setup the variables and settings needed for the project.
+source scripts/step_00_setup.tcl
+
+# Create the project
+puts "INFO: Creating your rp Project: Part = $part"
+#create_project -in_memory -part $part -force
+create_project -force $projName $projDir -part $part
+
+# Set the rtf Sandbox if needed.
+if { $rtfSandbox != "none" } {
+  # Set the IP path to your local sandbox build and rebuild the IP catalog
+  puts "INFO: RTF Sandbox = ${rtfSandbox}"
+  set_property ip_repo_paths  ${rtfSandbox} [current_fileset]
+  update_ip_catalog -rebuild
+}
+
+# Genearte Mig
+source $scriptDir/ddr_define.tcl
+if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_DDR4_C3 == 1)} {
+    source $scriptDir/rp_mig_bd.tcl
+    validate_bd_design
+    save_bd_design
+    close_bd_design [get_bd_designs rp_mig_bd]
+
+    # Set the appropriate OOC Synthesis settings for the .bd
+    set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
+}
+
+# Add source files and IPs to the project.
+# Add the top-level source files.
+add_files -norecurse $commonDir/hdl
+add_files -norecurse $usrRtlPath
+add_files -norecurse $usrIncPath
+add_files -norecurse $commonDir/constraints
+
+foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
+    add_files -fileset constrs_1 -norecurse $xdcfile
+}
+
+# Add the xci file in usr_ip and generate IP core files
+set xcifile [split [exec find $usrDir/usr_ip | grep xci]]
+for {set a 0} {$a < [llength $xcifile]} {incr a} {
+   read_ip [lindex $xcifile $a]
+   set_property generate_synth_checkpoint false [get_files [lindex $xcifile $a]]
+   generate_target all [get_files [lindex $xcifile $a]]
+   export_ip_user_files -of_objects [get_files [lindex $xcifile $a]] -sync -force -quiet
+   #export_simulation -of_objects [get_files [lindex $xcifile $a]]
+}
+
+# Add the debug bridge IP that will be added to the PR region
+source $scriptDir/ip_configs.tcl
+generate_target all [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci]
+export_ip_user_files -of_objects [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci] -sync -force -quiet
+#export_simulation -of_objects [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci]
+
+# Error and Message Reporting
+set warningCount [get_msg_config -severity {Warning} -count]
+set criticalCount [get_msg_config -severity {Critical Warning} -count]
+set errorCount [get_msg_config -severity {Error} -count]
+puts "# HD INFO: Design creation completed with $errorCount Errors, $criticalCount Critical Warnings, and $warningCount Warnings.\n"
+set fp [open $runSummary a]
+puts $fp "Design creation completed with $errorCount Errors, $criticalCount Critical Warnings, and $warningCount Warnings at [clock format [clock seconds]]."
+close $fp
+
