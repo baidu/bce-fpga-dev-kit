@@ -1,4 +1,4 @@
-##1.目录结构##
+##1.目录结构
 Baidu\_HW\_design\_toolkit提供了制作fpga硬件逻辑所需的环境，您只将自己逻辑所需的相关的文件如rtl代码，ip核，xdc约束等放入指定的路径，然后执行脚本，即可生成用于烧写fpga云服务器的逻辑镜像文件。
 
 Baidu\_HW\_design\_toolkit包含了4个子文件夹，分别是common_files和三个demo工程。
@@ -21,10 +21,10 @@ Baidu\_HW\_design\_toolkit包含了4个子文件夹，分别是common_files和�
 
 build存放制作fpga云服务器逻辑镜像所要执行的脚本，如果您是有经验的用户，可以参考并根据自己的需要修改脚本。
 
-##2.制作fpga云服务逻辑镜像步骤##
+##2.制作fpga云服务逻辑镜像步骤
 Baidu\_HW\_design_toolkit提供了两种方式制作fpga云服务器逻辑镜像。两种方式需要准备不同的设计文件，您可以任选一种自己喜欢的方式。
 
-###1) Non_IPI流程###
+###1) Non_IPI流程
 
 这种方式比较类似传统的fpga工程实现方式，您需要准备好动态部分逻辑（也就是rp\_bd\_wrapper.rp\_bd\_i）的设计文件放入usr\_files指定的目录， 然后执行build目录下的run\_nonIPI.tcl脚本。
 
