@@ -17,7 +17,7 @@ FPGA温度读取脚本藉由一个C语言写成的小程序mmap映射FPGA BAR空
 IS_FPGA_INSTALLED:1
 </pre>
 
-* `get_fpga_temperature.sh` 用于获取FPGA的温度，输出类似`FPGA_TEMPERATURE:45.32`。**如机器未插卡或运行过程发生异常，脚本无打印输出，并会令返回值为1。**
+* `get_fpga_temperature.sh` 用于获取FPGA的温度，输出类似`FPGA_TEMPERATURE:45.32`。**如机器未插卡或运行过程发生异常，脚本无打印输出，并会令返回值为1。在vm关机/重启或hypervisor加载驱动时，PCIe链路可能不稳定，有一定几率导致温度寄存器读出值为64位全ff，此时脚本会输出一个仿冒的温度`FPGA_TEMPERATURE:37.0`。**
 <pre>
 [root@cq02-bcc-online-com2-418.cq02.baidu.com miaotianxiang]# ./get_fpga_temperature.sh
 FPGA_TEMPERATURE:45.32
