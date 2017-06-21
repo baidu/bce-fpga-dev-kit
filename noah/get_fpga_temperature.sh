@@ -57,6 +57,11 @@ case $fpga_type in
     ;;
 esac
 
+if [[ $(echo "${fpga_temperature}>200.0" | bc) == "1" ]]; then
+    # Maybe, PCIe link is not ready :), then use a faked value
+    fpga_temperature='37.0'
+fi
+
 echo "FPGA_TEMPERATURE:${fpga_temperature}"
 exit 0
 
