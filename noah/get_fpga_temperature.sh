@@ -58,8 +58,31 @@ case $fpga_type in
 esac
 
 if [[ $(echo "${fpga_temperature}>200.0" | bc) == "1" ]]; then
-    # Maybe, PCIe link is not ready :), then use a faked value
-    fpga_temperature='37.0'
+    # though not happy, enable device(refcnt++) and retry
+    echo "1" > $fpga_sysfs_path/enable
+
+    case $fpga_type in
+    "cnn")
+        qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((2*8)))
+        fpga_temperature=$(echo "${qword}*501.37/4096-273.68" | bc)
+        ;;
+    "rsa")
+        qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((32*8)))
+        fpga_temperature=$(echo "${qword}*503.98/4096-273.15" | bc)
+        ;;
+    "dev")
+        # TODO unsupported
+        #qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((2*8)))
+        #fpga_temperature=$(echo "${qword}*501.37/4096-273.68" | bc)
+        ;;
+    esac
+
+    echo "0" > $fpga_sysfs_path/enable
+
+    # Maybe, PCIe link is not ready :), then give up and use a faked value
+    if [[ $(echo "${fpga_temperature}>200.0" | bc) == "1" ]]; then
+        fpga_temperature='37.0'
+    fi
 fi
 
 echo "FPGA_TEMPERATURE:${fpga_temperature}"
