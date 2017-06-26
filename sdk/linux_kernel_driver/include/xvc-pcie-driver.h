@@ -34,7 +34,6 @@ struct xvc_algo_t {
 };
 
 struct xil_xvc_char {
-    struct pci_dev *pci_dev;
     struct xvc_algo_t xvc_algo;
 };
 

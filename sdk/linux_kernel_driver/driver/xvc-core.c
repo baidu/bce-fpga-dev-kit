@@ -31,7 +31,6 @@
 long setup_xvc_algo(struct xdma_dev *lro)
 {
     int status = -EINVAL;
-    int bar_index = user_config.bar_index;
 
     // initialize algo selection if not already selected
     if (!lro->xvc_char.xvc_algo.type) {
@@ -40,7 +39,7 @@ long setup_xvc_algo(struct xdma_dev *lro)
 
         // try to find the cfg capability if CONFIG or AUTO was specified by user
         if ((user_config.config_space == CONFIG) || (user_config.config_space == AUTO)) {
-            status = xil_xvc_get_offset(xvc_char->pci_dev, &algo->offset.cfg);
+            status = xil_xvc_get_offset(lro->pci_dev, &algo->offset.cfg);
             if (status == 0) {
                 // found the capability so use CFG space;
                 algo->type = XVC_ALGO_CFG;
@@ -49,24 +48,25 @@ long setup_xvc_algo(struct xdma_dev *lro)
         }
         // try to use BAR space if selected, or fall through for AUTO
         if ((user_config.config_space == BAR) || (user_config.config_space == AUTO)) {
+            int bar_index = user_config.bar_index;
             resource_size_t bar_start;
             resource_size_t bar_len;
             resource_size_t map_len;
 
-            if ((!pci_resource_flags(xvc_char->pci_dev, bar_index)) & IORESOURCE_MEM) {
+            if ((!pci_resource_flags(lro->pci_dev, bar_index)) & IORESOURCE_MEM) {
                 printk(KERN_ERR LOG_PREFIX "Incorrect BAR configuration\n");
                 return -ENODEV;
             }
 
-            bar_start = pci_resource_start(xvc_char->pci_dev, bar_index);
-            bar_len = pci_resource_len(xvc_char->pci_dev, bar_index);
+            bar_start = pci_resource_start(lro->pci_dev, bar_index);
+            bar_len = pci_resource_len(lro->pci_dev, bar_index);
             map_len = bar_len;
 
             if (!bar_len) {
                 printk(KERN_WARNING LOG_PREFIX "BAR #%d is not present.\n", bar_index);
             } else {
                 // XXX: add user specified BAR offset to base address of mapping,
-                // modify it accordingly
+                // modify user_config struct accordingly
                 algo->offset.bar = lro->bar[user_config.bar_index] + user_config.bar_offset;
                 /*
                  *algo->offset.bar =
