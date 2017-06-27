@@ -103,7 +103,7 @@ sleep 0.5
 
 #soft reset rp_bd
 echo "set soft reset..." >> $REGLOGFILE
-$REGBIN 0 $((0*1024+16)) 0 >> $REGLOGFILE 2>&1
+$REGBIN 0 $((0*1024+248)) 0 >> $REGLOGFILE 2>&1
 if [[ $? == 0 ]]; then
     echo "OK soft reset rp_bd ..."
 else

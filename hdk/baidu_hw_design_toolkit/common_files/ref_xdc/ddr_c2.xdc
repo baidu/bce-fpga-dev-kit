@@ -132,4 +132,4 @@ set_property PACKAGE_PIN F33 [get_ports {C2_DDR4_adr[14]}]
 set_property PACKAGE_PIN H33 [get_ports {C2_DDR4_adr[10]}]
 
 #set false path for usr reset
-set_false_path -through [get_nets -of_objects [get_pins rp_bd_i/*/c2_ddr4_ui_clk_sync_rst]]
+set_false_path -through [get_nets -of_objects [get_pins rp_i/*/c2_ddr4_ui_clk_sync_rst]]

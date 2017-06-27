@@ -305,8 +305,13 @@ CONFIG.FREQ_HZ {250000000} \
   set s_axi_aresetn [ create_bd_port -dir I -type rst s_axi_aresetn ]
   set usr_clk [ create_bd_port -dir I -type clk usr_clk ]
   set_property -dict [ list \
+CONFIG.ASSOCIATED_RESET {usr_clk_rst} \
 CONFIG.FREQ_HZ {100000000} \
  ] $usr_clk
+  set usr_clk_rst [ create_bd_port -dir I -type rst usr_clk_rst ]
+  set_property -dict [ list \
+CONFIG.POLARITY {ACTIVE_HIGH} \
+ ] $usr_clk_rst
   set usr_irq_ack [ create_bd_port -dir I -from 15 -to 0 -type data usr_irq_ack ]
   set usr_irq_req [ create_bd_port -dir O -from 15 -to 0 usr_irq_req ]
 
@@ -335,11 +340,6 @@ CONFIG.S01_HAS_REGSLICE {4} \
 
   # Create instance: axislave_cu_apctrl_v1_0_0, and set properties
   set axislave_cu_apctrl_v1_0_0 [ create_bd_cell -type ip -vlnv baidu.com:user:axislave_cu_apctrl_v1_0 axislave_cu_apctrl_v1_0_0 ]
-
-  set_property -dict [ list \
-CONFIG.NUM_READ_OUTSTANDING {1} \
-CONFIG.NUM_WRITE_OUTSTANDING {1} \
- ] [get_bd_intf_pins /axislave_cu_apctrl_v1_0_0/s00_axi]
 
   # Create instance: example_0, and set properties
   set example_0 [ create_bd_cell -type ip -vlnv xilinx.com:hls:example example_0 ]

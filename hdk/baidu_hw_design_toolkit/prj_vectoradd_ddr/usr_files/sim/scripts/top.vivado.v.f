@@ -6,6 +6,7 @@
 
 --include ${SIMSCRIPT_DIR}/../ipi_simfiles
 --include ${SIMSCRIPT_DIR}/../../include
+--include ${COMMON_DIR}/hdl
 
 ${SIMSCRIPT_DIR}/../../sim/tb/tb.v
 
@@ -38,6 +39,9 @@ ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_rs_w_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_us_1.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_rs_w_1.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd.v
+
+${COMMON_DIR}/sim/module/ddr4/rtl/ip_top/axiddr/ddr4_0.sv
+${COMMON_DIR}/sim/module/ddr4/rtl/ip_top/axiddr/ddr4_0_ddr4.sv
 
 -f ${COMMON_DIR}/sim/filelists/tb.vivado.f
 -f ${COMMON_DIR}/sim/filelists/ddr.vivado.f

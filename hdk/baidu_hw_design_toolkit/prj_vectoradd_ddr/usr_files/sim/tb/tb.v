@@ -75,9 +75,9 @@ module tb ();
          card_sim.sp_sim.host_mem_wr(host_a_addr,vector_a,32'hffffffff);
          card_sim.sp_sim.host_mem_wr(host_b_addr,vector_b,32'hffffffff);
          card_sim.sp_sim.host_mem_wr(host_result_addr,256'd0,32'hffffffff);
-         host_a_addr = host_a_addr + MASK_WIDTH; 
-         host_b_addr = host_b_addr + MASK_WIDTH; 
-         host_result_addr = host_result_addr + MASK_WIDTH; 
+         host_a_addr = host_a_addr + MASK_WIDTH;
+         host_b_addr = host_b_addr + MASK_WIDTH;
+         host_result_addr = host_result_addr + MASK_WIDTH;
       end
 
       //start dma operation for host2card
@@ -115,7 +115,7 @@ module tb ();
          if (calc_result != expect_result) begin
             $display ("%g Test fail", $time);
          end
-         host_result_addr = host_result_addr + MASK_WIDTH; 
+         host_result_addr = host_result_addr + MASK_WIDTH;
       end
       $display ("%g Test pass", $time);
       $finish;

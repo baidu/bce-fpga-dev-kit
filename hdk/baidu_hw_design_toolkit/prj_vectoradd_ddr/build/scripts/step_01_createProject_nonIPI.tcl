@@ -14,20 +14,37 @@ if { $rtfSandbox != "none" } {
   update_ip_catalog -rebuild
 }
 
-#Add Ddr controller block
-source $scriptDir/ddr_init.tcl
+# Genearte DDR define
+source $scriptDir/ddr_define.tcl
 
 # Add source files and IPs to the project.
 # Add the top-level source files.
 add_files -norecurse $commonDir/hdl
+add_files -norecurse $usrRtlPath
 add_files -norecurse $usrIncPath
 add_files -norecurse $commonDir/constraints
 
-add_file $usrRtlPath/usr_counter.v
-add_file $usrRtlPath/rp_bd.v
-
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     add_files -fileset constrs_1 -norecurse $xdcfile
+}
+
+# Genearte Mig
+if {($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_DDR4_C3 == 1)} {
+   if {$USE_AXI_DDR == 1} {
+      source $scriptDir/rp_mig_bd.tcl
+      validate_bd_design
+      save_bd_design
+      close_bd_design [get_bd_designs rp_mig_bd]
+
+      # Set the appropriate OOC Synthesis settings for the .bd
+      set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
+   } else {
+      set migxcifile $commonDir/ip/ddr4_0/ddr4_0.xci
+      read_ip $migxcifile
+      set_property generate_synth_checkpoint false [get_files $migxcifile]
+      generate_target all [get_files $migxcifile]
+      export_ip_user_files -of_objects $migxcifile -sync -force -quiet
+   }
 }
 
 # Add the xci file in usr_ip and generate IP core files

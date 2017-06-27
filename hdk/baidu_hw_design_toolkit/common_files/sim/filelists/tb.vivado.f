@@ -22,5 +22,6 @@ ${COMMON_DIR}/sim/top/card_sim.v
 ${COMMON_DIR}/sim/top/rp_sim.v
 ${COMMON_DIR}/sim/top/sp_sim.v
 ${COMMON_DIR}/sim/top/ddr_sim.v
+${COMMON_DIR}/sim/top/mig_dummy.v
 ${COMMON_DIR}/sim/top/mem_2ports.v
 

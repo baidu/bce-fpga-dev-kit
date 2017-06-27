@@ -10,12 +10,12 @@ file mkdir $synthDir/$updateName
 
 # Run OOC Synthesis for the static portion of the design
 puts "# HD INFO: Running OOC synthesis for the RP portion of the design for $updateName"
-reset_run rp_bd_wrapper_synth_1
-launch_runs rp_bd_wrapper_synth_1
-wait_on_run rp_bd_wrapper_synth_1
+reset_run rp_wrapper_synth_1
+launch_runs rp_wrapper_synth_1
+wait_on_run rp_wrapper_synth_1
 
 # Copy the log file to the synthesis directory
-file copy -force $projDir/${projName}.runs/rp_bd_wrapper_synth_1/runme.log $synthDir/$updateName/${updateName}_synth.log
+file copy -force $projDir/${projName}.runs/rp_wrapper_synth_1/runme.log $synthDir/$updateName/${updateName}_synth.log
 
 # Report ooc synthesis pass/fail and warning/error counts
 #if {[catch {exec grep -B 1 -A 1 "synth_design completed successfully" $synthDir/$updateName/${updateName}_synth.log} returnVal]} {
@@ -23,7 +23,7 @@ file copy -force $projDir/${projName}.runs/rp_bd_wrapper_synth_1/runme.log $synt
 #  error "Synthesis failed. Pass string not found."
 #} else {
   # Copy the post synthesis .dcp file to the synthesis directory
-file copy -force $projDir/${projName}.runs/rp_bd_wrapper_synth_1/rp_bd_wrapper.dcp $synthDir/$updateName/${updateName}_synth.dcp
+file copy -force $projDir/${projName}.runs/rp_wrapper_synth_1/rp_wrapper.dcp $synthDir/$updateName/${updateName}_synth.dcp
 
   # Error and Message Reporting
 #  set warningCount [lindex $returnVal 2]
