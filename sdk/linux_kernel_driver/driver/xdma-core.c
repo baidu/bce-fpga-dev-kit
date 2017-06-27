@@ -55,13 +55,15 @@ MODULE_PARM_DESC(poll_mode, "Set 1 for hw polling, default is 0 (interrupts)");
 
 static unsigned int enable_credit_mp;
 module_param(enable_credit_mp, uint, 0644);
-MODULE_PARM_DESC(enable_credit_mp, "Set 1 to enable creidt feature, default is 0 (no credit control)");
+MODULE_PARM_DESC(enable_credit_mp,
+        "Set 1 to enable creidt feature, default is 0 (no credit control)");
 
 #if SD_ACCEL
 /* SD_Accel Specific */
 static bool load_firmware = true;
 module_param(load_firmware, bool, 0644);
-MODULE_PARM_DESC(load_firmware, "For UltraScale boards load xclbin firmware file from /lib/firmware/xilinx directory (default: true)");
+MODULE_PARM_DESC(load_firmware,
+        "For UltraScale boards load xclbin firmware file from /lib/firmware/xilinx directory (default: true)");
 #endif
 
 /* SECTION: Module global variables */
@@ -468,7 +470,6 @@ static void channel_interrupts_enable(struct xdma_dev *lro, u32 mask)
 {
     struct interrupt_regs *reg =
         (struct interrupt_regs *)(lro->bar[lro->config_bar_idx] + XDMA_OFS_INT_CTRL);
-
     write_register(mask, &reg->channel_int_enable_w1s);
 }
 
@@ -477,7 +478,6 @@ static void channel_interrupts_disable(struct xdma_dev *lro, u32 mask)
 {
     struct interrupt_regs *reg =
         (struct interrupt_regs *)(lro->bar[lro->config_bar_idx] + XDMA_OFS_INT_CTRL);
-
     write_register(mask, &reg->channel_int_enable_w1c);
 }
 
@@ -486,7 +486,6 @@ static void user_interrupts_enable(struct xdma_dev *lro, u32 mask)
 {
     struct interrupt_regs *reg =
         (struct interrupt_regs *)(lro->bar[lro->config_bar_idx] + XDMA_OFS_INT_CTRL);
-
     write_register(mask, &reg->user_int_enable_w1s);
 }
 
@@ -495,7 +494,6 @@ static void user_interrupts_disable(struct xdma_dev *lro, u32 mask)
 {
     struct interrupt_regs *reg =
         (struct interrupt_regs *)(lro->bar[lro->config_bar_idx] + XDMA_OFS_INT_CTRL);
-
     write_register(mask, &reg->user_int_enable_w1c);
 }
 
@@ -1420,7 +1418,6 @@ static int engine_service(struct xdma_engine *engine, int desc_writeback)
 
         dbg_tfr("head of queue transfer 0x%p has %d descriptors\n",
                 transfer, (int)transfer->desc_num);
-
         dbg_tfr("Engine completed %d desc, %d not yet dequeued\n",
                 (int)desc_count, (int)desc_count - engine->desc_dequeued);
 
@@ -1474,10 +1471,12 @@ static void engine_service_work(struct work_struct *work)
 
     /* re-enable interrupts for this engine */
     if(engine->lro->msix_enabled){
-        write_register(engine->interrupt_enable_mask_value, &engine->regs->interrupt_enable_mask_w1s);
+        write_register(engine->interrupt_enable_mask_value,
+                &engine->regs->interrupt_enable_mask_w1s);
     }else{
         channel_interrupts_enable(engine->lro, engine->irq_bitmask);
     }
+
     /* unlock the engine */
     spin_unlock(&engine->lock);
 }
@@ -1792,7 +1791,7 @@ static int is_config_bar(struct xdma_dev *lro, int idx)
     irq_id = read_register(&irq_regs->identifier);
     cfg_id = read_register(&cfg_regs->identifier);
 
-    if (((irq_id & mask)== IRQ_BLOCK_ID) && ((cfg_id & mask)== CONFIG_BLOCK_ID)) {
+    if (((irq_id & mask) == IRQ_BLOCK_ID) && ((cfg_id & mask) == CONFIG_BLOCK_ID)) {
         dbg_init("BAR %d is the XDMA config BAR\n", idx);
         flag = 1;
     } else {
@@ -2084,7 +2083,7 @@ static void xdma_desc_adjacent(struct xdma_desc *desc, int next_adjacent)
 
     if (next_adjacent > 0) {
         extra_adj =  next_adjacent - 1;
-        if (extra_adj > MAX_EXTRA_ADJ){
+        if (extra_adj > MAX_EXTRA_ADJ) {
             extra_adj = MAX_EXTRA_ADJ;
         }
         max_adj_4k = (0x1000 - ((le32_to_cpu(desc->next_lo)) & 0xFFF)) / 32 - 1;
@@ -2849,7 +2848,6 @@ static int transfer_build(struct xdma_transfer *transfer, u64 ep_addr,
     BUG_ON(j > transfer->sgl_nents);
 
     /* j is the index of the last descriptor */
-
     dbg_desc("SGLE %4d: addr=0x%016llx length=0x%08x\n", i, (u64)addr, len);
     dbg_desc("DESC %4d: cont_addr=0x%llx cont_len=0x%08x ep_addr=0x%llx\n",
             j, (u64)cont_addr, cont_len, (unsigned long long)ep_addr);
@@ -2875,9 +2873,7 @@ static struct xdma_transfer *transfer_create(struct xdma_dev *lro,
 
     /* allocate transfer data structure */
     transfer = kzalloc(sizeof(struct xdma_transfer), GFP_KERNEL);
-
     dbg_sg("transfer_create()\n");
-
     if (!transfer)
         return NULL;
 
@@ -3299,10 +3295,8 @@ static ssize_t char_sgdma_read_write(struct file *file, char __user *buf,
 
     dbg_tfr("seq:%d file=0x%p, buf=0x%p, count=%lld, pos=%llu\n", seq,
             file, buf, (s64)count, (u64)*pos);
-
     dbg_tfr("seq:%d dir_to_dev=%d %s request\n", seq, dir_to_dev,
             dir_to_dev ? "write" : "read");
-
     dbg_tfr("%s engine channel %d (engine num %d)= 0x%p\n", engine->name,
             engine->channel, engine->number_in_channel, engine);
     dbg_tfr("lro = 0x%p\n", lro);
@@ -3429,11 +3423,10 @@ static int complete_cyclic(struct xdma_engine *engine, char __user *buf)
 
     /* iterate over newly received results */
     //while (result[engine->rx_head].status) {
-    while (engine->rx_head != engine->rx_tail||engine->rx_overrun) {
-        WARN_ON(result[engine->rx_head].status==0);
+    while (engine->rx_head != engine->rx_tail || engine->rx_overrun) {
+        WARN_ON(result[engine->rx_head].status == 0);
         dbg_tfr("result[engine->rx_head=%3d].status = 0x%08x\n",
                 engine->rx_head, (int)result[engine->rx_head].status);
-
         dbg_tfr("result[engine->rx_head=%3d].length = %d\n",
                 engine->rx_head, (int)result[engine->rx_head].length);
 
@@ -3703,10 +3696,8 @@ static int ioctl_do_addrmode_get(struct xdma_engine *engine, unsigned long arg)
     BUG_ON(!engine);
 
     src = !!engine->non_incr_addr;
-
     dbg_perf("IOCTL_XDMA_ADDRMODE_GET\n");
     rc = put_user(src, (int __user *)arg);
-
     return rc;
 }
 
@@ -4008,7 +3999,6 @@ static int cyclic_shutdown_interrupt(struct xdma_engine *engine)
     BUG_ON(!engine);
 
     rc = wait_event_interruptible(engine->shutdown_wq, !engine->running);
-
     if (rc) {
         dbg_tfr("wait_event_interruptible=%d\n", rc);
         return rc;
@@ -4197,6 +4187,7 @@ static int probe_scan_for_msi(struct xdma_dev *lro, struct pci_dev *pdev)
         rc = pci_enable_msi(pdev);
         if (rc < 0)
             dbg_init("Couldn't enable MSI mode: rc = %d\n", rc);
+
         lro->msi_enabled = 1;
     } else {
         dbg_init("MSI/MSI-X not detected - using legacy interrupts\n");
@@ -4274,6 +4265,7 @@ static void write_msix_vectors(struct xdma_dev *lro)
     u32 reg_val;
 
     BUG_ON(!lro);
+
     int_regs = (struct interrupt_regs *)(lro->bar[lro->config_bar_idx] + XDMA_OFS_INT_CTRL);
 
     /* user irq MSI-X vectors */
@@ -4303,11 +4295,11 @@ static int msix_irq_setup(struct xdma_dev *lro)
     int rc;
 
     BUG_ON(!lro);
+
     write_msix_vectors(lro);
 
     for (i = 0; i < MAX_USER_IRQ; i++) {
         rc = request_irq(lro->entry[i].vector, xdma_user_irq, 0, DRV_NAME, &lro->user_irq[i]);
-
         if (rc) {
             dbg_init("Couldn't use IRQ#%d, rc=%d\n", lro->entry[i].vector, rc);
             break;
@@ -4360,16 +4352,16 @@ static int irq_setup(struct xdma_dev *lro, struct pci_dev *pdev)
             dbg_init("Legacy Interrupt register value = %d\n", val);
             if (val > 1) {
                 val--;
-                w = (val<<24) | (val<<16) | (val<<8)| val;
+                w = (val << 24) | (val << 16) | (val << 8) | val;
                 // Program IRQ Block Channel vactor and IRQ Block User vector with Legacy interrupt value
                 reg = lro->bar[lro->config_bar_idx] + 0x2080;   // IRQ user
                 write_register(w, reg);
-                write_register(w, reg+0x4);
-                write_register(w, reg+0x8);
-                write_register(w, reg+0xC);
+                write_register(w, reg + 0x4);
+                write_register(w, reg + 0x8);
+                write_register(w, reg + 0xC);
                 reg = lro->bar[lro->config_bar_idx] + 0x20A0;   // IRQ Block
                 write_register(w, reg);
-                write_register(w, reg+0x4);
+                write_register(w, reg + 0x4);
             }
         }
         irq_flag = lro->msi_enabled ? 0 : IRQF_SHARED;
@@ -4386,21 +4378,17 @@ static int irq_setup(struct xdma_dev *lro, struct pci_dev *pdev)
 
 static void enable_credit_feature(struct xdma_dev *lro)
 {
-    u32 w;
+    u32 w = 0xF0000U;
     struct sgdma_common_regs *reg =
-        (struct sgdma_common_regs *)(lro->bar[lro->config_bar_idx] + (0x6*TARGET_SPACING));
+        (struct sgdma_common_regs *)(lro->bar[lro->config_bar_idx] + (0x6 * TARGET_SPACING));
     printk("credit_feature_enable addr = %p",&reg->credit_feature_enable);
-
-    w = 0xF0000U;
-    write_register(w,&reg->credit_feature_enable);
+    write_register(w, &reg->credit_feature_enable);
 }
 
 static u32 get_engine_type(struct engine_regs *regs)
 {
     u32 value;
-
     BUG_ON(!regs);
-
     value = read_register(&regs->identifier);
     return (value & 0x8000U) ? 1 : 0;
 }
@@ -4408,20 +4396,15 @@ static u32 get_engine_type(struct engine_regs *regs)
 static u32 get_engine_channel_id(struct engine_regs *regs)
 {
     u32 value;
-
     BUG_ON(!regs);
-
     value = read_register(&regs->identifier);
-
     return (value & 0x00000f00U) >> 8;
 }
 
 static u32 get_engine_id(struct engine_regs *regs)
 {
     u32 value;
-
     BUG_ON(!regs);
-
     value = read_register(&regs->identifier);
     return (value & 0xffff0000U) >> 16;
 }
@@ -4685,7 +4668,6 @@ static struct xdma_char * create_xvc_interface(struct xdma_dev *lro)
     }
 
     /* bring character device live */
-    /*XXX what the fuck? XDMA_MINOR_COUNT*/
     rc = cdev_add(&lro_char->cdev, lro_char->cdevno, 1);
     if (rc < 0) {
         dbg_init("cdev_add() = %d\n", rc);
@@ -4728,7 +4710,6 @@ static int create_interfaces(struct xdma_dev *lro)
         dbg_init("Creating xvc interface failed\n");
         goto fail;
     }
-    lro->xvc_char.pci_dev = lro->pci_dev;
 #ifdef INCLUDE_CUSTOM_MMCONFIG
     // Comment this out on 32 bit systems
     pci_mmcfg_driver_init();
@@ -5163,6 +5144,7 @@ static ssize_t char_ctrl_read(struct file *file, char __user *buf, size_t count,
     /* only 32-bit aligned and 32-bit multiples */
     if (*pos & 3)
         return -EPROTO;
+
     /* first address is BAR base plus file position offset */
     reg = lro->bar[lro_char->bar] + *pos;
     w = read_register(reg);
@@ -5199,9 +5181,9 @@ static ssize_t char_ctrl_write(struct file *file, const char __user *buf, size_t
     ret = copy_from_user(&w, buf, 4);
     if (ret)
         dbg_sg("Copy from user failed but continuing\n");
-
     dbg_sg("char_ctrl_write(0x%08x @%p, count=%ld, pos=%d)\n", w, reg, (long)count, (int)*pos);
     write_register(w, reg);
+
     *pos += 4;
     return 4;
 }
@@ -5271,7 +5253,6 @@ static unsigned int char_events_poll(struct file *file, poll_table *wait)
     spin_lock_irqsave(&user_irq->events_lock, flags);
     if (user_irq->events_irq)
         mask = POLLIN | POLLRDNORM; /* readable */
-
     spin_unlock_irqrestore(&user_irq->events_lock, flags);
 
     return mask;
@@ -5730,6 +5711,7 @@ static int __init xdma_init(void)
     for (i = 0; i < MAX_XDMA_DEVICES; i++){
         dev_present[i] = 0;
     }
+
 err_class:
     return rc;
 }
