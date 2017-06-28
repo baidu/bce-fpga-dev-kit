@@ -231,7 +231,7 @@
 #if SD_ACCEL
 # define NODE_PREFIX "xcldma"
 #else
-# define NODE_PREFIX DRV_NAME
+# define NODE_PREFIX "xdma"
 #endif
 
 /* SECTION: Enum definitions */
