@@ -132,6 +132,4 @@ set_property PACKAGE_PIN AU36 [get_ports {C0_DDR4_dqs_t[8]}]
 set_property PACKAGE_PIN AU37 [get_ports {C0_DDR4_dqs_c[8]}]
 
 #set false path for usr reset
-set_false_path -through [get_nets -of_objects [get_pins rp_bd_i/*/c0_ddr4_ui_clk_sync_rst]]
-
-
+set_false_path -through [get_nets -of_objects [get_pins rp_i/*/c0_ddr4_ui_clk_sync_rst]]

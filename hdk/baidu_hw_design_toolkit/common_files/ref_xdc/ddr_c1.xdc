@@ -132,5 +132,5 @@ set_property PACKAGE_PIN BA19 [get_ports {C1_DDR4_dq[70]}]
 set_property PACKAGE_PIN BA18 [get_ports {C1_DDR4_dq[71]}]
 
 #set false path for usr reset
-set_false_path -through [get_nets -of_objects [get_pins rp_bd_i/*/c1_ddr4_ui_clk_sync_rst]]
+set_false_path -through [get_nets -of_objects [get_pins rp_i/*/c1_ddr4_ui_clk_sync_rst]]
 

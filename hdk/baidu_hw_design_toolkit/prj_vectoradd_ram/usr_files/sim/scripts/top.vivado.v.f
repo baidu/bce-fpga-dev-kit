@@ -6,6 +6,8 @@
 
 --include ${SIMSCRIPT_DIR}/../ipi_simfiles
 --include ${SIMSCRIPT_DIR}/../../include
+--include ${COMMON_DIR}/hdl
+
 
 ${SIMSCRIPT_DIR}/../../sim/tb/tb.v
 

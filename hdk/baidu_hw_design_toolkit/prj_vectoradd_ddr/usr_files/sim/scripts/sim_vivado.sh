@@ -25,7 +25,7 @@ export SIMSCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export BUILD_DIR="${SIMSCRIPT_DIR}/../../../build"
 export COMMON_DIR="${SIMSCRIPT_DIR}/../../../../common_files"
 
-if [ $SIM_IPI == 1 ]; then 
+if [ $SIM_IPI == 1 ]; then
     echo "Simulation IPI mode, generating IPI sim files..."
     source ${COMMON_DIR}/sim/script/build_ipi_simfiles.tcl
 else

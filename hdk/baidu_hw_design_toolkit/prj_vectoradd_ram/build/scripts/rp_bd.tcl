@@ -228,8 +228,13 @@ CONFIG.FREQ_HZ {250000000} \
   set s_axi_aresetn [ create_bd_port -dir I -type rst s_axi_aresetn ]
   set usr_clk [ create_bd_port -dir I -type clk usr_clk ]
   set_property -dict [ list \
+CONFIG.ASSOCIATED_RESET {usr_clk_rst} \
 CONFIG.FREQ_HZ {100000000} \
  ] $usr_clk
+  set usr_clk_rst [ create_bd_port -dir I -type rst usr_clk_rst ]
+  set_property -dict [ list \
+CONFIG.POLARITY {ACTIVE_HIGH} \
+ ] $usr_clk_rst
   set usr_irq_ack [ create_bd_port -dir I -from 15 -to 0 -type data usr_irq_ack ]
   set usr_irq_req [ create_bd_port -dir O -from 15 -to 0 usr_irq_req ]
 
@@ -278,13 +283,29 @@ CONFIG.S01_HAS_REGSLICE {4} \
   # Create instance: axislave_cu_apctrl_v1_0_0, and set properties
   set axislave_cu_apctrl_v1_0_0 [ create_bd_cell -type ip -vlnv baidu.com:user:axislave_cu_apctrl_v1_0 axislave_cu_apctrl_v1_0_0 ]
 
-  set_property -dict [ list \
-CONFIG.NUM_READ_OUTSTANDING {1} \
-CONFIG.NUM_WRITE_OUTSTANDING {1} \
- ] [get_bd_intf_pins /axislave_cu_apctrl_v1_0_0/s00_axi]
-
   # Create instance: example_0, and set properties
   set example_0 [ create_bd_cell -type ip -vlnv xilinx.com:hls:example example_0 ]
+
+  # Create instance: system_ila1, and set properties
+  set system_ila1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:system_ila system_ila1 ]
+  set_property -dict [ list \
+CONFIG.C_MON_TYPE {MIX} \
+CONFIG.C_NUM_MONITOR_SLOTS {1} \
+CONFIG.C_NUM_OF_PROBES {1} \
+CONFIG.C_PROBE0_TYPE {0} \
+CONFIG.C_SLOT_0_APC_EN {0} \
+CONFIG.C_SLOT_0_AXI_AR_SEL_DATA {1} \
+CONFIG.C_SLOT_0_AXI_AR_SEL_TRIG {1} \
+CONFIG.C_SLOT_0_AXI_AW_SEL_DATA {1} \
+CONFIG.C_SLOT_0_AXI_AW_SEL_TRIG {1} \
+CONFIG.C_SLOT_0_AXI_B_SEL_DATA {1} \
+CONFIG.C_SLOT_0_AXI_B_SEL_TRIG {1} \
+CONFIG.C_SLOT_0_AXI_R_SEL_DATA {1} \
+CONFIG.C_SLOT_0_AXI_R_SEL_TRIG {0} \
+CONFIG.C_SLOT_0_AXI_W_SEL_DATA {1} \
+CONFIG.C_SLOT_0_AXI_W_SEL_TRIG {0} \
+CONFIG.C_SLOT_0_INTF_TYPE {xilinx.com:interface:aximm_rtl:1.0} \
+ ] $system_ila1
 
   # Create instance: util_vector_logic_0, and set properties
   set util_vector_logic_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:util_vector_logic util_vector_logic_0 ]
@@ -298,6 +319,10 @@ CONFIG.C_SIZE {1} \
   connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTA [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTA] [get_bd_intf_pins axi_bram_ctrl_0_bram/BRAM_PORTA]
   connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTB [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTB] [get_bd_intf_pins axi_bram_ctrl_0_bram/BRAM_PORTB]
   connect_bd_intf_net -intf_net axi_interconnect_1_M00_AXI [get_bd_intf_pins axi_bram_ctrl_0/S_AXI] [get_bd_intf_pins axi_interconnect_1/M00_AXI]
+connect_bd_intf_net -intf_net [get_bd_intf_nets axi_interconnect_1_M00_AXI] [get_bd_intf_pins axi_interconnect_1/M00_AXI] [get_bd_intf_pins system_ila1/SLOT_0_AXI]
+  set_property -dict [ list \
+HDL_ATTRIBUTE.DEBUG {true} \
+ ] [get_bd_intf_nets axi_interconnect_1_M00_AXI]
   connect_bd_intf_net -intf_net example_0_m_axi_a_V [get_bd_intf_pins axi_interconnect_1/S01_AXI] [get_bd_intf_pins example_0/m_axi_a_V]
 
   # Create port connections
@@ -315,10 +340,13 @@ CONFIG.C_SIZE {1} \
   connect_bd_net -net example_0_ap_idle [get_bd_pins axislave_cu_apctrl_v1_0_0/ap_idle] [get_bd_pins example_0/ap_idle]
   connect_bd_net -net example_0_ap_ready [get_bd_pins axislave_cu_apctrl_v1_0_0/ap_ready] [get_bd_pins example_0/ap_ready]
   connect_bd_net -net i_soft_rst_n_1 [get_bd_ports i_soft_rst_n] [get_bd_pins util_vector_logic_0/Op1]
-  connect_bd_net -net s_axi_aclk_1 [get_bd_ports s_axi_aclk] [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] [get_bd_pins axi_interconnect_1/ACLK] [get_bd_pins axi_interconnect_1/M00_ACLK] [get_bd_pins axi_interconnect_1/S00_ACLK] [get_bd_pins axi_interconnect_1/S01_ACLK] [get_bd_pins axislave_cu_apctrl_v1_0_0/s00_axi_aclk] [get_bd_pins example_0/ap_clk]
+  connect_bd_net -net s_axi_aclk_1 [get_bd_ports s_axi_aclk] [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] [get_bd_pins axi_interconnect_1/ACLK] [get_bd_pins axi_interconnect_1/M00_ACLK] [get_bd_pins axi_interconnect_1/S00_ACLK] [get_bd_pins axi_interconnect_1/S01_ACLK] [get_bd_pins axislave_cu_apctrl_v1_0_0/s00_axi_aclk] [get_bd_pins example_0/ap_clk] [get_bd_pins system_ila1/clk]
   connect_bd_net -net s_axi_aresetn_1 [get_bd_ports s_axi_aresetn] [get_bd_pins axi_bram_ctrl_0/s_axi_aresetn] [get_bd_pins axi_interconnect_1/ARESETN] [get_bd_pins axi_interconnect_1/M00_ARESETN] [get_bd_pins axi_interconnect_1/S00_ARESETN] [get_bd_pins axi_interconnect_1/S01_ARESETN] [get_bd_pins axislave_cu_apctrl_v1_0_0/s00_axi_aresetn] [get_bd_pins util_vector_logic_0/Op2]
   connect_bd_net -net usr_irq_ack_1 [get_bd_ports usr_irq_ack] [get_bd_pins axislave_cu_apctrl_v1_0_0/i_interrpt_done]
-  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins example_0/ap_rst_n] [get_bd_pins util_vector_logic_0/Res]
+  connect_bd_net -net util_vector_logic_0_Res [get_bd_pins example_0/ap_rst_n] [get_bd_pins system_ila1/probe0] [get_bd_pins util_vector_logic_0/Res]
+  set_property -dict [ list \
+HDL_ATTRIBUTE.DEBUG {true} \
+ ] [get_bd_nets util_vector_logic_0_Res]
 
   # Create address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x00000000 [get_bd_addr_spaces example_0/Data_m_axi_a_V] [get_bd_addr_segs axi_bram_ctrl_0/S_AXI/Mem0] SEG_axi_bram_ctrl_0_Mem0
@@ -329,45 +357,47 @@ CONFIG.C_SIZE {1} \
   regenerate_bd_layout -layout_string {
    guistr: "# # String gsaved with Nlview 6.6.5b  2016-09-06 bk=1.3687 VDI=39 GEI=35 GUI=JA:1.6
 #  -string -flagsOSRD
-preplace port s_axi_aclk -pg 1 -y 730 -defaultsOSRD
-preplace port S_AXI_LITE -pg 1 -y 340 -defaultsOSRD
-preplace port S_AXI -pg 1 -y 690 -defaultsOSRD
-preplace port s_axi_aresetn -pg 1 -y 750 -defaultsOSRD
-preplace port i_soft_rst_n -pg 1 -y 620 -defaultsOSRD
-preplace port usr_clk -pg 1 -y 460 -defaultsOSRD
-preplace portBus usr_irq_req -pg 1 -y 370 -defaultsOSRD
-preplace portBus usr_irq_ack -pg 1 -y 360 -defaultsOSRD
-preplace inst axi_bram_ctrl_0_bram -pg 1 -lvl 5 -y 800 -defaultsOSRD
-preplace inst util_vector_logic_0 -pg 1 -lvl 1 -y 630 -defaultsOSRD
+preplace port s_axi_aclk -pg 1 -y 630 -defaultsOSRD
+preplace port S_AXI_LITE -pg 1 -y 140 -defaultsOSRD
+preplace port S_AXI -pg 1 -y 380 -defaultsOSRD
+preplace port usr_clk_rst -pg 1 -y 10 -defaultsOSRD
+preplace port s_axi_aresetn -pg 1 -y 520 -defaultsOSRD
+preplace port i_soft_rst_n -pg 1 -y 430 -defaultsOSRD
+preplace port usr_clk -pg 1 -y 40 -defaultsOSRD
+preplace portBus usr_irq_req -pg 1 -y 100 -defaultsOSRD
+preplace portBus usr_irq_ack -pg 1 -y 160 -defaultsOSRD
+preplace inst axi_bram_ctrl_0_bram -pg 1 -lvl 5 -y 510 -defaultsOSRD
+preplace inst util_vector_logic_0 -pg 1 -lvl 1 -y 440 -defaultsOSRD
 preplace inst example_0 -pg 1 -lvl 2 -y 180 -defaultsOSRD
-preplace inst axi_interconnect_1 -pg 1 -lvl 3 -y 780 -defaultsOSRD
-preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 1 -y 400 -defaultsOSRD
-preplace inst axi_bram_ctrl_0 -pg 1 -lvl 4 -y 800 -defaultsOSRD
+preplace inst system_ila1 -pg 1 -lvl 4 -y 630 -defaultsOSRD
+preplace inst axi_interconnect_1 -pg 1 -lvl 3 -y 470 -defaultsOSRD
+preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 1 -y 200 -defaultsOSRD
+preplace inst axi_bram_ctrl_0 -pg 1 -lvl 4 -y 510 -defaultsOSRD
 preplace netloc S_AXI_LITE_1 1 0 1 NJ
 preplace netloc i_soft_rst_n_1 1 0 1 NJ
-preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 1 1 400
-preplace netloc s_axi_aclk_1 1 0 4 0J 730 480 730 830 930 1130
-preplace netloc s_axi_aresetn_1 1 0 4 10 750 NJ 750 820 940 1140
-preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 1 5 430J 370 NJ 370 NJ 370 NJ 370 N
+preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 1 1 450
+preplace netloc s_axi_aclk_1 1 0 4 10 630 480 630 810 630 1130
+preplace netloc s_axi_aresetn_1 1 0 4 20 520 NJ 520 820 620 1140J
+preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 1 5 420J 640 800J 100 NJ 100 NJ 100 NJ
 preplace netloc axi_bram_ctrl_0_BRAM_PORTA 1 4 1 N
 preplace netloc usr_irq_ack_1 1 0 1 NJ
-preplace netloc example_0_ap_done 1 0 2 20 80 N
-preplace netloc axislave_cu_apctrl_0_ap_start 1 1 1 380
+preplace netloc example_0_ap_done 1 0 2 30 10 480J
+preplace netloc axislave_cu_apctrl_0_ap_start 1 1 1 390
 preplace netloc axi_bram_ctrl_0_BRAM_PORTB 1 4 1 N
-preplace netloc util_vector_logic_0_Res 1 1 1 490
-preplace netloc example_0_m_axi_a_V 1 2 1 830
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 1 1 420
-preplace netloc S00_AXI_1 1 0 3 NJ 690 NJ 690 NJ
-preplace netloc example_0_ap_idle 1 0 2 30J 100 NJ
-preplace netloc example_0_ap_ready 1 0 2 40 120 N
-preplace netloc axislave_cu_apctrl_0_array_len 1 1 1 450
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 1 1 440
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 1 1 460
-preplace netloc axi_interconnect_1_M00_AXI 1 3 1 N
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 1 1 470
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 1 1 410
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 1 1 390
-levelinfo -pg 1 -20 210 670 990 1270 1510 1630 -top -10 -bot 1560
+preplace netloc util_vector_logic_0_Res 1 1 3 490 650 NJ 650 NJ
+preplace netloc example_0_m_axi_a_V 1 2 1 820
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 1 1 440
+preplace netloc S00_AXI_1 1 0 3 NJ 380 NJ 380 NJ
+preplace netloc example_0_ap_idle 1 0 2 40 30 470J
+preplace netloc example_0_ap_ready 1 0 2 50 50 440J
+preplace netloc axislave_cu_apctrl_0_array_len 1 1 1 400
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 1 1 470
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 1 1 410
+preplace netloc axi_interconnect_1_M00_AXI 1 3 1 1120
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 1 1 390
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 1 1 460
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 1 1 430
+levelinfo -pg 1 -10 220 650 960 1300 1540 1660 -top 0 -bot 690
 ",
 }
 

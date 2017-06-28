@@ -12,7 +12,7 @@ if { $rtfSandbox != "none" } {
   update_ip_catalog -rebuild
 }
 
-# Generate DDR define
+# Genearte DDR define
 source $scriptDir/ddr_define.tcl
 
 # Add source files and IPs to the project.
@@ -26,9 +26,28 @@ foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
 # Add additional design IPs
 source $scriptDir/ip_configs.tcl
 
+# Genearte Mig
+if {($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_DDR4_C3 == 1)} {
+   if {$USE_AXI_DDR == 1} {
+      source $scriptDir/rp_mig_bd.tcl
+      validate_bd_design
+      save_bd_design
+      close_bd_design [get_bd_designs rp_mig_bd]
+
+      # Set the appropriate OOC Synthesis settings for the .bd
+      set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
+   } else {
+      set migxcifile $commonDir/ip/ddr4_0/ddr4_0.xci
+      read_ip $migxcifile
+      set_property generate_synth_checkpoint false [get_files $migxcifile]
+      generate_target all [get_files $migxcifile]
+      export_ip_user_files -of_objects $migxcifile -sync -force -quiet
+   }
+}
+
 # Add the PR region .bd design and associated wrapper. This file can be updated by
 # modifying the .bd design and using the following command to overwrite the existing
-# rp_bd.tcl file. 
+# rp_bd.tcl file.
 #     - write_bd_tcl -force -no_ip_version ./scripts/rp_bd.tcl
 source $scriptDir/rp_bd.tcl
 validate_bd_design
@@ -37,20 +56,9 @@ close_bd_design [get_bd_designs rp_bd]
 # Set the appropriate OOC Synthesis settings for the .bd
 set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_bd/rp_bd.bd]
 
-# Genearte Mig
-if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_DDR4_C3 == 1)} {
-    source $scriptDir/rp_mig_bd.tcl
-    validate_bd_design
-    save_bd_design
-    close_bd_design [get_bd_designs rp_mig_bd]
-
-    # Set the appropriate OOC Synthesis settings for the .bd
-    set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
-}
-
 # Set the PR region as OOC
-create_fileset -blockset -define_from rp_bd_wrapper rp_bd_wrapper
-add_file -fileset rp_bd_wrapper $commonDir/constraints/rp_bd_wrapper_ooc.xdc
+create_fileset -blockset -define_from rp_wrapper rp_wrapper
+add_file -fileset rp_wrapper $commonDir/constraints/rp_wrapper_ooc.xdc
 
 # Error and Message Reporting
 set warningCount [get_msg_config -severity {Warning} -count]

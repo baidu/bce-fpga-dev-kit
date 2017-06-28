@@ -177,6 +177,7 @@ module card_sim ();
    wire   [8:0]             C3_DDR4_dqs_c;
    wire   [8:0]             C3_DDR4_dqs_t;
 
+`ifndef FAST_SIM
    `ifdef USE_DDR4_C0
    dram_wrapper dram_wrapper_c0(
       .c0_ddr4_act_n(C0_DDR4_act_n),
@@ -249,6 +250,7 @@ module card_sim ();
       .c0_ddr4_dqs_t(C3_DDR4_dqs_t)
    );
    `endif
+`endif
 
    sp_sim sp_sim(
       .clk(axi_clk),

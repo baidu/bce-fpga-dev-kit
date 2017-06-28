@@ -93,8 +93,8 @@ ${COMMON_DIR}/sim/module/ddr4/rtl/cal/ddr4_v2_1_cal_xsdb_arbiter.sv
 ${COMMON_DIR}/sim/module/ddr4/rtl/cal/ddr4_v2_1_cal.sv
 ${COMMON_DIR}/sim/module/ddr4/rtl/cal/ddr4_v2_1_chipscope_xsdb_slave.sv
 ${COMMON_DIR}/sim/module/ddr4/rtl/cal/ddr4_v2_1_dp_AB9.sv
-${COMMON_DIR}/sim/module/ddr4/rtl/ip_top/ddr4_0.sv
-${COMMON_DIR}/sim/module/ddr4/rtl/ip_top/ddr4_0_ddr4.sv
+#${COMMON_DIR}/sim/module/ddr4/rtl/ip_top/ddr4_0.sv
+#${COMMON_DIR}/sim/module/ddr4/rtl/ip_top/ddr4_0_ddr4.sv
 ${COMMON_DIR}/sim/module/ddr4/rtl/ip_top/ddr4_0_ddr4_mem_intfc.sv
 ${COMMON_DIR}/sim/module/ddr4/tb/microblaze_mcs_0.sv
 #${COMMON_DIR}/sim/module/ddr4/ip_0/sim/ddr4_0_microblaze_mcs.v
