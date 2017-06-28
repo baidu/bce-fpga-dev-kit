@@ -60,30 +60,23 @@ long setup_xvc_algo(struct xdma_dev *lro)
 
             bar_start = pci_resource_start(lro->pci_dev, bar_index);
             bar_len = pci_resource_len(lro->pci_dev, bar_index);
-            map_len = bar_len;
+            map_len = bar_len - user_config.bar_offset;
 
-            if (!bar_len) {
+            if (!bar_start || !bar_len) {
                 printk(KERN_WARNING LOG_PREFIX "BAR #%d is not present.\n", bar_index);
+            } else if (bar_len <= user_config.bar_offset) {
+                printk(KERN_WARNING LOG_PREFIX "Invalid offset in BAR #%d, bar_len = %llu, offset = %llu\n",
+                        bar_index, (u64)bar_len, (u64)user_config.bar_offset);
             } else {
                 // XXX: add user specified BAR offset to base address of mapping,
                 // modify user_config struct accordingly
                 algo->offset.bar = lro->bar[user_config.bar_index] + user_config.bar_offset;
-                /*
-                 *algo->offset.bar =
-                 *        pci_iomap(xvc_char->pci_dev, bar_index, map_len) + user_config.bar_offset;
-                 */
-
-                if (!(algo->offset.bar)) {
-                    printk(KERN_ERR LOG_PREFIX "Could not map BAR %d\n", bar_index);
-                    return -ENODEV;
-                } else {
-                    algo->type = XVC_ALGO_BAR;
-                    printk(KERN_INFO LOG_PREFIX
-                            "BAR%d at 0x%llx mapped at 0x%p, length=%llu(/%llu)\n",
-                            bar_index, (u64)bar_start, algo->offset.bar,
-                            (u64)map_len, (u64)bar_len);
-                    status = 0;
-                }
+                algo->type = XVC_ALGO_BAR;
+                printk(KERN_INFO LOG_PREFIX
+                        "BAR%d at 0x%llx mapped at 0x%p, offset=%llu, length=%llu(/%llu)\n",
+                        bar_index, (u64)bar_start, algo->offset.bar,
+                        (u64)user_config.bar_offset, (u64)map_len, (u64)bar_len);
+                status = 0;
             }
         }
     }
