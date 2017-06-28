@@ -5248,7 +5248,7 @@ static unsigned int char_events_poll(struct file *file, poll_table *wait)
     user_irq = lro_char->user_irq;
     BUG_ON(!user_irq);
 
-    poll_wait(file, &user_irq->events_wq,  wait);
+    poll_wait(file, &user_irq->events_wq, wait);
 
     spin_lock_irqsave(&user_irq->events_lock, flags);
     if (user_irq->events_irq)
