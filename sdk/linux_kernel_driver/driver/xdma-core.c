@@ -4456,7 +4456,7 @@ static int probe_for_engine(struct xdma_dev *lro, int dir_to_dev, int channel)
         dbg_init("Probing for H2C %d engine at %p\n", channel, regs);
         engine_id_expected = XDMA_ID_H2C;
     } else {
-        dbg_init("Probing for C2C %d engine at %p\n", channel, regs);
+        dbg_init("Probing for C2H %d engine at %p\n", channel, regs);
         engine_id_expected = XDMA_ID_C2H;
     }
 
@@ -4969,7 +4969,7 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
     lro->feature_id = find_feature_id(lro);
 #endif
 
-    printk(KERN_DEBUG "Create device attribute file for major =%d, instance = %d\n",
+    printk(KERN_DEBUG "Create device attribute file for major = %d, instance = %d\n",
             (int)lro->major, (int)lro->instance);
     rc = device_create_file(&pdev->dev, &dev_attr_xdma_dev_instance);
     if (rc) {

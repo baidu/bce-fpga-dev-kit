@@ -77,7 +77,7 @@
 
 /* SECTION: Preprocessor macros/constants */
 
-#define DRV_NAME "xdma"
+#define DRV_NAME "xdma_xvc"
 #define XDMA_MINOR_BASE (0)
 #define XDMA_MINOR_COUNT (255)
 
