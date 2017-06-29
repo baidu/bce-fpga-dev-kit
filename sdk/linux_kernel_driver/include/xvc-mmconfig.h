@@ -31,8 +31,8 @@ extern struct acpi_mcfg_allocation *pci_mmcfg_config;
 extern int pci_mmcfg_config_num;
 
 int pci_mmcfg_read(unsigned int seg, unsigned int bus,
-        unsigned int devfn, int reg, int len, u32 *value);
+                   unsigned int devfn, int reg, int len, u32 *value);
 int pci_mmcfg_write(unsigned int seg, unsigned int bus,
-        unsigned int devfn, int reg, int len, u32 value);
+                    unsigned int devfn, int reg, int len, u32 value);
 
 #endif /* _MMCONFIG_CUSTOM_H */

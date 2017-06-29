@@ -39,9 +39,10 @@ static char __iomem *get_virt(unsigned int seg, unsigned bus)
     for (cfg_num = 0; cfg_num < pci_mmcfg_config_num; cfg_num++) {
         cfg = pci_mmcfg_virt[cfg_num].cfg;
         if ((cfg->pci_segment == seg) &&
-                (cfg->start_bus_number <= bus) &&
-                (cfg->end_bus_number >= bus))
+            (cfg->start_bus_number <= bus) &&
+            (cfg->end_bus_number >= bus)) {
             return pci_mmcfg_virt[cfg_num].virt;
+        }
     }
 
     /* Fall back to type 0 */
@@ -53,13 +54,14 @@ static char __iomem *pci_dev_base(unsigned int seg, unsigned int bus, unsigned i
     char __iomem *addr;
 
     addr = get_virt(seg, bus);
-    if (!addr)
+    if (!addr) {
         return NULL;
+    }
     return addr + ((bus << 20) | (devfn << 12));
 }
 
 int pci_mmcfg_read(unsigned int seg, unsigned int bus,
-        unsigned int devfn, int reg, int len, u32 *value)
+                   unsigned int devfn, int reg, int len, u32 *value)
 {
     char __iomem *addr;
 
@@ -71,53 +73,56 @@ err:
     }
 
     addr = pci_dev_base(seg, bus, devfn);
-    if (!addr)
+    if (!addr) {
         goto err;
+    }
 
     switch (len) {
-        case 1:
-            *value = mmio_config_readb(addr + reg);
-            break;
-        case 2:
-            *value = mmio_config_readw(addr + reg);
-            break;
-        case 4:
-            *value = mmio_config_readl(addr + reg);
-            break;
+    case 1:
+        *value = mmio_config_readb(addr + reg);
+        break;
+    case 2:
+        *value = mmio_config_readw(addr + reg);
+        break;
+    case 4:
+        *value = mmio_config_readl(addr + reg);
+        break;
     }
 
     return 0;
 }
 
 int pci_mmcfg_write(unsigned int seg, unsigned int bus,
-        unsigned int devfn, int reg, int len, u32 value)
+                    unsigned int devfn, int reg, int len, u32 value)
 {
     char __iomem *addr;
 
     /* Why do we have this when nobody checks it. How about a BUG()!? -AK */
-    if (unlikely((bus > 255) || (devfn > 255) || (reg > 4095)))
+    if (unlikely((bus > 255) || (devfn > 255) || (reg > 4095))) {
         return -EINVAL;
+    }
 
     addr = pci_dev_base(seg, bus, devfn);
-    if (!addr)
+    if (!addr) {
         return -EINVAL;
+    }
 
     switch (len) {
-        case 1:
-            mmio_config_writeb(addr + reg, value);
-            break;
-        case 2:
-            mmio_config_writew(addr + reg, value);
-            break;
-        case 4:
-            mmio_config_writel(addr + reg, value);
-            break;
+    case 1:
+        mmio_config_writeb(addr + reg, value);
+        break;
+    case 2:
+        mmio_config_writew(addr + reg, value);
+        break;
+    case 4:
+        mmio_config_writel(addr + reg, value);
+        break;
     }
 
     return 0;
 }
 
-static void __iomem * mcfg_ioremap(struct acpi_mcfg_allocation *cfg)
+static void __iomem *mcfg_ioremap(struct acpi_mcfg_allocation *cfg)
 {
     void __iomem *addr;
     u64 start, size;
@@ -138,8 +143,9 @@ static void arch_cleanup(void)
 {
     int i;
 
-    if (pci_mmcfg_virt == NULL)
+    if (pci_mmcfg_virt == NULL) {
         return;
+    }
 
     for (i = 0; i < pci_mmcfg_config_num; ++i) {
         if (pci_mmcfg_virt[i].virt) {
@@ -167,7 +173,7 @@ int __section(.text) pci_mmcfg_arch_init(void)
         pci_mmcfg_virt[i].virt = mcfg_ioremap(&pci_mmcfg_config[i]);
         if (!pci_mmcfg_virt[i].virt) {
             printk(KERN_ERR LOG_PREFIX "Cannot map mmconfig aperture for segment %d\n",
-                    pci_mmcfg_config[i].pci_segment);
+                   pci_mmcfg_config[i].pci_segment);
             arch_cleanup();
             return 0;
         }

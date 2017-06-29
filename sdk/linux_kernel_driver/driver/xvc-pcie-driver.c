@@ -60,19 +60,21 @@ static const struct xvc_offsets xvc_offsets[] = {
 
 int pci_read32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 *value)
 {
-    switch(algo->type) {
-        case XVC_ALGO_BAR:
-            *value = ioread32(algo->offset.bar + offset);
-            return 0;
-        case XVC_ALGO_CFG:
+    switch (algo->type) {
+    case XVC_ALGO_BAR:
+        *value = ioread32(algo->offset.bar + offset);
+        return 0;
+    case XVC_ALGO_CFG:
 #ifndef INCLUDE_CUSTOM_MMCONFIG
-            // Use this function for use with 32-bit systems
-            return pci_read_config_dword(dev, algo->offset.cfg + offset, value);
+        // Use this function for use with 32-bit systems
+        return pci_read_config_dword(dev, algo->offset.cfg + offset, value);
 #else
-            // Use this function for use with 64-bit systems
-            return pci_mmcfg_read(pci_domain_nr(dev->bus), dev->bus->number, dev->devfn, algo->offset.cfg + offset, 4, value);
+        // Use this function for use with 64-bit systems
+        return pci_mmcfg_read(pci_domain_nr(dev->bus), dev->bus->number, dev->devfn,
+                              algo->offset.cfg + offset, 4, value);
 #endif
-        default:;
+    default:
+        ;
     }
 
     return -1;
@@ -80,25 +82,29 @@ int pci_read32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 *va
 
 int pci_write32(struct pci_dev *dev, struct xvc_algo_t *algo, int offset, u32 value)
 {
-    switch(algo->type) {
-        case XVC_ALGO_BAR:
-            iowrite32(value, algo->offset.bar + offset);
-            return 0;
-        case XVC_ALGO_CFG:
+    switch (algo->type) {
+    case XVC_ALGO_BAR:
+        iowrite32(value, algo->offset.bar + offset);
+        return 0;
+    case XVC_ALGO_CFG:
 #ifndef INCLUDE_CUSTOM_MMCONFIG
-            // Use this function for use with 32-bit systems
-            return pci_write_config_dword(dev, algo->offset.cfg + offset, value);
+        // Use this function for use with 32-bit systems
+        return pci_write_config_dword(dev, algo->offset.cfg + offset, value);
 #else
-            // Use this function for use with 64-bit systems
-            return pci_mmcfg_write(pci_domain_nr(dev->bus), dev->bus->number, dev->devfn, algo->offset.cfg + offset, 4, value);
+        // Use this function for use with 64-bit systems
+        return pci_mmcfg_write(pci_domain_nr(dev->bus), dev->bus->number, dev->devfn,
+                               algo->offset.cfg + offset, 4, value);
 #endif
-        default:;
+    default:
+        ;
     }
 
     return -1;
 }
 
-static int xil_xvc_shift_bits(struct pci_dev *pci_dev, struct xvc_algo_t *algo, u32 tms_bits, u32 tdi_bits, u32 *tdo_bits) {
+static int xil_xvc_shift_bits(struct pci_dev *pci_dev, struct xvc_algo_t *algo, u32 tms_bits,
+                              u32 tdi_bits, u32 *tdo_bits)
+{
     int status;
     u32 control_reg_data;
     int count = 100;
@@ -146,7 +152,8 @@ static int xil_xvc_shift_bits(struct pci_dev *pci_dev, struct xvc_algo_t *algo, 
     return status;
 }
 
-ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const char __user *arg) {
+ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const char __user *arg)
+{
     struct xil_xvc_ioc xvc_obj;
     u32 operation_code;
     u32 num_bits;
@@ -177,7 +184,7 @@ ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const ch
     num_bytes = (num_bits + 7) / 8;
 
     // Allocate and copy data into temporary buffers
-    tms_buf_temp = (char*)kmalloc(num_bytes, GFP_KERNEL);
+    tms_buf_temp = (char *)kmalloc(num_bytes, GFP_KERNEL);
     if (tms_buf_temp == NULL) {
         status = -ENOMEM;
         goto cleanup;
@@ -186,7 +193,7 @@ ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const ch
         goto cleanup;
     }
 
-    tdi_buf_temp = (char*)kmalloc(num_bytes, GFP_KERNEL);
+    tdi_buf_temp = (char *)kmalloc(num_bytes, GFP_KERNEL);
     if (tdi_buf_temp == NULL) {
         status = -ENOMEM;
         goto cleanup;
@@ -196,7 +203,7 @@ ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const ch
     }
 
     // Allocate TDO buffer
-    tdo_buf_temp = (char*)kmalloc(num_bytes, GFP_KERNEL);
+    tdo_buf_temp = (char *)kmalloc(num_bytes, GFP_KERNEL);
     if (tdo_buf_temp == NULL) {
         status = -ENOMEM;
         goto cleanup;
@@ -272,13 +279,20 @@ ssize_t xil_xvc_ioctl(struct pci_dev *pci_dev, struct xvc_algo_t *algo, const ch
     }
 
 cleanup:
-    if (tms_buf_temp) kfree(tms_buf_temp);
-    if (tdi_buf_temp) kfree(tdi_buf_temp);
-    if (tdo_buf_temp) kfree(tdo_buf_temp);
+    if (tms_buf_temp) {
+        kfree(tms_buf_temp);
+    }
+    if (tdi_buf_temp) {
+        kfree(tdi_buf_temp);
+    }
+    if (tdo_buf_temp) {
+        kfree(tdo_buf_temp);
+    }
     return status;
 }
 
-int xil_xvc_get_offset(struct pci_dev *pci_dev, size_t *offset) {
+int xil_xvc_get_offset(struct pci_dev *pci_dev, size_t *offset)
+{
     int status;
     size_t i = 0x100; // starting offset for extended capability regisers
     struct xvc_algo_t algo = {
@@ -298,8 +312,7 @@ int xil_xvc_get_offset(struct pci_dev *pci_dev, size_t *offset) {
 
         id = word & 0xFF;
 
-        if (id == XVC_VSEC_ID)
-        {
+        if (id == XVC_VSEC_ID) {
             break;
         }
 
@@ -314,7 +327,9 @@ int xil_xvc_get_offset(struct pci_dev *pci_dev, size_t *offset) {
 
     if (VALID_OFFSET(i)) {
         // found capability
-        if (offset) *offset = i;
+        if (offset) {
+            *offset = i;
+        }
     } else {
         status = -ENXIO;
     }

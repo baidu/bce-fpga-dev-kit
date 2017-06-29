@@ -28,7 +28,7 @@ enum xvc_algo_type {
 struct xvc_algo_t {
     enum xvc_algo_type type;
     union offset_t {
-        void* __iomem bar;
+        void *__iomem bar;
         size_t cfg;
     } offset;
 };

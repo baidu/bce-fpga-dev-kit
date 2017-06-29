@@ -31,19 +31,22 @@ static int acpi_mcfg_check_entry(struct acpi_table_mcfg *mcfg, struct acpi_mcfg_
 {
     int year;
 
-    if (cfg->address < 0xFFFFFFFF)
+    if (cfg->address < 0xFFFFFFFF) {
         return 0;
+    }
 
-    if (!strncmp(mcfg->header.oem_id, "SGI", 3))
+    if (!strncmp(mcfg->header.oem_id, "SGI", 3)) {
         return 0;
+    }
 
     if (mcfg->header.revision >= 1) {
-        if (dmi_get_date(DMI_BIOS_DATE, &year, NULL, NULL) && year >= 2010)
+        if (dmi_get_date(DMI_BIOS_DATE, &year, NULL, NULL) && year >= 2010) {
             return 0;
+        }
     }
 
     printk(KERN_ERR LOG_PREFIX "MCFG region for %04x:%02x-%02x at %#llx is above 4GB, ignored\n",
-            cfg->pci_segment, cfg->start_bus_number, cfg->end_bus_number, cfg->address);
+           cfg->pci_segment, cfg->start_bus_number, cfg->end_bus_number, cfg->address);
     return -EFAULT;
 }
 
@@ -53,8 +56,9 @@ static int pci_parse_mcfg(struct acpi_table_header *header)
     unsigned long i;
     int config_size;
 
-    if (!header)
+    if (!header) {
         return -EINVAL;
+    }
 
     mcfg = (struct acpi_table_mcfg *)header;
 

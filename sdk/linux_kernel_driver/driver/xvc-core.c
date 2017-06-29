@@ -66,16 +66,16 @@ long setup_xvc_algo(struct xdma_dev *lro)
                 printk(KERN_WARNING LOG_PREFIX "BAR #%d is not present.\n", bar_index);
             } else if (bar_len <= user_config.bar_offset) {
                 printk(KERN_WARNING LOG_PREFIX "Invalid offset in BAR #%d, bar_len = %llu, offset = %llu\n",
-                        bar_index, (u64)bar_len, (u64)user_config.bar_offset);
+                       bar_index, (u64)bar_len, (u64)user_config.bar_offset);
             } else {
                 // XXX: add user specified BAR offset to base address of mapping,
                 // modify user_config struct accordingly
                 algo->offset.bar = lro->bar[user_config.bar_index] + user_config.bar_offset;
                 algo->type = XVC_ALGO_BAR;
                 printk(KERN_INFO LOG_PREFIX
-                        "BAR%d at 0x%llx mapped at 0x%p, offset=%llu, length=%llu(/%llu)\n",
-                        bar_index, (u64)bar_start, algo->offset.bar,
-                        (u64)user_config.bar_offset, (u64)map_len, (u64)bar_len);
+                       "BAR%d at 0x%llx mapped at 0x%p, offset=%llu, length=%llu(/%llu)\n",
+                       bar_index, (u64)bar_start, algo->offset.bar,
+                       (u64)user_config.bar_offset, (u64)map_len, (u64)bar_len);
                 status = 0;
             }
         }
@@ -84,7 +84,8 @@ long setup_xvc_algo(struct xdma_dev *lro)
     return status;
 }
 
-static long xvc_ioctl(struct file *file_p, unsigned int cmd, unsigned long arg) {
+static long xvc_ioctl(struct file *file_p, unsigned int cmd, unsigned long arg)
+{
     /*int device_index = iminor(file_p->f_path.dentry->d_inode) - MINOR(xvc_ioc_dev_region);*/
     int device_index = 0;
     int status = 0;
@@ -102,12 +103,12 @@ static long xvc_ioctl(struct file *file_p, unsigned int cmd, unsigned long arg) 
     /*spin_lock_irqsave(&file_p->f_path.dentry->d_inode->i_lock, pci_config_lock_flags);*/
 
     switch (cmd) {
-        case XDMA_IOCXVC:
-            status = xil_xvc_ioctl(lro->pci_dev, &xvc_char->xvc_algo, (void __user *)arg);
-            break;
-        default:
-            status = -ENOIOCTLCMD;
-            break;
+    case XDMA_IOCXVC:
+        status = xil_xvc_ioctl(lro->pci_dev, &xvc_char->xvc_algo, (void __user *)arg);
+        break;
+    default:
+        status = -ENOIOCTLCMD;
+        break;
     }
 
     mmiowb();

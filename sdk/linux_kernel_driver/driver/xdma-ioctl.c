@@ -68,8 +68,9 @@ static int reinit(struct xdma_dev *lro)
         /* Re-init all the channels */
         for (channel = 0; channel < XDMA_CHANNEL_NUM_MAX; channel++) {
             engine = lro->engine[channel][dir_from_dev];
-            if (engine)
+            if (engine) {
                 engine_reinit(engine);
+            }
         }
     }
     return rc;
@@ -82,13 +83,15 @@ static unsigned compute_unit_busy(struct xdma_dev *lro)
     u32 r = ioread32(lro->bar[lro->user_bar_idx] + AXI_GATE_OFFSET_READ);
 
     /* r != 0x3 implies that OCL region is isolated and we cannot read CUs' status */
-    if (r != 0x3)
+    if (r != 0x3) {
         return 0;
+    }
 
     for (i = 0; i < 16; i++) {
         r = ioread32(lro->bar[lro->user_bar_idx] + OCL_CTLR_OFFSET + i * OCL_CU_CTRL_RANGE);
-        if (r == 0x1)
+        if (r == 0x1) {
             result |= (r << i);
+        }
     }
     return result;
 }
@@ -160,8 +163,9 @@ static u64 get_ocl_frequency(const struct xdma_dev *lro)
 
     val = ioread32(lro->bar[lro->user_bar_idx] + OCL_CLKWIZ_STATUS);
     printk(KERN_INFO "%s: ClockWiz SR %x\n", DRV_NAME, val);
-    if ((val & 1) == 0)
+    if ((val & 1) == 0) {
         return 0;
+    }
 
     val = ioread32(lro->bar[lro->user_bar_idx] + OCL_CLKWIZ_CONFIG(0));
     printk(KERN_INFO "%s: ClockWiz CONFIG(0) %x\n", DRV_NAME, val);
@@ -183,7 +187,7 @@ static u64 get_ocl_frequency(const struct xdma_dev *lro)
 
     val = ioread32(lro->bar[lro->user_bar_idx] + OCL_CLKWIZ_CONFIG(2));
     printk(KERN_INFO "%s: ClockWiz CONFIG(2) %x\n", DRV_NAME, val);
-    div1 = val &0xff;
+    div1 = val & 0xff;
     if (val & BIT(18)) {
         div_frac1 = val >> 8;
         div_frac1 &= 0x3ff;
@@ -216,8 +220,9 @@ static long link_info(const struct xdma_dev *lro, struct xdma_ioc_info *obj)
     obj->pcie_link_width = 0;
     obj->pcie_link_speed = 0;
     result = pcie_capability_read_word(lro->pci_dev, PCI_EXP_LNKSTA, &stat);
-    if (result)
+    if (result) {
         return result;
+    }
     obj->pcie_link_width = (stat & PCI_EXP_LNKSTA_NLW) >> PCI_EXP_LNKSTA_NLW_SHIFT;
     obj->pcie_link_speed = stat & PCI_EXP_LNKSTA_CLS;
 #endif
@@ -229,8 +234,9 @@ static long version_ioctl(struct xdma_char *lro_char, void __user *arg)
     struct xdma_ioc_info obj;
     struct xdma_dev *lro = lro_char->lro;
 
-    if (copy_from_user((void *)&obj, arg, sizeof(struct xdma_ioc_info)))
+    if (copy_from_user((void *)&obj, arg, sizeof(struct xdma_ioc_info))) {
         return -EFAULT;
+    }
     memset(&obj, 0, sizeof(obj));
     obj.vendor = lro->pci_dev->vendor;
     obj.device = lro->pci_dev->device;
@@ -240,8 +246,9 @@ static long version_ioctl(struct xdma_char *lro_char, void __user *arg)
     obj.driver_version = 0x10000;
     obj.ocl_frequency = get_ocl_frequency(lro);
     link_info(lro, &obj);
-    if (copy_to_user(arg, &obj, sizeof(struct xdma_ioc_info)))
+    if (copy_to_user(arg, &obj, sizeof(struct xdma_ioc_info))) {
         return -EFAULT;
+    }
     return 0;
 }
 
@@ -250,8 +257,9 @@ static long reset_ocl_ioctl(struct xdma_char *lro_char)
     struct xdma_dev *lro = lro_char->lro;
 
     /* If compute units are not busy then nothing to do */
-    if (!compute_unit_busy(lro))
+    if (!compute_unit_busy(lro)) {
         return 0;
+    }
 
     freezeAXIGate(lro);
     freeAXIGate(lro);
@@ -284,23 +292,26 @@ static long reset_hot_ioctl(struct xdma_char *lro_char)
 
     if (!pdev->bus || !pdev->bus->self) {
         printk(KERN_ERR "%s: Unable to identify device root port for card %d\n", DRV_NAME,
-                lro->instance);
+               lro->instance);
         err = -EIO;
         goto done;
     }
 
     ep_name = pdev->bus->name;
 #if defined(__PPC64__)
-    printk(KERN_INFO "%s: Ignoring reset operation for card %d in slot %s:%02x:%1x\n", DRV_NAME, lro->instance, ep_name,
-            PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+    printk(KERN_INFO "%s: Ignoring reset operation for card %d in slot %s:%02x:%1x\n", DRV_NAME,
+           lro->instance, ep_name,
+           PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
 #else
-    printk(KERN_INFO "%s: Trying to reset card %d in slot %s:%02x:%1x\n", DRV_NAME, lro->instance, ep_name,
-            PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+    printk(KERN_INFO "%s: Trying to reset card %d in slot %s:%02x:%1x\n", DRV_NAME, lro->instance,
+           ep_name,
+           PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
 
     /* Allocate buffer for 256B PCIe config space */
     pci_cfg = kmalloc(0x100, GFP_KERNEL);
-    if (!pci_cfg)
+    if (!pci_cfg) {
         return -ENOMEM;
+    }
 
     rp_name = pdev->bus->parent ? pdev->bus->parent->name : "null";
     /* Save the card's PCIe config space */
@@ -321,8 +332,9 @@ static long reset_hot_ioctl(struct xdma_char *lro_char)
     ssleep(1);
 
     /* Restore the card's PCIe config space */
-    for (i = 0; i < 0x100; i += 4)
+    for (i = 0; i < 0x100; i += 4) {
         pci_write_config_dword(pdev, i, pci_cfg[i / 4]);
+    }
 
     ssleep(1);
 
@@ -330,9 +342,10 @@ static long reset_hot_ioctl(struct xdma_char *lro_char)
     for (i = 0; i < 0x100; i += 4) {
         pci_read_config_dword(pdev, i, &pci_cfg2[i / 4]);
         if (pci_cfg2[i / 4] != pci_cfg[i / 4])
-            printk(KERN_WARNING "%s: Unable to restore config dword at %x (%x->%x) for card %d in slot %s:%02x:%1x\n",
-                    DRV_NAME, i, pci_cfg[i / 4], pci_cfg2[i / 4], lro->instance, ep_name, PCI_SLOT(pdev->devfn),
-                    PCI_FUNC(pdev->devfn));
+            printk(KERN_WARNING
+                   "%s: Unable to restore config dword at %x (%x->%x) for card %d in slot %s:%02x:%1x\n",
+                   DRV_NAME, i, pci_cfg[i / 4], pci_cfg2[i / 4], lro->instance, ep_name, PCI_SLOT(pdev->devfn),
+                   PCI_FUNC(pdev->devfn));
     }
 
     err = reinit(lro);
@@ -357,18 +370,22 @@ static long ocl_freqscaling_ioctl(struct xdma_char *lro_char, void __user *arg)
     /* Divide by 1; multiply by 5 for Utrascale and 10 for V7 */
     u32 config = (lro->pci_dev->device == 0x8138) ? 0x04000501 : 0x04000a01;
 
-    if (copy_from_user((void *)&obj, arg, sizeof(struct xdma_ioc_freqscaling)))
+    if (copy_from_user((void *)&obj, arg, sizeof(struct xdma_ioc_freqscaling))) {
         return -EFAULT;
+    }
 
     val = ioread32(lro->bar[lro->user_bar_idx] + OCL_CLKWIZ_STATUS);
-    if ((val & 0x1) == 0)
+    if ((val & 0x1) == 0) {
         return -EBUSY;
+    }
 
-    if (compute_unit_busy(lro))
+    if (compute_unit_busy(lro)) {
         return -EBUSY;
+    }
 
-    if ((obj.ocl_target_freq > 250) || (obj.ocl_target_freq < frequency_table[0].ocl))
+    if ((obj.ocl_target_freq > 250) || (obj.ocl_target_freq < frequency_table[0].ocl)) {
         return -EINVAL;
+    }
 
     get_ocl_frequency(lro);
 
@@ -395,8 +412,9 @@ static long ocl_freqscaling_ioctl(struct xdma_char *lro_char, void __user *arg)
     iowrite32(config, lro->bar[lro->user_bar_idx] + OCL_CLKWIZ_CONFIG(0));
     config = frequency_table[idx].divide_frac;
     config <<= 8;
-    if (config) /* Enable divide fraction bit */
+    if (config) { /* Enable divide fraction bit */
         config &= (0x1 << 18);
+    }
     config |= frequency_table[idx].divide;
     iowrite32(config, lro->bar[lro->user_bar_idx] + OCL_CLKWIZ_CONFIG(2));
     msleep(10);
@@ -413,7 +431,9 @@ static long ocl_freqscaling_ioctl(struct xdma_char *lro_char, void __user *arg)
         }
     }
     if (val != 1) {
-        printk(KERN_ERR "%s: ClockWiz MMCM/PLL did not lock after 100 * 1000 ms, restoring the original configuration\n", DRV_NAME);
+        printk(KERN_ERR
+               "%s: ClockWiz MMCM/PLL did not lock after 100 * 1000 ms, restoring the original configuration\n",
+               DRV_NAME);
         /* restore the original clock configuration */
         iowrite32(0x00000004, lro->bar[lro->user_bar_idx] + OCL_CLKWIZ_CONFIG(23));
         msleep(10);
@@ -441,40 +461,46 @@ long char_ctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
     printk(KERN_DEBUG "IOCTL %s:%d Command: %x\n", __FILE__, __LINE__, cmd);
 
-    if (lro_char != lro->user_char_dev)
+    if (lro_char != lro->user_char_dev) {
         return -ENOTTY;
+    }
 
-    if (_IOC_TYPE(cmd) != XDMA_IOC_MAGIC)
+    if (_IOC_TYPE(cmd) != XDMA_IOC_MAGIC) {
         return -ENOTTY;
+    }
 
-    if (_IOC_DIR(cmd) & _IOC_READ)
+    if (_IOC_DIR(cmd) & _IOC_READ) {
         result = !access_ok(VERIFY_WRITE, (void __user *)arg, _IOC_SIZE(cmd));
-    else if (_IOC_DIR(cmd) & _IOC_WRITE)
+    } else if (_IOC_DIR(cmd) & _IOC_WRITE) {
         result = !access_ok(VERIFY_READ, (void __user *)arg, _IOC_SIZE(cmd));
+    }
 
-    if (result)
+    if (result) {
         return -EFAULT;
+    }
 
     printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
-    if (copy_from_user((void *)&ioctl_obj, (void *) arg, sizeof(struct xdma_ioc_base)))
+    if (copy_from_user((void *)&ioctl_obj, (void *) arg, sizeof(struct xdma_ioc_base))) {
         return -EFAULT;
-    if (ioctl_obj.magic != XDMA_XCL_MAGIC)
+    }
+    if (ioctl_obj.magic != XDMA_XCL_MAGIC) {
         return -ENOTTY;
+    }
     printk(KERN_DEBUG "IOCTL %s:%d\n", __FILE__, __LINE__);
     switch (cmd) {
-        case XDMA_IOCINFO:
-            return version_ioctl(lro_char, (void __user *)arg);
-        case XDMA_IOCICAPDOWNLOAD:
-        case XDMA_IOCMCAPDOWNLOAD:
-            return bitstream_ioctl(lro_char, cmd, (void __user *)arg);
-        case XDMA_IOCOCLRESET:
-            return reset_ocl_ioctl(lro_char);
-        case XDMA_IOCHOTRESET:
-            return reset_hot_ioctl(lro_char);
-        case XDMA_IOCFREQSCALING:
-            return ocl_freqscaling_ioctl(lro_char, (void __user *)arg);
-        default:
-            return -ENOTTY;
+    case XDMA_IOCINFO:
+        return version_ioctl(lro_char, (void __user *)arg);
+    case XDMA_IOCICAPDOWNLOAD:
+    case XDMA_IOCMCAPDOWNLOAD:
+        return bitstream_ioctl(lro_char, cmd, (void __user *)arg);
+    case XDMA_IOCOCLRESET:
+        return reset_ocl_ioctl(lro_char);
+    case XDMA_IOCHOTRESET:
+        return reset_hot_ioctl(lro_char);
+    case XDMA_IOCFREQSCALING:
+        return ocl_freqscaling_ioctl(lro_char, (void __user *)arg);
+    default:
+        return -ENOTTY;
     }
     return 0;
 }
@@ -482,14 +508,16 @@ long char_ctrl_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 long reset_device_if_running(struct xdma_dev *lro)
 {
     /* If compute units are not busy then nothing to do */
-    if (!compute_unit_busy(lro))
+    if (!compute_unit_busy(lro)) {
         return 0;
+    }
 
     /* If one or more compute units are busy then try to reset the card */
     printk(KERN_INFO "%s: One or more compute units busy\n", DRV_NAME);
 
-    if (reset_ocl_ioctl(lro->user_char_dev) == 0)
+    if (reset_ocl_ioctl(lro->user_char_dev) == 0) {
         return 0;
+    }
     return reset_hot_ioctl(lro->user_char_dev);
 }
 

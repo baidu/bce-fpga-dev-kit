@@ -49,12 +49,14 @@
 struct sg_mapping_t *sg_create_mapper(unsigned long max_len)
 {
     struct sg_mapping_t *sgm;
-    if (max_len == 0)
+    if (max_len == 0) {
         return NULL;
+    }
     /* allocate bookkeeping */
     sgm = kcalloc(1, sizeof(struct sg_mapping_t), GFP_KERNEL);
-    if (sgm == NULL)
+    if (sgm == NULL) {
         return NULL;
+    }
     /* upper bound of pages */
     sgm->max_pages = max_len / PAGE_SIZE + 2;
     /* allocate an array of struct page pointers */
@@ -64,7 +66,7 @@ struct sg_mapping_t *sg_create_mapper(unsigned long max_len)
         return NULL;
     }
     pr_debug("Allocated %lu bytes for page pointer array for %d pages @0x%p.\n",
-            sgm->max_pages * sizeof(*sgm->pages), sgm->max_pages, sgm->pages);
+             sgm->max_pages * sizeof(*sgm->pages), sgm->max_pages, sgm->pages);
     /* allocate a scatter gather list */
     sgm->sgl = kcalloc(sgm->max_pages, sizeof(struct scatterlist), GFP_KERNEL);
     if (sgm->sgl == NULL) {
@@ -73,7 +75,7 @@ struct sg_mapping_t *sg_create_mapper(unsigned long max_len)
         return NULL;
     }
     pr_debug("Allocated %lu bytes for scatterlist for %d pages @0x%p.\n",
-            sgm->max_pages * sizeof(struct scatterlist), sgm->max_pages, sgm->sgl);
+             sgm->max_pages * sizeof(struct scatterlist), sgm->max_pages, sgm->sgl);
     sg_init_table(sgm->sgl, sgm->max_pages);
     pr_debug("sg_mapping_t *sgm=0x%p\n", sgm);
     pr_debug("sgm->pages=0x%p\n", sgm->pages);
@@ -133,12 +135,15 @@ int sgm_get_user_pages(struct sg_mapping_t *sgm, const char *start, size_t count
 
     /* no pages should currently be mapped */
     BUG_ON(sgm->mapped_pages > 0);
-    if (start + count < start)
+    if (start + count < start) {
         return -EINVAL;
-    if (nr_pages > sgm->max_pages)
+    }
+    if (nr_pages > sgm->max_pages) {
         return -EINVAL;
-    if (count == 0)
+    }
+    if (count == 0) {
         return 0;
+    }
     /* initialize scatter gather list */
     sg_init_table(sgl, nr_pages);
 
@@ -154,7 +159,7 @@ int sgm_get_user_pages(struct sg_mapping_t *sgm, const char *start, size_t count
     down_read(&current->mm->mmap_sem);
     /* to_user != 0 means read from device, write into user space buffer memory */
     rc = get_user_pages(current, current->mm, (unsigned long)start, nr_pages, to_user,
-            0 /* don't force */, pages, NULL);
+                        0 /* don't force */, pages, NULL);
     pr_debug("get_user_pages(%lu, nr_pages = %d) == %d.\n", (unsigned long)start, nr_pages, rc);
     up_read(&current->mm->mmap_sem);
 #else
@@ -167,7 +172,9 @@ int sgm_get_user_pages(struct sg_mapping_t *sgm, const char *start, size_t count
     }
     /* errors and no page mapped should return here */
     if (rc < nr_pages) {
-        if (rc > 0) sgm->mapped_pages = rc;
+        if (rc > 0) {
+            sgm->mapped_pages = rc;
+        }
         pr_debug("Could not get_user_pages(), %d.\n", rc);
         goto out_unmap;
     }
@@ -185,7 +192,7 @@ int sgm_get_user_pages(struct sg_mapping_t *sgm, const char *start, size_t count
 
     sg_set_page(&sgl[0], pages[0], 0 /*length*/, offset_in_page(start));
     pr_debug("sg_page(&sgl[0]) = 0x%p (pfn = %lu).\n", sg_page(&sgl[0]),
-            page_to_pfn(sg_page(&sgl[0])));
+             page_to_pfn(sg_page(&sgl[0])));
 
     /* verify if the page start address got into the first sg entry */
     pr_debug("sg_dma_address(&sgl[0])=0x%016llx.\n", (u64)sg_dma_address(&sgl[0]));
@@ -196,7 +203,8 @@ int sgm_get_user_pages(struct sg_mapping_t *sgm, const char *start, size_t count
         /* offset was already set above */
         sgl[0].length = PAGE_SIZE - sgl[0].offset;
         pr_debug("%04d: page=0x%p, pfn=%lu, offset=%u, length=%u (FIRST)\n", 0,
-                (void *)sg_page(&sgl[0]), (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset, sgl[0].length);
+                 (void *)sg_page(&sgl[0]), (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset,
+                 sgl[0].length);
         count -= sgl[0].length;
         /* iterate over further pages, except the last page */
         for (i = 1; i < nr_pages - 1; i++) {
@@ -205,29 +213,33 @@ int sgm_get_user_pages(struct sg_mapping_t *sgm, const char *start, size_t count
             sg_set_page(&sgl[i], pages[i], PAGE_SIZE, 0/*offset*/);
             count -= PAGE_SIZE;
             pr_debug("%04d: page=0x%p, pfn=%lu, offset=%u, length=%u\n", i,
-                    (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset, sgl[i].length);
+                     (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset,
+                     sgl[i].length);
         }
         /* last page */
         BUG_ON(count > PAGE_SIZE);
         /* set count bytes at offset 0 in the page */
         sg_set_page(&sgl[i], pages[i], count, 0);
         pr_debug("%04d: page=0x%p, pfn=%lu, offset=%u, length=%u (LAST)\n", i,
-                (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset, sgl[i].length);
+                 (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset,
+                 sgl[i].length);
     }
     /* single page */
     else {
         /* limit the count */
         sgl[0].length = count;
         pr_debug("%04d: page=0x%p, pfn=%lu, offset=%u, length=%u (SINGLE/FIRST/LAST)\n", 0,
-                (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset, sgl[0].length);
+                 (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset,
+                 sgl[0].length);
     }
     return nr_pages;
 
 out_unmap:
     /* { rc < 0 means errors, >= 0 means not all pages could be mapped } */
     /* did we map any pages? */
-    for (i = 0; i < sgm->mapped_pages; i++)
+    for (i = 0; i < sgm->mapped_pages; i++) {
         put_page(pages[i]);
+    }
     rc = -ENOMEM;
     sgm->mapped_pages = 0;
     return rc;
@@ -244,8 +256,9 @@ int sgm_put_user_pages(struct sg_mapping_t *sgm, int dirtied)
 {
     int i;
     /* mark page dirty */
-    if (dirtied)
+    if (dirtied) {
         sgm_dirty_pages(sgm);
+    }
     /* put (i.e. release) pages */
     for (i = 0; i < sgm->mapped_pages; i++) {
         put_page(sgm->pages[i]);
@@ -285,12 +298,15 @@ int sgm_kernel_pages(struct sg_mapping_t *sgm, const char *start, size_t count, 
 
     /* no pages should currently be mapped */
     BUG_ON(sgm->mapped_pages > 0);
-    if (start + count < start)
+    if (start + count < start) {
         return -EINVAL;
-    if (nr_pages > sgm->max_pages)
+    }
+    if (nr_pages > sgm->max_pages) {
         return -EINVAL;
-    if (count == 0)
+    }
+    if (count == 0) {
         return 0;
+    }
     /* initialize scatter gather list */
     sg_init_table(sgl, nr_pages);
 
@@ -301,8 +317,9 @@ int sgm_kernel_pages(struct sg_mapping_t *sgm, const char *start, size_t count, 
     /* get pages belonging to vmalloc()ed space */
     for (i = 0; i < nr_pages; i++, virt += PAGE_SIZE) {
         pages[i] = vmalloc_to_page(virt);
-        if (pages[i] == NULL)
+        if (pages[i] == NULL) {
             goto err;
+        }
         /* make sure page was allocated using vmalloc_32() */
         BUG_ON(PageHighMem(pages[i]));
     }
@@ -322,7 +339,7 @@ int sgm_kernel_pages(struct sg_mapping_t *sgm, const char *start, size_t count, 
     /* set first page */
     sg_set_page(&sgl[0], pages[0], 0 /*length*/, offset_in_page(start));
     pr_debug("sg_page(&sgl[0]) = 0x%p (pfn = %lu).\n", sg_page(&sgl[0]),
-            page_to_pfn(sg_page(&sgl[0])));
+             page_to_pfn(sg_page(&sgl[0])));
 
     /* verify if the page start address got into the first sg entry */
     pr_debug("sg_dma_address(&sgl[0])=0x%016llx.\n", (u64)sg_dma_address(&sgl[0]));
@@ -333,7 +350,8 @@ int sgm_kernel_pages(struct sg_mapping_t *sgm, const char *start, size_t count, 
         /* { sgl[0].offset is already set } */
         sgl[0].length = PAGE_SIZE - sgl[0].offset;
         pr_debug("%04d: page=0x%p, pfn=%lu, offset=%u length=%u (F)\n", 0,
-                (void *)sg_page(&sgl[0]), (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset, sgl[0].length);
+                 (void *)sg_page(&sgl[0]), (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset,
+                 sgl[0].length);
         count -= sgl[0].length;
         /* iterate over further pages, except the last page */
         for (i = 1; i < nr_pages - 1; i++) {
@@ -342,21 +360,22 @@ int sgm_kernel_pages(struct sg_mapping_t *sgm, const char *start, size_t count, 
             sg_set_page(&sgl[i], pages[i], PAGE_SIZE, 0/*offset*/);
             count -= PAGE_SIZE;
             pr_debug("%04d: page=0x%p, pfn=%lu, offset=%u length=%u\n", i,
-                    (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset, sgl[i].length);
+                     (void *)sg_page(&sgl[i]), (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset,
+                     sgl[i].length);
         }
         /* last page */
         BUG_ON(count > PAGE_SIZE);
         /* 'count' bytes remaining at offset 0 in the page */
         sg_set_page(&sgl[i], pages[i], count, 0);
         pr_debug("%04d: pfn=%lu, offset=%u length=%u (L)\n", i,
-                (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset, sgl[i].length);
+                 (unsigned long)page_to_pfn(sg_page(&sgl[i])), sgl[i].offset, sgl[i].length);
     }
     /* single page */
     else {
         /* limit the count */
         sgl[0].length = count;
         pr_debug("%04d: pfn=%lu, offset=%u length=%u (F)\n", 0,
-                (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset, sgl[0].length);
+                 (unsigned long)page_to_pfn(sg_page(&sgl[0])), sgl[0].offset, sgl[0].length);
     }
     return nr_pages;
 
