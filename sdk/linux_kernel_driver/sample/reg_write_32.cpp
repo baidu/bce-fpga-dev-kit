@@ -29,10 +29,11 @@
 
 namespace api = fpga::cloud::api;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     if (argc != 4) {
         printf("Usage: %s <dev id> <register offset in decimal> <value in hex, e.g. 0x1a or 1a>\n",
-                argv[0]);
+               argv[0]);
         exit(1);
     }
 

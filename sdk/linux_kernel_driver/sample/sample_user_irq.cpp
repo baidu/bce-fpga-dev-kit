@@ -32,17 +32,18 @@ uint64_t float_b_addr = 4096 * 2;
 float float_c_array[8];
 uint64_t float_c_addr = 4096 * 3;
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     int ret = 0;
 
     /* DMA float_a_array and float_b_array to FPGA */
     ret = fpga_memcpy(0, 4096,
-            reinterpret_cast<uint64_t>(&float_a_array),
-            sizeof(float_a_array), 1);
+                      reinterpret_cast<uint64_t>(&float_a_array),
+                      sizeof(float_a_array), 1);
     assert(ret == 0);
     ret = fpga_memcpy(0, 4096 * 2,
-            reinterpret_cast<uint64_t>(&float_b_array),
-            sizeof(float_b_array), 1);
+                      reinterpret_cast<uint64_t>(&float_b_array),
+                      sizeof(float_b_array), 1);
     assert(ret == 0);
 
     /* wr reg float_a_addr */
@@ -80,8 +81,8 @@ int main(int argc, char **argv) {
 
     /* DMA float_c_array from FPGA */
     ret = fpga_memcpy(0,
-            reinterpret_cast<uint64_t>(&float_c_array), 4096 * 3,
-            sizeof(float_c_array), 0);
+                      reinterpret_cast<uint64_t>(&float_c_array), 4096 * 3,
+                      sizeof(float_c_array), 0);
     assert(ret == 0);
 
     /* print output */

@@ -35,7 +35,8 @@ pthread_once_t mmap_once = PTHREAD_ONCE_INIT;
 
 void *mmap_base = NULL;
 
-void mmap_func(void) {
+void mmap_func(void)
+{
     int fd = open("/dev/xdma0_user", O_RDWR | O_SYNC);
     if (fd == -1) {
         printf("Fail to open /dev/xdma0_user\n");
@@ -58,7 +59,8 @@ namespace fpga {
 namespace cloud {
 namespace api {
 
-int reg_read(int dev, uint64_t addr, uint64_t *value) {
+int reg_read(int dev, uint64_t addr, uint64_t *value)
+{
     int ret = pthread_once(&::mmap_once, &::mmap_func);
     if (ret != 0) {
         printf("pthread_once failed\n");
@@ -69,7 +71,8 @@ int reg_read(int dev, uint64_t addr, uint64_t *value) {
     return 0;
 }
 
-int reg_write(int dev, uint64_t addr, uint64_t value) {
+int reg_write(int dev, uint64_t addr, uint64_t value)
+{
     int ret = pthread_once(&::mmap_once, &::mmap_func);
     if (ret != 0) {
         printf("pthread_once failed\n");
@@ -80,7 +83,8 @@ int reg_write(int dev, uint64_t addr, uint64_t value) {
     return 0;
 }
 
-int reg_read_32(int dev, uint64_t addr, uint32_t *value) {
+int reg_read_32(int dev, uint64_t addr, uint32_t *value)
+{
     int ret = pthread_once(&::mmap_once, &::mmap_func);
     if (ret != 0) {
         printf("pthread_once failed\n");
@@ -91,7 +95,8 @@ int reg_read_32(int dev, uint64_t addr, uint32_t *value) {
     return 0;
 }
 
-int reg_write_32(int dev, uint64_t addr, uint32_t value) {
+int reg_write_32(int dev, uint64_t addr, uint32_t value)
+{
     int ret = pthread_once(&::mmap_once, &::mmap_func);
     if (ret != 0) {
         printf("pthread_once failed\n");
@@ -102,7 +107,8 @@ int reg_write_32(int dev, uint64_t addr, uint32_t value) {
     return 0;
 }
 
-int fpga_memcpy(int dev, uint64_t dest, uint64_t src, size_t n, int to_dev) {
+int fpga_memcpy(int dev, uint64_t dest, uint64_t src, size_t n, int to_dev)
+{
     if (to_dev) {
         int fd = open("/dev/xdma0_h2c_0", O_WRONLY);
         if (fd == -1) {

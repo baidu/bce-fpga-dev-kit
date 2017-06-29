@@ -29,7 +29,8 @@
 
 namespace api = fpga::cloud::api;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     if (argc != 3) {
         printf("Usage: %s <dev id> <register offset in decimal>\n", argv[0]);
         exit(1);
