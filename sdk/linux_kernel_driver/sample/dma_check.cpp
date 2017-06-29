@@ -46,6 +46,9 @@ void *thread_func(void *p)
     }
 
     for (uint64_t i = 0; i < iteration; ++i) {
+        to_fpga[0] = (unsigned char)i;
+        to_fpga[dma_size - 1] = (unsigned char)(i + 1);
+
         rc = fpga_memcpy(0, ddr_addr,
                          reinterpret_cast<uint64_t>(to_fpga),
                          dma_size, 1);
