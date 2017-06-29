@@ -93,21 +93,29 @@ static unsigned char *reply_buf = NULL;
 static unsigned reply_max = 0;
 static unsigned reply_len;
 
-static void reply_buf_size(unsigned bytes) {
+static void reply_buf_size(unsigned bytes)
+{
     if (reply_max < bytes) {
-        if (reply_max == 0) reply_max = 1;
-        while (reply_max < bytes) reply_max *= 2;
+        if (reply_max == 0) {
+            reply_max = 1;
+        }
+        while (reply_max < bytes) {
+            reply_max *= 2;
+        }
         reply_buf = (unsigned char *)realloc(reply_buf, reply_max);
     }
 }
 
-static char *get_field(char **sp, int c) {
+static char *get_field(char **sp, int c)
+{
     char *field = *sp;
     char *s = field;
-    while (*s != '\0' && *s != c)
+    while (*s != '\0' && *s != c) {
         s++;
-    if (*s != '\0')
+    }
+    if (*s != '\0') {
         *s++ = '\0';
+    }
     *sp = s;
     return field;
 }
@@ -119,7 +127,8 @@ static int closesocket(int sock)
 }
 #endif
 
-static int open_server(const char *host, const char *port) {
+static int open_server(const char *host, const char *port)
+{
     int err = 0;
     int sock = -1;
     struct addrinfo hints;
@@ -131,7 +140,9 @@ static int open_server(const char *host, const char *port) {
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
     hints.ai_flags = AI_PASSIVE;
-    if (*host == '\0') host = NULL;
+    if (*host == '\0') {
+        host = NULL;
+    }
     err = getaddrinfo(host, port, &hints, &reslist);
     if (err) {
         fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(err));
@@ -142,13 +153,23 @@ static int open_server(const char *host, const char *port) {
     for (res = reslist; res != NULL; res = res->ai_next) {
         const int i = 1;
         sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
-        if (sock < 0) continue;
+        if (sock < 0) {
+            continue;
+        }
 
         err = 0;
-        if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&i, sizeof(i)) < 0) err = 1;
-        if (!err && bind(sock, res->ai_addr, res->ai_addrlen)) err = 1;
-        if (!err && listen(sock, 4)) err = 1;
-        if (!err) break;
+        if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&i, sizeof(i)) < 0) {
+            err = 1;
+        }
+        if (!err && bind(sock, res->ai_addr, res->ai_addrlen)) {
+            err = 1;
+        }
+        if (!err && listen(sock, 4)) {
+            err = 1;
+        }
+        if (!err) {
+            break;
+        }
 
         closesocket(sock);
         sock = -1;
@@ -157,7 +178,8 @@ static int open_server(const char *host, const char *port) {
     return sock;
 }
 
-static unsigned get_uint_le(void *buf, int len) {
+static unsigned get_uint_le(void *buf, int len)
+{
     unsigned char *p = (unsigned char *)buf;
     unsigned value = 0;
 
@@ -167,7 +189,8 @@ static unsigned get_uint_le(void *buf, int len) {
     return value;
 }
 
-static void set_uint_le(void *buf, int len, unsigned value) {
+static void set_uint_le(void *buf, int len, unsigned value)
+{
     unsigned char *p = (unsigned char *)buf;
 
     while (len-- > 0) {
@@ -177,7 +200,8 @@ static void set_uint_le(void *buf, int len, unsigned value) {
 }
 
 #if XVC_VERSION >= 11
-static unsigned get_uleb128(unsigned char **buf, void *bufend) {
+static unsigned get_uleb128(unsigned char **buf, void *bufend)
+{
     unsigned char *p = (unsigned char *)*buf;
     unsigned value = 0;
     int i = 0;
@@ -191,13 +215,16 @@ static unsigned get_uleb128(unsigned char **buf, void *bufend) {
     return value;
 }
 
-static void reply_status(XvcClient *c) {
-    if (reply_len < max_packet_len)
+static void reply_status(XvcClient *c)
+{
+    if (reply_len < max_packet_len) {
         reply_buf[reply_len] = (c->pending_error[0] != '\0');
+    }
     reply_len++;
 }
 
-static void reply_uleb128(unsigned value) {
+static void reply_uleb128(unsigned value)
+{
     unsigned pos = 0;
     do {
         if (reply_len + pos < max_packet_len) {
@@ -213,7 +240,8 @@ static void reply_uleb128(unsigned value) {
     reply_len += pos;
 }
 
-void xvcserver_set_error(XvcClient *c, const char *fmt, ...) {
+void xvcserver_set_error(XvcClient *c, const char *fmt, ...)
+{
     va_list ap;
     va_start(ap, fmt);
     vsnprintf(c->pending_error, sizeof c->pending_error, fmt, ap);
@@ -222,24 +250,28 @@ void xvcserver_set_error(XvcClient *c, const char *fmt, ...) {
 }
 #endif
 
-static int send_packet(XvcClient *c, const void *buf, unsigned len) {
+static int send_packet(XvcClient *c, const void *buf, unsigned len)
+{
     int rval = send(c->fd, buf, len, 0);
     return rval;
 }
 
-static void consume_packet(XvcClient *c, unsigned len) {
+static void consume_packet(XvcClient *c, unsigned len)
+{
     assert(len <= c->buf_len);
     c->buf_len -= len;
     memmove(c->buf, c->buf + len, c->buf_len);
 }
 
 #ifdef LOG_PACKET
-static void dumphex(void *buf, size_t len) {
+static void dumphex(void *buf, size_t len)
+{
     unsigned char *p = (unsigned char *)buf;
     size_t i;
 
-    if (len == 0)
+    if (len == 0) {
         return;
+    }
     for (i = 0; i < len; i++) {
         int c = p[i];
         if (c >= 32 && c <= 127) {
@@ -253,7 +285,8 @@ static void dumphex(void *buf, size_t len) {
 }
 #endif
 
-static void read_packet(XvcClient *c) {
+static void read_packet(XvcClient *c)
+{
     unsigned char *cbuf;
     unsigned char *cend;
     unsigned fill;
@@ -294,7 +327,7 @@ read_more:
 
         if (len == 8 && memcmp(cbuf, "getinfo:", len) == 0) {
             snprintf((char *)reply_buf + reply_len, 100, "xvcServer_v%u.%u:%u\n",
-                    XVC_VERSION / 10, XVC_VERSION % 10, c->buf_max);
+                     XVC_VERSION / 10, XVC_VERSION % 10, c->buf_max);
             reply_len += strlen((char *)reply_buf + reply_len);
             goto reply;
         }
@@ -304,10 +337,12 @@ read_more:
             unsigned bytes;
             char capabilities[100];
             capabilities[0] = '\0';
-            if (c->handlers->lock && c->handlers->unlock)
+            if (c->handlers->lock && c->handlers->unlock) {
                 strcat(capabilities, "locking,");
-            if (c->handlers->register_shift && c->handlers->state)
+            }
+            if (c->handlers->register_shift && c->handlers->state) {
                 strcat(capabilities, "state-aware,");
+            }
             strcat(capabilities, "status");
             bytes = strlen(capabilities);
             reply_uleb128(bytes);
@@ -371,8 +406,9 @@ read_more:
 
         if (len == 6 && memcmp(cbuf, "error:", len) == 0) {
             unsigned bytes = strlen(c->pending_error);
-            if (bytes > c->buf_max - (bytes + 127)/128)
-                bytes = c->buf_max - (bytes + 127)/128;
+            if (bytes > c->buf_max - (bytes + 127) / 128) {
+                bytes = c->buf_max - (bytes + 127) / 128;
+            }
             reply_uleb128(bytes);
             memcpy(reply_buf + reply_len, c->pending_error, bytes);
             reply_len += bytes;
@@ -387,7 +423,9 @@ read_more:
                 fill = 1;
                 break;
             }
-            if (reply_len > 0) break;
+            if (reply_len > 0) {
+                break;
+            }
             if (!c->pending_error[0]) {
                 if (!c->enable_locking) {
                     xvcserver_set_error(c, "locking is disabled");
@@ -395,8 +433,9 @@ read_more:
                     xvcserver_set_error(c, "already locked");
                 } else {
                     c->handlers->lock(c->client_data, timeout);
-                    if (!c->pending_error[0])
+                    if (!c->pending_error[0]) {
                         c->locked = 1;
+                    }
                 }
             }
             goto reply_with_status;
@@ -410,8 +449,9 @@ read_more:
                     xvcserver_set_error(c, "already unlocked");
                 } else {
                     c->handlers->unlock(c->client_data);
-                    if (!c->pending_error[0])
+                    if (!c->pending_error[0]) {
                         c->locked = 0;
+                    }
                 }
             }
             goto reply_with_status;
@@ -466,10 +506,12 @@ read_more:
             nsperiod = get_uint_le(p, 4);
             p += 4;
 
-            if (!c->pending_error[0])
+            if (!c->pending_error[0]) {
                 c->handlers->set_tck(c->client_data, nsperiod, &resnsperiod);
-            if (c->pending_error[0])
+            }
+            if (c->pending_error[0]) {
                 resnsperiod = nsperiod;
+            }
 
             set_uint_le(reply_buf + reply_len, 4, resnsperiod);
             reply_len += 4;
@@ -478,9 +520,9 @@ read_more:
 
 #if XVC_VERSION >= 11
         if (len == 8 &&
-                (cbuf[0] == 'i' || cbuf[0] == 'd') &&
-                memcmp(cbuf + 1, "rshift:", len - 1) == 0 &&
-                c->handlers->register_shift) {
+            (cbuf[0] == 'i' || cbuf[0] == 'd') &&
+            memcmp(cbuf + 1, "rshift:", len - 1) == 0 &&
+            c->handlers->register_shift) {
             unsigned int flags = get_uleb128(&p, cend);
             unsigned int state = get_uleb128(&p, cend);
             unsigned long count = get_uleb128(&p, cend);
@@ -495,8 +537,9 @@ read_more:
                 c->handlers->register_shift(
                         c->client_data, (cbuf[0] == 'i'), flags, state,
                         count, tdibytes ? p : NULL, tdobytes ? reply_buf + reply_len : NULL);
-            if (c->pending_error[0])
+            if (c->pending_error[0]) {
                 memset(reply_buf + reply_len, 0, tdobytes);
+            }
             reply_len += tdobytes;
             p += tdibytes;
             goto reply_with_status;
@@ -511,8 +554,9 @@ read_more:
                 fill = 1;
                 break;
             }
-            if (!c->pending_error[0])
+            if (!c->pending_error[0]) {
                 c->handlers->state(c->client_data, flags, state, count);
+            }
             goto reply_with_status;
         }
 #endif
@@ -523,7 +567,9 @@ read_more:
 
 reply_with_optional_status:
         // printf("Here2\n");
-        if (!c->enable_status) goto reply;
+        if (!c->enable_status) {
+            goto reply;
+        }
 #if XVC_VERSION >= 11
 reply_with_status:
         reply_status(c);
@@ -534,20 +580,26 @@ reply:
 
     if (c->buf < cbuf) {
         if (c->handlers->flush)
-            if (c->handlers->flush(c->client_data) < 0) goto error;
+            if (c->handlers->flush(c->client_data) < 0) {
+                goto error;
+            }
 #ifdef LOG_PACKET
         printf("send_packet ");
         dumphex(reply_buf, reply_len);
         printf("\n");
 #endif
-        if (send_packet(c, reply_buf, reply_len) < 0) goto error;
+        if (send_packet(c, reply_buf, reply_len) < 0) {
+            goto error;
+        }
         consume_packet(c, cbuf - c->buf);
 
         gettimeofday(&stop, NULL);
         // if (start.tv_usec != 0)
         //     printf("Shift send packet %lu u-seconds\n", stop.tv_usec - start.tv_usec);
 
-        if (c->buf_len && !fill) goto read_more;
+        if (c->buf_len && !fill) {
+            goto read_more;
+        }
     }
 
     {
@@ -556,7 +608,9 @@ reply:
             c->buf_len += len;
             goto read_more;
         }
-        if (len < 0) goto error;
+        if (len < 0) {
+            goto error;
+        }
     }
     return;
 
@@ -567,7 +621,8 @@ error:
 int xvcserver_start(
         const char *url,
         void *client_data,
-        XvcServerHandlers *handlers) {
+        XvcServerHandlers *handlers)
+{
     XvcClient *c = &xvc_client;
     int sock;
     int fd;
@@ -579,9 +634,9 @@ int xvcserver_start(
 
     transport = get_field(&p, ':');
     if ((transport[0] == 'T' || transport[0] == 't') &&
-            (transport[1] == 'C' || transport[1] == 'c') &&
-            (transport[2] == 'P' || transport[2] == 'p') &&
-            transport[3] == '\0') {
+        (transport[1] == 'C' || transport[1] == 'c') &&
+        (transport[2] == 'P' || transport[2] == 'p') &&
+        transport[3] == '\0') {
         host = get_field(&p, ':');
     } else if (strchr(p, ':') == NULL) {
         host = transport;
@@ -620,8 +675,9 @@ int xvcserver_start(
     while ((fd = accept(sock, NULL, NULL)) >= 0) {
         int opt = 1;
 
-        if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&opt, sizeof(opt)) < 0)
+        if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *)&opt, sizeof(opt)) < 0) {
             fprintf(stderr, "setsockopt TCP_NODELAY failed\n");
+        }
 
         if (handlers->open_port(client_data, c) < 0) {
             fprintf(stderr, "open JTAG port failed\n");

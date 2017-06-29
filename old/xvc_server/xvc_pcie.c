@@ -57,7 +57,8 @@ typedef struct {
 
 int verbose = 0;
 
-static int open_port(void *client_data, XvcClient *c) {
+static int open_port(void *client_data, XvcClient *c)
+{
     pcie_reg_t *pcie = (pcie_reg_t *)client_data;
     char dev_node[32] = "/dev/xil_xvc/cfg_ioc0";
     const char *env = getenv("DEVICE_NODE");
@@ -79,14 +80,16 @@ static int open_port(void *client_data, XvcClient *c) {
     return (0);
 }
 
-static void close_port(void *client_data) {
+static void close_port(void *client_data)
+{
     pcie_reg_t *pcie = (pcie_reg_t *)client_data;
     if (pcie->fd >= 1) {
         close(pcie->fd);
     }
 }
 
-static void set_tck(void *client_data, unsigned long nsperiod, unsigned long *result) {
+static void set_tck(void *client_data, unsigned long nsperiod, unsigned long *result)
+{
     *result = nsperiod;
 }
 
@@ -95,7 +98,8 @@ static void shift_tms_tdi(
         unsigned long bitcount,
         unsigned char *tms_buf,
         unsigned char *tdi_buf,
-        unsigned char *tdo_buf) {
+        unsigned char *tdo_buf)
+{
     pcie_reg_t *pcie = (pcie_reg_t *)client_data;
     struct timeval stop, start;
 
@@ -120,7 +124,7 @@ static void shift_tms_tdi(
     if (verbose) {
         gettimeofday(&stop, NULL);
         printf("IOC shift internal took %lu u-seconds with %lu bits. Return value %d\n",
-                stop.tv_usec - start.tv_usec, bitcount, ret);
+               stop.tv_usec - start.tv_usec, bitcount, ret);
     }
 }
 
@@ -135,8 +139,9 @@ XvcServerHandlers handlers = {
     NULL
 };
 
-int main(int argc, char **argv) {
-    const char * url = "tcp::10200";
+int main(int argc, char **argv)
+{
+    const char *url = "tcp::10200";
     char dev_node [64];
     pcie_reg_t pcie_reg;
     int i = 1;
