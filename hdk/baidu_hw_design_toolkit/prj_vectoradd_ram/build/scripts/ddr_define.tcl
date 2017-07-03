@@ -1,5 +1,9 @@
 source ./scripts/step_00_setup.tcl
 
+if { ![ file isdirectory $usrDir/include ] }  {
+    exec mkdir $usrDir/include
+}
+
 set refDir $commonDir/ref_xdc
 set usrXdcDir $usrDir/usr_xdc
 set ddrIncFile $usrDir/include/usr_ddr4_define.vh
@@ -9,6 +13,7 @@ exec rm -f $usrXdcDir/ddr_c0.xdc
 exec rm -f $usrXdcDir/ddr_c1.xdc
 exec rm -f $usrXdcDir/ddr_c2.xdc
 exec rm -f $usrXdcDir/ddr_c3.xdc
+
 
 if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_DDR4_C3 == 1)} {
     puts $fp_define "`define USE_DDR 1"
