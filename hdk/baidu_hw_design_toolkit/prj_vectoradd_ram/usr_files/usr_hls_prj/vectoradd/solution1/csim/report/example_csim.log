@@ -1,0 +1,10 @@
+INFO: [SIM 2] *************** CSIM start ***************
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+/usr/bin/make64 MAC=64 -f csim.mk
+   Compiling ../../../../src/example_test.cpp in debug mode
+   Compiling ../../../../src/example.cpp in debug mode
+   Generating csim.exe
+HLS AXI-Stream no side-channel data example
+Success HW and SW results match
+INFO: [SIM 1] CSim done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************

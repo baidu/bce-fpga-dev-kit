@@ -29,8 +29,8 @@ if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_
        set migxcifile $commonDir/ip/ddr4_0/ddr4_0.xci
        read_ip $migxcifile
        set_property generate_synth_checkpoint false [get_files $migxcifile]
-       generate_target all [get_files $migxcifile]
-       export_ip_user_files -of_objects [get_files $migxcifile] -sync -force -quiet
+       #generate_target all [get_files $migxcifile]
+       #export_ip_user_files -of_objects [get_files $migxcifile] -sync -force -quiet
     }
 }
 

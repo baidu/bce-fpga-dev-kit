@@ -1,27 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: axi_master_bfm.v
-//    Data last Modified:
-//    Data Created:June. 2nd, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: A bfm for axi master. Receive register config reqs and generate
-//    AXI maseter signals. The main function of this module include:
-//       1. generate axi read or write reqs which burst length is 1.
-//       2. generate dma read or write reqs according to the dma register
-//       3. generate axi reqs for non-aligned read/write
-//
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1ns / 1ps
 module axi_master_bfm #(
    parameter DMA_NUM    = 4,
@@ -81,7 +72,7 @@ module axi_master_bfm #(
    // Host Memory Interface
    input                            mem_wr_cmd_rdy,
    output [DATA_WIDTH-1:0]          mem_wr_data,
-   output [MASK_WIDTH-1:0]          mem_wr_datamask,
+   output [MASK_WIDTH-1:0]          mem_wr_datastrb,
    output [ADDR_WIDTH-1:0]          mem_wr_addr,
    input                            mem_rd_cmd_rdy,
    input  [DATA_WIDTH-1:0]          mem_rd_data,
@@ -104,7 +95,7 @@ module axi_master_bfm #(
    output [DATA_WIDTH-1:0]          normal_rd_data,
    input  [ADDR_WIDTH-1:0]          normal_wr_addr,
    input  [DATA_WIDTH-1:0]          normal_wr_data,
-   input  [MASK_WIDTH-1:0]          normal_wr_datamask
+   input  [MASK_WIDTH-1:0]          normal_wr_datastrb
 );
 
    wire   [ADDR_WIDTH-1:0]          c0_axi_l_araddr;
@@ -152,7 +143,7 @@ module axi_master_bfm #(
       .normal_wr_cmd_rdy(),
       .normal_wr_addr(normal_wr_addr),
       .normal_wr_data(normal_wr_data),
-      .normal_wr_datamask(normal_wr_datamask),
+      .normal_wr_datastrb(normal_wr_datastrb),
 
       .araddr(c0_axi_l_araddr),
       .arprot(c0_axi_l_arprot),
@@ -196,7 +187,7 @@ module axi_master_bfm #(
    wire   [DMA_NUM-1:0]             dma_axi_wvalid;
 
    wire   [DMA_NUM*DATA_WIDTH-1:0]  dma_wr_data;
-   wire   [DMA_NUM*MASK_WIDTH-1:0]  dma_wr_datamask;
+   wire   [DMA_NUM*MASK_WIDTH-1:0]  dma_wr_datastrb;
    wire   [DMA_NUM*ADDR_WIDTH-1:0]  dma_wr_addr;
    wire   [DMA_NUM-1:0]             dma_wr_cmd_rdy;
    wire   [DMA_NUM*DATA_WIDTH-1:0]  dma_rd_data;
@@ -250,7 +241,7 @@ module axi_master_bfm #(
          .wr_cmd_rdy   (dma_wr_cmd_rdy[i]),
          .wr_addr      (dma_wr_addr[i*ADDR_WIDTH+ADDR_WIDTH-1:i*ADDR_WIDTH]),
          .wr_data      (dma_wr_data[i*DATA_WIDTH+DATA_WIDTH-1:i*DATA_WIDTH]),
-         .wr_datamask  (dma_wr_datamask[i*MASK_WIDTH+MASK_WIDTH-1:i*MASK_WIDTH])
+         .wr_datastrb  (dma_wr_datastrb[i*MASK_WIDTH+MASK_WIDTH-1:i*MASK_WIDTH])
       );
    end
    endgenerate
@@ -341,7 +332,7 @@ module axi_master_bfm #(
       .in_wr_cmd_rdy(dma_wr_cmd_rdy),
       .in_wr_addr(dma_wr_addr),
       .in_wr_data(dma_wr_data),
-      .in_wr_datamask(dma_wr_datamask),
+      .in_wr_datastrb(dma_wr_datastrb),
 
       .rd_cmd_rdy(mem_rd_cmd_rdy),
       .rd_addr(mem_rd_addr),
@@ -351,7 +342,7 @@ module axi_master_bfm #(
       .wr_cmd_rdy(mem_wr_cmd_rdy),
       .wr_addr(mem_wr_addr),
       .wr_data(mem_wr_data),
-      .wr_datamask(mem_wr_datamask)
+      .wr_datastrb(mem_wr_datastrb)
    );
 
 endmodule

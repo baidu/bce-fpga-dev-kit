@@ -1,23 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: axi_slave_bfm.v
-//    Data last Modified:
-//    Data Created:June. 5th, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: A bfm for axi slave.
-//
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1ns / 1ps
 module axi_slave_bfm #(
    parameter DATA_WIDTH = 512,
@@ -76,7 +71,7 @@ module axi_slave_bfm #(
    // Memory Interface
    input                    mem_wr_cmd_rdy,
    output [DATA_WIDTH-1:0]  mem_wr_data,
-   output [MASK_WIDTH-1:0]  mem_wr_datamask,
+   output [MASK_WIDTH-1:0]  mem_wr_datastrb,
    output [ADDR_WIDTH-1:0]  mem_wr_addr,
    input                    mem_rd_cmd_rdy,
    input  [DATA_WIDTH-1:0]  mem_rd_data,
@@ -200,7 +195,7 @@ module axi_slave_bfm #(
    assign   wready          = (w_state == WRITE) && mem_wr_cmd_rdy;
    assign   mem_wr_addr     = wr_cmd_addr_r;
    assign   mem_wr_data     = wdata;
-   assign   mem_wr_datamask = wvalid ? wstrb : {(MASK_WIDTH){1'b0}};
+   assign   mem_wr_datastrb = ((w_state == WRITE) && wvalid) ? wstrb : {(MASK_WIDTH){1'b0}};
 
    assign   bvalid          = (w_state == W_END);
    assign   bid             = aw_fifo_dout[ADDR_WIDTH+ID_WIDTH-1:ADDR_WIDTH];

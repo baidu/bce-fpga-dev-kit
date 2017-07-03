@@ -1,23 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: rp_bd_simple.v
-//    Data last Modified:
-//    Data Created:June. 15th, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: The simple project for FPGA cloud.
-//
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1 ps / 1 ps
 `include "usr_ddr4_define.vh"
 
@@ -208,7 +203,8 @@ vio_0 vio_0 (
 
 axi_lite_ila axi_lite_ila(
    .clk(s_axi_aclk),
-   .probe0(S_AXI_LITE_arready),
+   //.probe0(S_AXI_LITE_arready),
+   .probe0(c0_init_calib_complete),
    .probe1(S_AXI_LITE_araddr),
    .probe2(S_AXI_LITE_bresp),
    .probe3(S_AXI_LITE_arvalid),
@@ -280,7 +276,7 @@ axi_lite_ila axi_lite_ila(
 
    wire                     mem_wr_cmd_rdy;
    wire   [512-1:0]         mem_wr_data;
-   wire   [64-1:0]          mem_wr_datamask;
+   wire   [64-1:0]          mem_wr_datastrb;
    wire   [ADDR_WIDTH-1:0]  mem_wr_addr;
    wire                     mem_rd_cmd_rdy;
    wire   [512-1:0]         mem_rd_data;
@@ -426,7 +422,7 @@ axi_slave_bfm #(
    // Card Memory Interface
    .mem_wr_cmd_rdy    (mem_wr_cmd_rdy),
    .mem_wr_data       (mem_wr_data),
-   .mem_wr_datamask   (mem_wr_datamask),
+   .mem_wr_datastrb   (mem_wr_datastrb),
    .mem_wr_addr       (mem_wr_addr),
    .mem_rd_cmd_rdy    (mem_rd_cmd_rdy),
    .mem_rd_data       (mem_rd_data),
@@ -446,8 +442,8 @@ axi_slave_bfm #(
    wire        w_cmd_fifo_rd_en;
    wire        w_cmd_fifo_valid;
 
-   assign mem_wr_en      = mem_wr_datamask != 'd0; 
-   assign mem_wr_byte    = (mem_wr_datamask != {(64){1'b1}});
+   assign mem_wr_en      = mem_wr_datastrb != 'd0; 
+   assign mem_wr_byte    = (mem_wr_datastrb != {(64){1'b1}});
    assign mem_wr_cmd_rdy = ~w_cmd_fifo_full && ~w_data_fifo_full;
    assign mem_rd_cmd_rdy = ~r_cmd_fifo_full;
    assign c0_ddr4_app_wdf_end = 1'b1;
@@ -483,7 +479,7 @@ fifo_async_blk_fwft_576x512_latency_0 w_data_fifo(
    .rst(~s_axi_aresetn),
    .wr_clk(s_axi_aclk),
    .rd_clk(c0_ddr4_ui_clk),
-   .din({~mem_wr_datamask,mem_wr_data}),
+   .din({~mem_wr_datastrb,mem_wr_data}),
    .wr_en(mem_wr_en && mem_wr_cmd_rdy),
    .rd_en(c0_ddr4_app_wdf_rdy),
    .dout({c0_ddr4_app_wdf_mask,c0_ddr4_app_wdf_data}),

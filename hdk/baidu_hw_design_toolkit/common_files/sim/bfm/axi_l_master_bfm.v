@@ -1,26 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: axi_l_master_bfm.v
-//    Data last Modified:
-//    Data Created:June. 2nd, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: A bfm for axi lite master. Receive normal reqs and generate
-//    AXI-lite maseter signals. The main function of this module include:
-//       1. generate axi read or write reqs which burst length is 1.
-//       2. generate axi reqs for non-aligned read/write
-//
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1ns / 1ps
 module axi_l_master_bfm #(
    parameter DATA_WIDTH = 512,
@@ -64,7 +56,7 @@ module axi_l_master_bfm #(
    output                   normal_wr_cmd_rdy,
    input  [ADDR_WIDTH-1:0]  normal_wr_addr,
    input  [DATA_WIDTH-1:0]  normal_wr_data,
-   input  [MASK_WIDTH-1:0]  normal_wr_datamask
+   input  [MASK_WIDTH-1:0]  normal_wr_datastrb
 );
 
    wire ar_fifo_full;
@@ -91,7 +83,7 @@ module axi_l_master_bfm #(
    );
 
    wire aw_fifo_wr_en;
-   assign aw_fifo_wr_en = (normal_wr_datamask != 0);
+   assign aw_fifo_wr_en = (normal_wr_datastrb != 0);
    fifo_sync_dist_fwft_64x16_latency_0 aw_fifo(
       .clk(clk),
       .rst(rst),
@@ -106,7 +98,7 @@ module axi_l_master_bfm #(
    fifo_sync_blk_fwft_576x16_latency_0 w_fifo(
       .clk(clk),
       .rst(rst),
-      .din({normal_wr_data,normal_wr_datamask}),
+      .din({normal_wr_data,normal_wr_datastrb}),
       .wr_en(aw_fifo_wr_en),
       .rd_en(wready),
       .dout({wdata,wstrb}),
