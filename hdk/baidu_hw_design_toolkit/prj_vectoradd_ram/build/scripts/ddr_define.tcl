@@ -4,6 +4,10 @@ if { ![ file isdirectory $usrDir/include ] }  {
     exec mkdir $usrDir/include
 }
 
+if { ![ file isdirectory $usrDir/usr_xdc] }  {
+    exec mkdir $usrDir/usr_xdc
+}
+
 set refDir $commonDir/ref_xdc
 set usrXdcDir $usrDir/usr_xdc
 set ddrIncFile $usrDir/include/usr_ddr4_define.vh
