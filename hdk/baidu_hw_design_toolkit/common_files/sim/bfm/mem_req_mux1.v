@@ -1,22 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: mem_req_mux1.v
-//    Data last Modified:
-//    Data Created:June 2nd, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: mem requeset mux, 4-slave 1-master
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1ns / 1ps
 module mem_req_mux1 #(
    parameter IN_NUM     = 4,
@@ -28,7 +24,7 @@ module mem_req_mux1 #(
    input                           rst,
 
    input  [IN_NUM*DATA_WIDTH-1:0]  in_wr_data,
-   input  [IN_NUM*MASK_WIDTH-1:0]  in_wr_datamask,
+   input  [IN_NUM*MASK_WIDTH-1:0]  in_wr_datastrb,
    input  [IN_NUM*ADDR_WIDTH-1:0]  in_wr_addr,
    output [IN_NUM*1-1:0]           in_wr_cmd_rdy,
    output [IN_NUM*DATA_WIDTH-1:0]  in_rd_data,
@@ -40,7 +36,7 @@ module mem_req_mux1 #(
    // Host Memory Interface
    input                           wr_cmd_rdy,
    output [DATA_WIDTH-1:0]         wr_data,
-   output [MASK_WIDTH-1:0]         wr_datamask,
+   output [MASK_WIDTH-1:0]         wr_datastrb,
    output [ADDR_WIDTH-1:0]         wr_addr,
    input                           rd_cmd_rdy,
    input  [DATA_WIDTH-1:0]         rd_data,
@@ -59,7 +55,7 @@ module mem_req_mux1 #(
    genvar i;
    generate
    for (i=0; i<IN_NUM; i=i+1) begin:gen_wr_req
-      assign wr_req[i] = (in_wr_datamask[i*MASK_WIDTH+MASK_WIDTH-1:i*MASK_WIDTH] != 'd0);
+      assign wr_req[i] = (in_wr_datastrb[i*MASK_WIDTH+MASK_WIDTH-1:i*MASK_WIDTH] != 'd0);
    end
    endgenerate
 
@@ -80,7 +76,7 @@ module mem_req_mux1 #(
 
    assign wr_data     = in_wr_data     >> (wr_switch * DATA_WIDTH);
    assign wr_addr     = in_wr_addr     >> (wr_switch * ADDR_WIDTH);
-   assign wr_datamask = in_wr_datamask >> (wr_switch * MASK_WIDTH);
+   assign wr_datastrb = in_wr_datastrb >> (wr_switch * MASK_WIDTH);
    assign rd_en       = in_rd_en       >> rd_switch;
    assign rd_addr     = in_rd_addr     >> (rd_switch*ADDR_WIDTH);
 

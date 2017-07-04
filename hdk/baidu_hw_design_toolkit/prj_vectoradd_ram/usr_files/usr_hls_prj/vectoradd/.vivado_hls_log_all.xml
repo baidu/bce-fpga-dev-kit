@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="WARNING: [XFORM 203-542] more than one sub loop." projectName="vectoradd" solutionName="solution1" date="2017-07-03T09:15:03.785+0800" type="Warning"/>
+        <logs message="WARNING: [XFORM 203-542] Cannot flatten a loop nest 'Loop-1' (src/example.cpp:119:19) in function 'example' : " projectName="vectoradd" solutionName="solution1" date="2017-07-03T09:15:03.612+0800" type="Warning"/>
+        <logs message="WARNING: [SYNCHK 200-23] src/example.cpp:130: variable-indexed range selection may cause suboptimal QoR." projectName="vectoradd" solutionName="solution1" date="2017-07-03T09:15:02.487+0800" type="Warning"/>
+      </synLog>
+      <simLog/>
+      <mgLog/>
+      <packageLog>
+        <logs message="WARNING: [IP_Flow 19-4832] The IP name 'example_ap_fadd_6_full_dsp_32' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues." projectName="vectoradd" solutionName="solution1" date="2017-07-03T09:28:13.338+0800" type="Warning"/>
+        <logs message="WARNING: [IP_Flow 19-4832] The IP name 'example_ap_fadd_6_full_dsp_32' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues." projectName="vectoradd" solutionName="solution1" date="2017-07-03T09:25:22.840+0800" type="Warning"/>
+        <logs message="WARNING: [IP_Flow 19-4832] The IP name 'example_ap_fadd_6_full_dsp_32' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues." projectName="vectoradd" solutionName="solution1" date="2017-07-03T09:23:58.463+0800" type="Warning"/>
+        <logs message="WARNING: [IP_Flow 19-4832] The IP name 'example_ap_fadd_6_full_dsp_32' you have specified is long. The Windows operating system has path length limitations. It is recommended you use shorter names to reduce the likelihood of issues." projectName="vectoradd" solutionName="solution1" date="2017-07-03T09:16:55.231+0800" type="Warning"/>
+      </packageLog>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

@@ -277,6 +277,7 @@
 
   input s_axi_aclk;
   input s_axi_aresetn;
+  
   input pe_clk;
   input pe_clk_rst;
   input i_soft_rst_n;

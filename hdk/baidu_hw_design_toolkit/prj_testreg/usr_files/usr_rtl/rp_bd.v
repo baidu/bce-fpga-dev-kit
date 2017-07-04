@@ -1,23 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: rp_bd_simple.v
-//    Data last Modified:
-//    Data Created:June. 15th, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: The simple project for FPGA cloud.
-//
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1 ps / 1 ps
 `include "usr_ddr4_define.vh"
 
@@ -280,7 +275,7 @@ axi_lite_ila axi_lite_ila(
 
    wire                     mem_wr_cmd_rdy;
    wire   [512-1:0]         mem_wr_data;
-   wire   [64-1:0]          mem_wr_datamask;
+   wire   [64-1:0]          mem_wr_datastrb;
    wire   [ADDR_WIDTH-1:0]  mem_wr_addr;
    wire                     mem_rd_cmd_rdy;
    wire   [512-1:0]         mem_rd_data;
@@ -293,7 +288,7 @@ axi_dwidth_converter_256to512 axi_256to512(
    .s_axi_aresetn    (s_axi_aresetn),
 
    .s_axi_awaddr     (S_AXI_awaddr),
-   .s_axi_awid       (S_AXI_awid),   
+   .s_axi_awid       (S_AXI_awid),
    .s_axi_awlen      (S_AXI_awlen),
    .s_axi_awsize     (S_AXI_awsize),
    .s_axi_awburst    (S_AXI_awburst),
@@ -309,12 +304,12 @@ axi_dwidth_converter_256to512 axi_256to512(
    .s_axi_wlast      (S_AXI_wlast),
    .s_axi_wvalid     (S_AXI_wvalid),
    .s_axi_wready     (S_AXI_wready),
-   .s_axi_bid        (S_AXI_bid),      
+   .s_axi_bid        (S_AXI_bid),
    .s_axi_bresp      (S_AXI_bresp),
    .s_axi_bvalid     (S_AXI_bvalid),
    .s_axi_bready     (S_AXI_bready),
    .s_axi_araddr     (S_AXI_araddr),
-   .s_axi_arid       (S_AXI_arid),      
+   .s_axi_arid       (S_AXI_arid),
    .s_axi_arlen      (S_AXI_arlen),
    .s_axi_arsize     (S_AXI_arsize),
    .s_axi_arburst    (S_AXI_arburst),
@@ -326,7 +321,7 @@ axi_dwidth_converter_256to512 axi_256to512(
    .s_axi_arvalid    (S_AXI_arvalid),
    .s_axi_arready    (S_AXI_arready),
    .s_axi_rdata      (S_AXI_rdata),
-   .s_axi_rid        (S_AXI_rid),     
+   .s_axi_rid        (S_AXI_rid),
    .s_axi_rresp      (S_AXI_rresp),
    .s_axi_rlast      (S_AXI_rlast),
    .s_axi_rvalid     (S_AXI_rvalid),
@@ -426,7 +421,7 @@ axi_slave_bfm #(
    // Card Memory Interface
    .mem_wr_cmd_rdy    (mem_wr_cmd_rdy),
    .mem_wr_data       (mem_wr_data),
-   .mem_wr_datamask   (mem_wr_datamask),
+   .mem_wr_datastrb   (mem_wr_datastrb),
    .mem_wr_addr       (mem_wr_addr),
    .mem_rd_cmd_rdy    (mem_rd_cmd_rdy),
    .mem_rd_data       (mem_rd_data),
@@ -446,8 +441,8 @@ axi_slave_bfm #(
    wire        w_cmd_fifo_rd_en;
    wire        w_cmd_fifo_valid;
 
-   assign mem_wr_en      = mem_wr_datamask != 'd0; 
-   assign mem_wr_byte    = (mem_wr_datamask != {(64){1'b1}});
+   assign mem_wr_en      = mem_wr_datastrb != 'd0;
+   assign mem_wr_byte    = (mem_wr_datastrb != {(64){1'b1}});
    assign mem_wr_cmd_rdy = ~w_cmd_fifo_full && ~w_data_fifo_full;
    assign mem_rd_cmd_rdy = ~r_cmd_fifo_full;
    assign c0_ddr4_app_wdf_end = 1'b1;
@@ -483,7 +478,7 @@ fifo_async_blk_fwft_576x512_latency_0 w_data_fifo(
    .rst(~s_axi_aresetn),
    .wr_clk(s_axi_aclk),
    .rd_clk(c0_ddr4_ui_clk),
-   .din({~mem_wr_datamask,mem_wr_data}),
+   .din({~mem_wr_datastrb,mem_wr_data}),
    .wr_en(mem_wr_en && mem_wr_cmd_rdy),
    .rd_en(c0_ddr4_app_wdf_rdy),
    .dout({c0_ddr4_app_wdf_mask,c0_ddr4_app_wdf_data}),
@@ -522,7 +517,7 @@ always @ (posedge c0_ddr4_ui_clk) begin
 end
 
 assign c0_ddr4_app_addr = (switch_r) ? r_cmd_fifo_dout[30:3] : w_cmd_fifo_dout[30:3];
-assign c0_ddr4_app_en   = (switch_r) ? r_cmd_fifo_valid : w_cmd_fifo_valid;  
+assign c0_ddr4_app_en   = (switch_r) ? r_cmd_fifo_valid : w_cmd_fifo_valid;
 assign c0_ddr4_app_cmd  = (switch_r) ? 3'b001 :
                           (w_cmd_fifo_dout[64]) ? 3'b011 : 3'b000;
 assign r_cmd_fifo_rd_en = (switch_r) ? c0_ddr4_app_rdy : 1'b0;

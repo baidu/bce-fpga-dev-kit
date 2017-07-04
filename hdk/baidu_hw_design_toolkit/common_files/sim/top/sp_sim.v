@@ -1,23 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: sp_sim.v
-//    Data last Modified:
-//    Data Created:June. 7th, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: simulate for static part of FPGA cloud.
-//
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1ns / 1ps
 
 module sp_sim #(
@@ -108,7 +103,7 @@ module sp_sim #(
 
    // Host Memory Interface for static
    wire   [DATA_WIDTH-1:0]  hostmem_wr_data;
-   wire   [MASK_WIDTH-1:0]  hostmem_wr_datamask;
+   wire   [MASK_WIDTH-1:0]  hostmem_wr_datastrb;
    wire   [ADDR_WIDTH-1:0]  hostmem_wr_addr;
    wire   [DATA_WIDTH-1:0]  hostmem_rd_data;
    wire                     hostmem_rd_data_vld;
@@ -117,7 +112,7 @@ module sp_sim #(
 
    // Host Memory Interface for testbench
    reg    [DATA_WIDTH-1:0]  tb_wr_data;
-   reg    [MASK_WIDTH-1:0]  tb_wr_datamask;
+   reg    [MASK_WIDTH-1:0]  tb_wr_datastrb;
    reg    [ADDR_WIDTH-1:0]  tb_wr_addr;
    wire   [DATA_WIDTH-1:0]  tb_rd_data;
    wire                     tb_rd_data_vld;
@@ -139,7 +134,7 @@ module sp_sim #(
    wire   [DATA_WIDTH-1:0]  normal_rd_data;
    reg    [ADDR_WIDTH-1:0]  normal_wr_addr;
    reg    [DATA_WIDTH-1:0]  normal_wr_data;
-   reg    [MASK_WIDTH-1:0]  normal_wr_datamask;
+   reg    [MASK_WIDTH-1:0]  normal_wr_datastrb;
 
    // Receive axi lite normal req
    reg    [15:0]            normal_lite_rd_addr;
@@ -148,7 +143,7 @@ module sp_sim #(
    wire   [31:0]            normal_lite_rd_data;
    reg    [15:0]            normal_lite_wr_addr;
    reg    [31:0]            normal_lite_wr_data;
-   reg    [3:0]             normal_lite_wr_datamask;
+   reg    [3:0]             normal_lite_wr_datastrb;
 
 ///////////module instance////////////
 axi_master_bfm #(
@@ -209,7 +204,7 @@ axi_master_bfm #(
    // Host Memory Interface
    .mem_wr_cmd_rdy(1'b1),
    .mem_wr_data(hostmem_wr_data),
-   .mem_wr_datamask(hostmem_wr_datamask),
+   .mem_wr_datastrb(hostmem_wr_datastrb),
    .mem_wr_addr(hostmem_wr_addr),
    .mem_rd_cmd_rdy(1'b1),
    .mem_rd_data(hostmem_rd_data),
@@ -232,7 +227,7 @@ axi_master_bfm #(
    .normal_rd_data(normal_rd_data),
    .normal_wr_addr(normal_wr_addr),
    .normal_wr_data(normal_wr_data),
-   .normal_wr_datamask(normal_wr_datamask)
+   .normal_wr_datastrb(normal_wr_datastrb)
 );
 
 //HOST Memory Simulate
@@ -246,7 +241,7 @@ mem_2ports #(
    .rst(rst),
 
    .c1_wr_data(hostmem_wr_data),
-   .c1_wr_datamask(hostmem_wr_datamask),
+   .c1_wr_datastrb(hostmem_wr_datastrb),
    .c1_wr_addr(hostmem_wr_addr),
    .c1_rd_data(hostmem_rd_data),
    .c1_rd_data_vld(hostmem_rd_data_vld),
@@ -254,7 +249,7 @@ mem_2ports #(
    .c1_rd_addr(hostmem_rd_addr),
 
    .c2_wr_data(tb_wr_data),
-   .c2_wr_datamask(tb_wr_datamask),
+   .c2_wr_datastrb(tb_wr_datastrb),
    .c2_wr_addr(tb_wr_addr),
    .c2_rd_data(tb_rd_data),
    .c2_rd_data_vld(tb_rd_data_vld),
@@ -277,7 +272,7 @@ mem_2ports #(
       .normal_wr_cmd_rdy(),
       .normal_wr_addr(normal_lite_wr_addr),
       .normal_wr_data(normal_lite_wr_data),
-      .normal_wr_datamask(normal_lite_wr_datamask),
+      .normal_wr_datastrb(normal_lite_wr_datastrb),
 
       .araddr(M_AXI_LITE_araddr),
       .arprot(M_AXI_LITE_arprot),
@@ -306,27 +301,27 @@ task axi_wr;
    input  [DATA_WIDTH-1:0]                 data;
    input  [3:0]                            size;
    reg    [2*DATA_WIDTH-1:0]               data_buf;
-   reg    [2*MASK_WIDTH-1:0]               datamask_buf;
+   reg    [2*MASK_WIDTH-1:0]               datastrb_buf;
    reg    [ADDR_WIDTH-ADDR_ALIGN_BITS-1:0] addr_nxt;
    begin
       @(posedge clk)
       addr_nxt     = addr[ADDR_WIDTH-1:ADDR_ALIGN_BITS]+'d1;
       data_buf     = data << (8 * addr[ADDR_ALIGN_BITS-1:0]);
-      datamask_buf = ({(MASK_WIDTH){1'b1}} >> (MASK_WIDTH-(1'b1 << size))) << addr[ADDR_ALIGN_BITS-1:0];
+      datastrb_buf = ({(MASK_WIDTH){1'b1}} >> (MASK_WIDTH-(1'b1 << size))) << addr[ADDR_ALIGN_BITS-1:0];
       #0.1;
       normal_wr_addr     = {addr[ADDR_WIDTH-1:ADDR_ALIGN_BITS],{(ADDR_ALIGN_BITS){1'b0}}};
       normal_wr_data     = data_buf[DATA_WIDTH-1:0];
-      normal_wr_datamask = datamask_buf[MASK_WIDTH-1:0];
+      normal_wr_datastrb = datastrb_buf[MASK_WIDTH-1:0];
       @(posedge clk)
       #0.1;
-      if (datamask_buf[2*MASK_WIDTH-1:MASK_WIDTH] != 'd0) begin
+      if (datastrb_buf[2*MASK_WIDTH-1:MASK_WIDTH] != 'd0) begin
          normal_wr_addr     = {addr_nxt,{(ADDR_ALIGN_BITS){1'b0}}};
          normal_wr_data     = data_buf[2*DATA_WIDTH-1:DATA_WIDTH];
-         normal_wr_datamask = datamask_buf[2*MASK_WIDTH-1:MASK_WIDTH];
+         normal_wr_datastrb = datastrb_buf[2*MASK_WIDTH-1:MASK_WIDTH];
          @(posedge clk)
          #0.1;
       end
-      normal_wr_datamask = 'd0;
+      normal_wr_datastrb = 'd0;
    end
 endtask
 
@@ -457,17 +452,17 @@ endtask
 task host_mem_wr;
    input  [ADDR_WIDTH-1:0] addr;
    input  [DATA_WIDTH-1:0] data;
-   input  [MASK_WIDTH-1:0] datamask;
+   input  [MASK_WIDTH-1:0] datastrb;
    begin
       @(posedge clk);
       #0.1;
       tb_wr_addr     = addr;
       tb_wr_data     = data;
-      tb_wr_datamask = datamask;
+      tb_wr_datastrb = datastrb;
       @(posedge clk);
       #0.1;
-      tb_wr_datamask = 'd0;
-      //$display ("%g Host Mem write %h with address %h and datamask %h", $time, data, addr, datamask);
+      tb_wr_datastrb = 'd0;
+      //$display ("%g Host Mem write %h with address %h and datastrb %h", $time, data, addr, datastrb);
    end
 endtask
 
@@ -479,10 +474,10 @@ task host_mem_wr_char;
       #0.1;
       tb_wr_addr     = {addr[ADDR_WIDTH-1:ADDR_ALIGN_BITS],{(ADDR_ALIGN_BITS){1'b0}}};
       tb_wr_data     = data << (8*addr[ADDR_ALIGN_BITS-1:0]);
-      tb_wr_datamask = 1'd1 << addr[ADDR_ALIGN_BITS-1:0];
+      tb_wr_datastrb = 1'd1 << addr[ADDR_ALIGN_BITS-1:0];
       @(posedge clk);
       #0.1;
-      tb_wr_datamask = 'd0;
+      tb_wr_datastrb = 'd0;
       $display ("%g Host Mem write_char %h with address %h", $time, data, addr);
    end
 endtask
@@ -514,12 +509,12 @@ task axi_l_wr;
       #0.1;
       normal_lite_wr_addr     = addr;
       normal_lite_wr_data     = data;
-      normal_lite_wr_datamask = mask;
+      normal_lite_wr_datastrb = mask;
       @(posedge clk);
       #0.1;
       normal_lite_wr_addr     = 'd0;
       normal_lite_wr_data     = 'd0;
-      normal_lite_wr_datamask = 'd0;
+      normal_lite_wr_datastrb = 'd0;
       $display ("%g AXI lite write %h with address %h", $time, data, addr);
    end
 endtask
@@ -542,12 +537,12 @@ endtask
 ///////////simulation start////////////
 initial begin
    usr_irq_ack             = 'd0;
-   normal_wr_datamask      = 'd0;
+   normal_wr_datastrb      = 'd0;
    normal_wr_data          = 'd0;
    normal_wr_addr          = 'd0;
    normal_rd_en            = 'd0;
    normal_rd_addr          = 'd0;
-   normal_lite_wr_datamask = 'd0;
+   normal_lite_wr_datastrb = 'd0;
    normal_lite_wr_data     = 'd0;
    normal_lite_wr_addr     = 'd0;
    normal_lite_rd_en       = 'd0;
@@ -558,7 +553,7 @@ initial begin
    dma_direction           = 'd0;
    dma_start               = 'd0;
    tb_wr_data              = 'd0;
-   tb_wr_datamask          = 'd0;
+   tb_wr_datastrb          = 'd0;
    tb_wr_addr              = 'd0;
    tb_rd_en                = 'd0;
    tb_rd_addr              = 'd0;

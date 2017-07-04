@@ -1,23 +1,18 @@
-//Confidential and proprietary information of Baidu, Inc
-//////////////////////////////////////////////////////
-//
-//
-//    Version:1.0
-//    FileName: dma_engine.v
-//    Data last Modified:
-//    Data Created:June. 2nd, 2017
-//
-//
-//
-//    Device:xcku115-flvf1924-2-e
-//    Purpose: receive dma configuration info and generate mem req & axi req
-//    to transfer data between host memory and card memory.
-//
-//    Reference:
-//    Revision History:
-//    Rev 1.0 - First created, ruanyuan,
-//    email: ruanyuan@baidu.com
-//////////////////////////////////////////////////////
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 `timescale 1ns / 1ps
 module dma_engine #(
    parameter DATA_WIDTH = 512,
@@ -57,7 +52,7 @@ module dma_engine #(
 
    //mem req
    output [DATA_WIDTH-1:0]  wr_data,
-   output [MASK_WIDTH-1:0]  wr_datamask,
+   output [MASK_WIDTH-1:0]  wr_datastrb,
    output [ADDR_WIDTH-1:0]  wr_addr,
    input                    wr_cmd_rdy,
    input  [DATA_WIDTH-1:0]  rd_data,
@@ -90,8 +85,8 @@ module dma_engine #(
    wire   [MASK_WIDTH-1:0]      rd_data_last_wstrb;
    wire   [ADDR_ALIGN_BITS+3:0] wr_data_idx_msb;
    wire   [ADDR_ALIGN_BITS+3:0] wr_data_idx_lsb;
-   wire   [ADDR_ALIGN_BITS:0]   wr_datamask_idx_msb;
-   wire   [ADDR_ALIGN_BITS:0]   wr_datamask_idx_lsb;
+   wire   [ADDR_ALIGN_BITS:0]   wr_datastrb_idx_msb;
+   wire   [ADDR_ALIGN_BITS:0]   wr_datastrb_idx_lsb;
 
    reg    [ADDR_ALIGN_BITS-1:0] rd_addr_offset_r;
    reg    [ADDR_WIDTH-1:0]      rd_start_addr_align_r;
@@ -103,8 +98,8 @@ module dma_engine #(
    reg    [MASK_WIDTH-1:0]      rd_data_last_wstrb_r;
    reg    [ADDR_ALIGN_BITS+3:0] wr_data_idx_msb_r;
    reg    [ADDR_ALIGN_BITS+3:0] wr_data_idx_lsb_r;
-   reg    [ADDR_ALIGN_BITS:0]   wr_datamask_idx_msb_r;
-   reg    [ADDR_ALIGN_BITS:0]   wr_datamask_idx_lsb_r;
+   reg    [ADDR_ALIGN_BITS:0]   wr_datastrb_idx_msb_r;
+   reg    [ADDR_ALIGN_BITS:0]   wr_datastrb_idx_lsb_r;
 
    reg    [31:0]                wr_words_cnt_r;
    reg    [31:0]                rd_words_cnt_r;
@@ -126,8 +121,8 @@ module dma_engine #(
    assign rd_data_last_wstrb   = {(MASK_WIDTH){1'b1}} >> (MASK_WIDTH-rd_last_addr_offset-'d1);
    assign wr_data_idx_msb      = wr_data_idx_lsb + DATA_WIDTH - 'd1;
    assign wr_data_idx_lsb      = {addr_distance_offset[ADDR_ALIGN_BITS-1:0],3'b0};
-   assign wr_datamask_idx_msb  = wr_datamask_idx_lsb + MASK_WIDTH - 'd1;
-   assign wr_datamask_idx_lsb  = addr_distance_offset[ADDR_ALIGN_BITS-1:0];
+   assign wr_datastrb_idx_msb  = wr_datastrb_idx_lsb + MASK_WIDTH - 'd1;
+   assign wr_datastrb_idx_lsb  = addr_distance_offset[ADDR_ALIGN_BITS-1:0];
 
    always @ (posedge clk) begin
       if (rst) begin
@@ -141,8 +136,8 @@ module dma_engine #(
          rd_data_last_wstrb_r  <= 'd0;
          wr_data_idx_msb_r     <= 'd0;
          wr_data_idx_lsb_r     <= 'd0;
-         wr_datamask_idx_msb_r <= 'd0;
-         wr_datamask_idx_lsb_r <= 'd0;
+         wr_datastrb_idx_msb_r <= 'd0;
+         wr_datastrb_idx_lsb_r <= 'd0;
          rd_words_total_r      <= 'd0;
          wr_words_total_r      <= 'd0;
          c2h_dma_r             <= 'd0;
@@ -159,8 +154,8 @@ module dma_engine #(
          rd_data_last_wstrb_r  <= rd_data_last_wstrb;
          wr_data_idx_msb_r     <= wr_data_idx_msb;
          wr_data_idx_lsb_r     <= wr_data_idx_lsb;
-         wr_datamask_idx_msb_r <= wr_datamask_idx_msb;
-         wr_datamask_idx_lsb_r <= wr_datamask_idx_lsb;
+         wr_datastrb_idx_msb_r <= wr_datastrb_idx_msb;
+         wr_datastrb_idx_lsb_r <= wr_datastrb_idx_lsb;
          rd_words_total_r      <= ((rd_end_addr_align - rd_start_addr_align) >> ADDR_ALIGN_BITS) + 'd1;
          wr_words_total_r      <= ((wr_end_addr_align - wr_start_addr_align) >> ADDR_ALIGN_BITS) + 'd1;
          c2h_dma_r             <= direction;
@@ -241,14 +236,14 @@ module dma_engine #(
    wire rd2wr_data_fifo_prog_empty;
    wire rd2wr_data_fifo_valid;
 
-   //assign rd2wr_data_fifo_din = {rd2wr_data_strb_r[wr_datamask_idx_msb_r:wr_datamask_idx_lsb_r],rd2wr_data_r[wr_data_idx_msb_r:wr_data_idx_lsb_r]};
-   //assign rd2wr_data_fifo_wr_en = (rd2wr_data_strb_r[wr_datamask_idx_msb_r:wr_datamask_idx_lsb_r] != 'd0);
+   //assign rd2wr_data_fifo_din = {rd2wr_data_strb_r[wr_datastrb_idx_msb_r:wr_datastrb_idx_lsb_r],rd2wr_data_r[wr_data_idx_msb_r:wr_data_idx_lsb_r]};
+   //assign rd2wr_data_fifo_wr_en = (rd2wr_data_strb_r[wr_datastrb_idx_msb_r:wr_datastrb_idx_lsb_r] != 'd0);
    wire [DATA_WIDTH-1:0] rd2wr_data_validrange;
-   wire [MASK_WIDTH-1:0] rd2wr_datamask_validrange;
+   wire [MASK_WIDTH-1:0] rd2wr_datastrb_validrange;
    assign rd2wr_data_validrange     = (rd2wr_data_r << (2*DATA_WIDTH-1-wr_data_idx_msb_r)) >> (2*DATA_WIDTH-1-wr_data_idx_msb_r+wr_data_idx_lsb_r);
-   assign rd2wr_datamask_validrange = (rd2wr_data_strb_r << (2*MASK_WIDTH-1-wr_datamask_idx_msb_r)) >> (2*MASK_WIDTH-1-wr_datamask_idx_msb_r+wr_datamask_idx_lsb_r);
-   assign rd2wr_data_fifo_din       = {rd2wr_datamask_validrange,rd2wr_data_validrange};
-   assign rd2wr_data_fifo_wr_en     = (rd2wr_datamask_validrange != 'd0) && (rd2wr_data_vld_r || rd2wr_data_last_r2);
+   assign rd2wr_datastrb_validrange = (rd2wr_data_strb_r << (2*MASK_WIDTH-1-wr_datastrb_idx_msb_r)) >> (2*MASK_WIDTH-1-wr_datastrb_idx_msb_r+wr_datastrb_idx_lsb_r);
+   assign rd2wr_data_fifo_din       = {rd2wr_datastrb_validrange,rd2wr_data_validrange};
+   assign rd2wr_data_fifo_wr_en     = (rd2wr_datastrb_validrange != 'd0) && (rd2wr_data_vld_r || rd2wr_data_last_r2);
    assign rd2wr_data_fifo_rd_en     = (c2h_dma_r && wr_cmd_rdy) || (h2c_dma_r && wready);
 
    fifo_sync_blk_fwft_576x512_latency_0 rd2wr_data_fifo(
@@ -328,7 +323,7 @@ module dma_engine #(
 
    assign wr_addr     = mem_wr_addr_r;
    assign wr_data     = (c2h_dma_r && rd2wr_data_fifo_valid) ? rd2wr_data_fifo_dout[DATA_WIDTH-1:0] : 'd0;
-   assign wr_datamask = (c2h_dma_r && rd2wr_data_fifo_valid) ? rd2wr_data_fifo_dout[DATA_WIDTH+MASK_WIDTH-1:DATA_WIDTH] : 'd0;
+   assign wr_datastrb = (c2h_dma_r && rd2wr_data_fifo_valid) ? rd2wr_data_fifo_dout[DATA_WIDTH+MASK_WIDTH-1:DATA_WIDTH] : 'd0;
 
    always @ (posedge clk) begin
       if (start) begin

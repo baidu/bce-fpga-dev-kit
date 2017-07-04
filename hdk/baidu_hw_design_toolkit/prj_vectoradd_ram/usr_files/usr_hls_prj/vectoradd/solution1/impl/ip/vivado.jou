@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2016.4 (64-bit)
+# SW Build 1733598 on Wed Dec 14 22:35:42 MST 2016
+# IP Build 1731160 on Wed Dec 14 23:47:21 MST 2016
+# Start of session at: Mon Jul  3 09:27:58 2017
+# Process ID: 5151
+# Current directory: /home/ruanyuan/CLOUD/fpga_cloud/hls/vectoradd/solution1/impl/ip
+# Command line: vivado -notrace -mode batch -source run_ippack.tcl
+# Log file: /home/ruanyuan/CLOUD/fpga_cloud/hls/vectoradd/solution1/impl/ip/vivado.log
+# Journal file: /home/ruanyuan/CLOUD/fpga_cloud/hls/vectoradd/solution1/impl/ip/vivado.jou
+#-----------------------------------------------------------
+source run_ippack.tcl -notrace
