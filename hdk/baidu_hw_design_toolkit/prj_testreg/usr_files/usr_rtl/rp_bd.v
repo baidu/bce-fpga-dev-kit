@@ -203,8 +203,7 @@ vio_0 vio_0 (
 
 axi_lite_ila axi_lite_ila(
    .clk(s_axi_aclk),
-   //.probe0(S_AXI_LITE_arready),
-   .probe0(c0_init_calib_complete),
+   .probe0(S_AXI_LITE_arready),
    .probe1(S_AXI_LITE_araddr),
    .probe2(S_AXI_LITE_bresp),
    .probe3(S_AXI_LITE_arvalid),
@@ -289,7 +288,7 @@ axi_dwidth_converter_256to512 axi_256to512(
    .s_axi_aresetn    (s_axi_aresetn),
 
    .s_axi_awaddr     (S_AXI_awaddr),
-   .s_axi_awid       (S_AXI_awid),   
+   .s_axi_awid       (S_AXI_awid),
    .s_axi_awlen      (S_AXI_awlen),
    .s_axi_awsize     (S_AXI_awsize),
    .s_axi_awburst    (S_AXI_awburst),
@@ -305,12 +304,12 @@ axi_dwidth_converter_256to512 axi_256to512(
    .s_axi_wlast      (S_AXI_wlast),
    .s_axi_wvalid     (S_AXI_wvalid),
    .s_axi_wready     (S_AXI_wready),
-   .s_axi_bid        (S_AXI_bid),      
+   .s_axi_bid        (S_AXI_bid),
    .s_axi_bresp      (S_AXI_bresp),
    .s_axi_bvalid     (S_AXI_bvalid),
    .s_axi_bready     (S_AXI_bready),
    .s_axi_araddr     (S_AXI_araddr),
-   .s_axi_arid       (S_AXI_arid),      
+   .s_axi_arid       (S_AXI_arid),
    .s_axi_arlen      (S_AXI_arlen),
    .s_axi_arsize     (S_AXI_arsize),
    .s_axi_arburst    (S_AXI_arburst),
@@ -322,7 +321,7 @@ axi_dwidth_converter_256to512 axi_256to512(
    .s_axi_arvalid    (S_AXI_arvalid),
    .s_axi_arready    (S_AXI_arready),
    .s_axi_rdata      (S_AXI_rdata),
-   .s_axi_rid        (S_AXI_rid),     
+   .s_axi_rid        (S_AXI_rid),
    .s_axi_rresp      (S_AXI_rresp),
    .s_axi_rlast      (S_AXI_rlast),
    .s_axi_rvalid     (S_AXI_rvalid),
@@ -442,7 +441,7 @@ axi_slave_bfm #(
    wire        w_cmd_fifo_rd_en;
    wire        w_cmd_fifo_valid;
 
-   assign mem_wr_en      = mem_wr_datastrb != 'd0; 
+   assign mem_wr_en      = mem_wr_datastrb != 'd0;
    assign mem_wr_byte    = (mem_wr_datastrb != {(64){1'b1}});
    assign mem_wr_cmd_rdy = ~w_cmd_fifo_full && ~w_data_fifo_full;
    assign mem_rd_cmd_rdy = ~r_cmd_fifo_full;
@@ -518,7 +517,7 @@ always @ (posedge c0_ddr4_ui_clk) begin
 end
 
 assign c0_ddr4_app_addr = (switch_r) ? r_cmd_fifo_dout[30:3] : w_cmd_fifo_dout[30:3];
-assign c0_ddr4_app_en   = (switch_r) ? r_cmd_fifo_valid : w_cmd_fifo_valid;  
+assign c0_ddr4_app_en   = (switch_r) ? r_cmd_fifo_valid : w_cmd_fifo_valid;
 assign c0_ddr4_app_cmd  = (switch_r) ? 3'b001 :
                           (w_cmd_fifo_dout[64]) ? 3'b011 : 3'b000;
 assign r_cmd_fifo_rd_en = (switch_r) ? c0_ddr4_app_rdy : 1'b0;
