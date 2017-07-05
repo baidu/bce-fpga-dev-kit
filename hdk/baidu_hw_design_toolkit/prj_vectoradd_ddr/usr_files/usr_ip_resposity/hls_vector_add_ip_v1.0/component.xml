@@ -1919,7 +1919,7 @@
       <spirit:file>
         <spirit:name>hdl/vhdl/example.vhd</spirit:name>
         <spirit:fileType>vhdlSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_432fba63</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_002e2a6b</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
@@ -2151,10 +2151,10 @@
       <xilinx:taxonomies>
         <xilinx:taxonomy>/VIVADO_HLS_IP</xilinx:taxonomy>
       </xilinx:taxonomies>
-      <xilinx:displayName>vector_add_IP_v1.00</xilinx:displayName>
+      <xilinx:displayName>vector_add</xilinx:displayName>
       <xilinx:definitionSource>HLS</xilinx:definitionSource>
-      <xilinx:coreRevision>1706150942</xilinx:coreRevision>
-      <xilinx:coreCreationDateTime>2017-06-15T01:42:20Z</xilinx:coreCreationDateTime>
+      <xilinx:coreRevision>1707030927</xilinx:coreRevision>
+      <xilinx:coreCreationDateTime>2017-07-03T01:28:14Z</xilinx:coreCreationDateTime>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
       <xilinx:xilinxVersion>2016.4</xilinx:xilinxVersion>

@@ -283,6 +283,9 @@ CONFIG.S01_HAS_REGSLICE {4} \
   # Create instance: axi_register_slice_0, and set properties
   set axi_register_slice_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_register_slice axi_register_slice_0 ]
 
+  # Create instance: axi_register_slice_1, and set properties
+  set axi_register_slice_1 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_register_slice axi_register_slice_1 ]
+
   # Create instance: axislave_cu_apctrl_v1_0_0, and set properties
   set axislave_cu_apctrl_v1_0_0 [ create_bd_cell -type ip -vlnv baidu.com:user:axislave_cu_apctrl_v1_0 axislave_cu_apctrl_v1_0_0 ]
 
@@ -317,7 +320,7 @@ CONFIG.C_SIZE {1} \
  ] $util_vector_logic_0
 
   # Create interface connections
-  connect_bd_intf_net -intf_net S00_AXI_1 [get_bd_intf_ports S_AXI] [get_bd_intf_pins axi_interconnect_1/S00_AXI]
+  connect_bd_intf_net -intf_net S_AXI_1 [get_bd_intf_ports S_AXI] [get_bd_intf_pins axi_register_slice_1/S_AXI]
   connect_bd_intf_net -intf_net S_AXI_LITE_1 [get_bd_intf_ports S_AXI_LITE] [get_bd_intf_pins axi_register_slice_0/S_AXI]
   connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTA [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTA] [get_bd_intf_pins axi_bram_ctrl_0_bram/BRAM_PORTA]
   connect_bd_intf_net -intf_net axi_bram_ctrl_0_BRAM_PORTB [get_bd_intf_pins axi_bram_ctrl_0/BRAM_PORTB] [get_bd_intf_pins axi_bram_ctrl_0_bram/BRAM_PORTB]
@@ -327,6 +330,7 @@ connect_bd_intf_net -intf_net [get_bd_intf_nets axi_interconnect_1_M00_AXI] [get
 HDL_ATTRIBUTE.DEBUG {true} \
  ] [get_bd_intf_nets axi_interconnect_1_M00_AXI]
   connect_bd_intf_net -intf_net axi_register_slice_0_M_AXI [get_bd_intf_pins axi_register_slice_0/M_AXI] [get_bd_intf_pins axislave_cu_apctrl_v1_0_0/s00_axi]
+  connect_bd_intf_net -intf_net axi_register_slice_1_M_AXI [get_bd_intf_pins axi_interconnect_1/S00_AXI] [get_bd_intf_pins axi_register_slice_1/M_AXI]
   connect_bd_intf_net -intf_net example_0_m_axi_a_V [get_bd_intf_pins axi_interconnect_1/S01_AXI] [get_bd_intf_pins example_0/m_axi_a_V]
 
   # Create port connections
@@ -344,8 +348,8 @@ HDL_ATTRIBUTE.DEBUG {true} \
   connect_bd_net -net example_0_ap_idle [get_bd_pins axislave_cu_apctrl_v1_0_0/ap_idle] [get_bd_pins example_0/ap_idle]
   connect_bd_net -net example_0_ap_ready [get_bd_pins axislave_cu_apctrl_v1_0_0/ap_ready] [get_bd_pins example_0/ap_ready]
   connect_bd_net -net i_soft_rst_n_1 [get_bd_ports i_soft_rst_n] [get_bd_pins util_vector_logic_0/Op1]
-  connect_bd_net -net s_axi_aclk_1 [get_bd_ports s_axi_aclk] [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] [get_bd_pins axi_interconnect_1/ACLK] [get_bd_pins axi_interconnect_1/M00_ACLK] [get_bd_pins axi_interconnect_1/S00_ACLK] [get_bd_pins axi_interconnect_1/S01_ACLK] [get_bd_pins axi_register_slice_0/aclk] [get_bd_pins axislave_cu_apctrl_v1_0_0/s00_axi_aclk] [get_bd_pins example_0/ap_clk] [get_bd_pins system_ila1/clk]
-  connect_bd_net -net s_axi_aresetn_1 [get_bd_ports s_axi_aresetn] [get_bd_pins axi_bram_ctrl_0/s_axi_aresetn] [get_bd_pins axi_interconnect_1/ARESETN] [get_bd_pins axi_interconnect_1/M00_ARESETN] [get_bd_pins axi_interconnect_1/S00_ARESETN] [get_bd_pins axi_interconnect_1/S01_ARESETN] [get_bd_pins axi_register_slice_0/aresetn] [get_bd_pins axislave_cu_apctrl_v1_0_0/s00_axi_aresetn] [get_bd_pins util_vector_logic_0/Op2]
+  connect_bd_net -net s_axi_aclk_1 [get_bd_ports s_axi_aclk] [get_bd_pins axi_bram_ctrl_0/s_axi_aclk] [get_bd_pins axi_interconnect_1/ACLK] [get_bd_pins axi_interconnect_1/M00_ACLK] [get_bd_pins axi_interconnect_1/S00_ACLK] [get_bd_pins axi_interconnect_1/S01_ACLK] [get_bd_pins axi_register_slice_0/aclk] [get_bd_pins axi_register_slice_1/aclk] [get_bd_pins axislave_cu_apctrl_v1_0_0/s00_axi_aclk] [get_bd_pins example_0/ap_clk] [get_bd_pins system_ila1/clk]
+  connect_bd_net -net s_axi_aresetn_1 [get_bd_ports s_axi_aresetn] [get_bd_pins axi_bram_ctrl_0/s_axi_aresetn] [get_bd_pins axi_interconnect_1/ARESETN] [get_bd_pins axi_interconnect_1/M00_ARESETN] [get_bd_pins axi_interconnect_1/S00_ARESETN] [get_bd_pins axi_interconnect_1/S01_ARESETN] [get_bd_pins axi_register_slice_0/aresetn] [get_bd_pins axi_register_slice_1/aresetn] [get_bd_pins axislave_cu_apctrl_v1_0_0/s00_axi_aresetn] [get_bd_pins util_vector_logic_0/Op2]
   connect_bd_net -net usr_irq_ack_1 [get_bd_ports usr_irq_ack] [get_bd_pins axislave_cu_apctrl_v1_0_0/i_interrpt_done]
   connect_bd_net -net util_vector_logic_0_Res [get_bd_pins example_0/ap_rst_n] [get_bd_pins system_ila1/probe0] [get_bd_pins util_vector_logic_0/Res]
   set_property -dict [ list \
@@ -371,37 +375,41 @@ preplace port usr_clk -pg 1 -y 40 -defaultsOSRD
 preplace portBus usr_irq_req -pg 1 -y 100 -defaultsOSRD
 preplace portBus usr_irq_ack -pg 1 -y 160 -defaultsOSRD
 preplace inst axi_bram_ctrl_0_bram -pg 1 -lvl 6 -y 510 -defaultsOSRD
-preplace inst axi_register_slice_0 -pg 1 -lvl 1 -y 100 -defaultsOSRD
 preplace inst util_vector_logic_0 -pg 1 -lvl 2 -y 440 -defaultsOSRD
+preplace inst axi_register_slice_0 -pg 1 -lvl 1 -y 100 -defaultsOSRD
+preplace inst axi_register_slice_1 -pg 1 -lvl 3 -y 440 -defaultsOSRD
 preplace inst example_0 -pg 1 -lvl 3 -y 180 -defaultsOSRD
 preplace inst system_ila1 -pg 1 -lvl 5 -y 630 -defaultsOSRD
 preplace inst axi_interconnect_1 -pg 1 -lvl 4 -y 470 -defaultsOSRD
 preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 2 -y 200 -defaultsOSRD
 preplace inst axi_bram_ctrl_0 -pg 1 -lvl 5 -y 510 -defaultsOSRD
+preplace netloc S_AXI_1 1 0 3 NJ 380 NJ 380 850
+preplace netloc S_AXI_LITE_1 1 0 1 -10
 preplace netloc i_soft_rst_n_1 1 0 2 NJ 430 N
-preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 2 1 660
-preplace netloc s_axi_aclk_1 1 0 5 N 630 230 630 690 630 1000 630 1320
-preplace netloc s_axi_aresetn_1 1 0 5 N 520 240J 520 NJ 520 1010 620 1330J
-preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 2 5 610J -30 NJ -30 NJ -30 NJ -30 1820J
+preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 2 1 870
+preplace netloc axi_register_slice_0_M_AXI 1 1 1 440
+preplace netloc s_axi_aclk_1 1 0 5 0 630 440 630 910 630 1230 630 1530
+preplace netloc s_axi_aresetn_1 1 0 5 10 520 450J 520 920J 520 1240 620 1540J
+preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 2 5 820J -10 NJ -10 NJ -10 NJ -10 2030J
 preplace netloc axi_bram_ctrl_0_BRAM_PORTA 1 5 1 N
-preplace netloc usr_irq_ack_1 1 0 2 10J 170 230
-preplace netloc example_0_ap_done 1 1 2 250J 30 690J
-preplace netloc axislave_cu_apctrl_0_ap_start 1 2 1 620
+preplace netloc usr_irq_ack_1 1 0 2 -10J 170 440
+preplace netloc example_0_ap_done 1 1 2 480J 50 890J
+preplace netloc axislave_cu_apctrl_0_ap_start 1 2 1 830
 preplace netloc axi_bram_ctrl_0_BRAM_PORTB 1 5 1 N
-preplace netloc util_vector_logic_0_Res 1 2 3 700 650 NJ 650 NJ
-preplace netloc example_0_m_axi_a_V 1 3 1 1000
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 2 1 650
-preplace netloc S00_AXI_1 1 0 4 NJ 380 NJ 380 NJ 380 NJ
-preplace netloc example_0_ap_idle 1 1 2 260J 40 680J
-preplace netloc example_0_ap_ready 1 1 2 270J 50 650J
-preplace netloc axislave_cu_apctrl_0_array_len 1 2 1 620
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 2 1 680
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 2 1 630
-preplace netloc axi_interconnect_1_M00_AXI 1 4 1 1310
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 2 1 610
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 2 1 670
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 2 1 640
-levelinfo -pg 1 -10 120 440 850 1150 1480 1720 1840 -top -40 -bot 690
+preplace netloc util_vector_logic_0_Res 1 2 3 900 650 NJ 650 NJ
+preplace netloc example_0_m_axi_a_V 1 3 1 1240
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 2 1 820
+preplace netloc example_0_ap_idle 1 1 2 460J 10 910J
+preplace netloc example_0_ap_ready 1 1 2 470J 40 840J
+preplace netloc axislave_cu_apctrl_0_array_len 1 2 1 860
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 2 1 890
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 2 1 840
+preplace netloc axi_register_slice_1_M_AXI 1 3 1 1220
+preplace netloc axi_interconnect_1_M00_AXI 1 4 1 1520
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 2 1 830
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 2 1 880
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 2 1 850
+levelinfo -pg 1 -30 330 650 1070 1380 1690 1930 2050 -top -200 -bot 690
 ",
 }
 
