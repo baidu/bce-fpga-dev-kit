@@ -558,7 +558,7 @@ static void rvfree(void *mem, unsigned long size)
 
 static int xdma_performance_submit(struct xdma_dev *lro, struct xdma_engine *engine)
 {
-    u8 *buffer_virt;
+    u8 *buffer_virt = NULL;
     u32 max_consistent_size = 128 * 32 * 1024; /* 1024 pages, 4MB */
     dma_addr_t buffer_bus; /* bus address */
     struct xdma_transfer *transfer;
@@ -568,7 +568,9 @@ static int xdma_performance_submit(struct xdma_dev *lro, struct xdma_engine *eng
     int size = size_in_desc * num_desc_in_a_loop;
     int i;
 
-    BUG_ON(size_in_desc > max_consistent_size);
+    if (size_in_desc > max_consistent_size) {
+        return -1;
+    }
 
     if (size > max_consistent_size) {
         size = max_consistent_size;
@@ -576,10 +578,15 @@ static int xdma_performance_submit(struct xdma_dev *lro, struct xdma_engine *eng
     }
 
     buffer_virt = pci_alloc_consistent(lro->pci_dev, size, &buffer_bus);
+    if (!buffer_virt) {
+        goto fail;
+    }
 
     /* allocate transfer data structure */
     transfer = kzalloc(sizeof(struct xdma_transfer), GFP_KERNEL);
-    BUG_ON(!transfer);
+    if (!transfer) {
+        goto fail;
+    }
 
     /* 0 = write engine (to_dev=0) , 1 = read engine (to_dev=1) */
     transfer->dir_to_dev = engine->dir_to_dev;
@@ -589,7 +596,9 @@ static int xdma_performance_submit(struct xdma_dev *lro, struct xdma_engine *eng
     transfer->desc_virt = xdma_desc_alloc(lro->pci_dev,
                                           transfer->desc_num,
                                           &transfer->desc_bus, NULL);
-    BUG_ON(!transfer->desc_virt);
+    if (!transfer->desc_virt) {
+        goto fail;
+    }
 
     for (i = 0; i < transfer->desc_num; i++) {
         struct xdma_desc *desc = transfer->desc_virt + i;
@@ -616,6 +625,19 @@ static int xdma_performance_submit(struct xdma_dev *lro, struct xdma_engine *eng
              engine->dir_to_dev ? "write (to dev)" : "read (from dev)");
     transfer_queue(engine, transfer);
     return 0;
+
+fail:
+    if (transfer && transfer->desc_virt) {
+        xdma_desc_free(lro->pci_dev, transfer->desc_num, transfer->desc_virt, transfer->desc_bus);
+    }
+    if (transfer) {
+        kfree(transfer);
+    }
+    if (buffer_virt) {
+        pci_free_consistent(lro->pci_dev, size, buffer_virt, buffer_bus);
+    }
+
+    return -1;
 }
 
 #if XDMA_STATUS_DUMPS
@@ -2917,8 +2939,7 @@ static struct xdma_transfer *transfer_create(struct xdma_dev *lro,
     int i = 0;
     int last = 0;
     int rc;
-    struct scatterlist *sgl;
-    struct xdma_transfer *transfer;
+    struct xdma_transfer *transfer = NULL;
     u32 control;
 
     /* allocate transfer data structure */
@@ -2933,7 +2954,9 @@ static struct xdma_transfer *transfer_create(struct xdma_dev *lro,
 
     /* create virtual memory mapper */
     transfer->sgm = sg_create_mapper(cnt);
-    BUG_ON(!transfer->sgm);
+    if (!transfer->sgm) {
+        goto fail;
+    }
     transfer->userspace = userspace;
 
     /* lock user pages in memory and create a scatter gather list */
@@ -2942,10 +2965,9 @@ static struct xdma_transfer *transfer_create(struct xdma_dev *lro,
     } else {
         rc = sgm_kernel_pages(transfer->sgm, start, cnt, !dir_to_dev);
     }
-
-    BUG_ON(rc < 0);
-
-    sgl = transfer->sgm->sgl;
+    if (rc < 0) {
+        goto fail;
+    }
 
     dbg_sg("mapped_pages=%d.\n", transfer->sgm->mapped_pages);
     dbg_sg("sgl = 0x%p.\n", transfer->sgm->sgl);
@@ -2998,6 +3020,16 @@ static struct xdma_transfer *transfer_create(struct xdma_dev *lro,
     init_waitqueue_head(&transfer->wq);
 
     return transfer;
+
+fail:
+    if (transfer && transfer->sgm) {
+        sg_destroy_mapper(transfer->sgm);
+    }
+    if (transfer) {
+        kfree(transfer);
+    }
+
+    return NULL;
 }
 
 static int check_transfer_align(struct xdma_engine *engine,
@@ -3117,7 +3149,6 @@ static ssize_t sg_aio_read_write(struct kiocb *iocb, const struct iovec *iov,
             /* build device-specific descriptor tables */
             transfer = transfer_create(lro, transfer_addr, transfer_len, pos, dir_to_dev, 0, 0, 1);
             dbg_sg("segment:%lu transfer=0x%p.\n", seg, transfer);
-            BUG_ON(!transfer);
 
             if (!transfer) {
                 dbg_tfr("Couldn't allocate memory for xfer!");
