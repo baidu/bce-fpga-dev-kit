@@ -374,42 +374,42 @@ preplace port i_soft_rst_n -pg 1 -y 430 -defaultsOSRD
 preplace port usr_clk -pg 1 -y 40 -defaultsOSRD
 preplace portBus usr_irq_req -pg 1 -y 100 -defaultsOSRD
 preplace portBus usr_irq_ack -pg 1 -y 160 -defaultsOSRD
-preplace inst axi_bram_ctrl_0_bram -pg 1 -lvl 6 -y 510 -defaultsOSRD
-preplace inst util_vector_logic_0 -pg 1 -lvl 2 -y 440 -defaultsOSRD
-preplace inst axi_register_slice_0 -pg 1 -lvl 1 -y 100 -defaultsOSRD
-preplace inst axi_register_slice_1 -pg 1 -lvl 3 -y 440 -defaultsOSRD
-preplace inst example_0 -pg 1 -lvl 3 -y 180 -defaultsOSRD
-preplace inst system_ila1 -pg 1 -lvl 5 -y 630 -defaultsOSRD
-preplace inst axi_interconnect_1 -pg 1 -lvl 4 -y 470 -defaultsOSRD
-preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 2 -y 200 -defaultsOSRD
-preplace inst axi_bram_ctrl_0 -pg 1 -lvl 5 -y 510 -defaultsOSRD
-preplace netloc S_AXI_1 1 0 3 NJ 380 NJ 380 850
-preplace netloc S_AXI_LITE_1 1 0 1 -10
-preplace netloc i_soft_rst_n_1 1 0 2 NJ 430 N
-preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 2 1 870
-preplace netloc axi_register_slice_0_M_AXI 1 1 1 440
-preplace netloc s_axi_aclk_1 1 0 5 0 630 440 630 910 630 1230 630 1530
-preplace netloc s_axi_aresetn_1 1 0 5 10 520 450J 520 920J 520 1240 620 1540J
-preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 2 5 820J -10 NJ -10 NJ -10 NJ -10 2030J
-preplace netloc axi_bram_ctrl_0_BRAM_PORTA 1 5 1 N
-preplace netloc usr_irq_ack_1 1 0 2 -10J 170 440
-preplace netloc example_0_ap_done 1 1 2 480J 50 890J
-preplace netloc axislave_cu_apctrl_0_ap_start 1 2 1 830
-preplace netloc axi_bram_ctrl_0_BRAM_PORTB 1 5 1 N
-preplace netloc util_vector_logic_0_Res 1 2 3 900 650 NJ 650 NJ
-preplace netloc example_0_m_axi_a_V 1 3 1 1240
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 2 1 820
-preplace netloc example_0_ap_idle 1 1 2 460J 10 910J
-preplace netloc example_0_ap_ready 1 1 2 470J 40 840J
-preplace netloc axislave_cu_apctrl_0_array_len 1 2 1 860
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 2 1 890
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 2 1 840
-preplace netloc axi_register_slice_1_M_AXI 1 3 1 1220
-preplace netloc axi_interconnect_1_M00_AXI 1 4 1 1520
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 2 1 830
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 2 1 880
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 2 1 850
-levelinfo -pg 1 -30 330 650 1070 1380 1690 1930 2050 -top -200 -bot 690
+preplace inst axi_bram_ctrl_0_bram -pg 1 -lvl 7 -y 510 -defaultsOSRD
+preplace inst util_vector_logic_0 -pg 1 -lvl 3 -y 440 -defaultsOSRD
+preplace inst axi_register_slice_0 -pg 1 -lvl 2 -y 100 -defaultsOSRD
+preplace inst axi_register_slice_1 -pg 1 -lvl 1 -y 360 -defaultsOSRD
+preplace inst example_0 -pg 1 -lvl 4 -y 180 -defaultsOSRD
+preplace inst system_ila1 -pg 1 -lvl 6 -y 630 -defaultsOSRD
+preplace inst axi_interconnect_1 -pg 1 -lvl 5 -y 470 -defaultsOSRD
+preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 3 -y 200 -defaultsOSRD
+preplace inst axi_bram_ctrl_0 -pg 1 -lvl 6 -y 510 -defaultsOSRD
+preplace netloc S_AXI_1 1 0 1 -30
+preplace netloc S_AXI_LITE_1 1 0 2 -30 80 N
+preplace netloc i_soft_rst_n_1 1 0 3 NJ 430 N 430 N
+preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 3 1 880
+preplace netloc axi_register_slice_0_M_AXI 1 2 1 450
+preplace netloc s_axi_aclk_1 1 0 6 -20 630 220 630 450 630 910 630 1220 630 1520
+preplace netloc s_axi_aresetn_1 1 0 6 -10 520 230J 520 460J 520 NJ 520 1230 620 1530J
+preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 3 5 830J -20 NJ -20 NJ -20 NJ -20 2030J
+preplace netloc axi_bram_ctrl_0_BRAM_PORTA 1 6 1 N
+preplace netloc usr_irq_ack_1 1 0 3 -30J 170 N 170 450
+preplace netloc example_0_ap_done 1 2 2 470J 30 910J
+preplace netloc axislave_cu_apctrl_0_ap_start 1 3 1 840
+preplace netloc axi_bram_ctrl_0_BRAM_PORTB 1 6 1 N
+preplace netloc util_vector_logic_0_Res 1 3 3 920 650 NJ 650 NJ
+preplace netloc example_0_m_axi_a_V 1 4 1 1220
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 3 1 870
+preplace netloc example_0_ap_idle 1 2 2 480J 40 900J
+preplace netloc example_0_ap_ready 1 2 2 490J 50 870J
+preplace netloc axislave_cu_apctrl_0_array_len 1 3 1 840
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 3 1 900
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 3 1 850
+preplace netloc axi_register_slice_1_M_AXI 1 1 4 210J 380 NJ 380 NJ 380 N
+preplace netloc axi_interconnect_1_M00_AXI 1 5 1 1510
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 3 1 830
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 3 1 890
+preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 3 1 860
+levelinfo -pg 1 -50 100 340 660 1070 1370 1690 1930 2050 -top -200 -bot 690
 ",
 }
 
@@ -427,4 +427,6 @@ levelinfo -pg 1 -30 330 650 1070 1380 1690 1930 2050 -top -200 -bot 690
 
 create_root_design ""
 
+
+common::send_msg_id "BD_TCL-1000" "WARNING" "This Tcl script was generated from a block design that has not been validated. It is possible that design <$design_name> may result in errors during validation."
 

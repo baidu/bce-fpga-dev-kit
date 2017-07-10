@@ -389,7 +389,6 @@ CONFIG.LOGO_FILE {data/sym_notgate.png} \
  ] $util_vector_logic_4
 
   # Create interface connections
-  connect_bd_intf_net -intf_net S00_AXI_1 [get_bd_intf_pins axi_interconnect_1/S00_AXI] [get_bd_intf_pins axi_register_slice_3/M_AXI]
   connect_bd_intf_net -intf_net S_AXI_1 [get_bd_intf_ports S_AXI] [get_bd_intf_pins axi_register_slice_3/S_AXI]
   connect_bd_intf_net -intf_net S_AXI_LITE_1 [get_bd_intf_ports S_AXI_LITE] [get_bd_intf_pins axi_register_slice_2/S_AXI]
   connect_bd_intf_net -intf_net axi_interconnect_1_M00_AXI [get_bd_intf_ports C0_DDR4_M_AXI] [get_bd_intf_pins axi_interconnect_1/M00_AXI]
@@ -399,6 +398,7 @@ CONFIG.LOGO_FILE {data/sym_notgate.png} \
   connect_bd_intf_net -intf_net axi_register_slice_0_M_AXI [get_bd_intf_ports C2_DDR4_M_AXI] [get_bd_intf_pins axi_register_slice_0/M_AXI]
   connect_bd_intf_net -intf_net axi_register_slice_1_M_AXI [get_bd_intf_ports C3_DDR4_M_AXI] [get_bd_intf_pins axi_register_slice_1/M_AXI]
   connect_bd_intf_net -intf_net axi_register_slice_2_M_AXI [get_bd_intf_pins axi_register_slice_2/M_AXI] [get_bd_intf_pins axislave_cu_apctrl_v1_0_0/s00_axi]
+  connect_bd_intf_net -intf_net axi_register_slice_3_M_AXI [get_bd_intf_pins axi_interconnect_1/S00_AXI] [get_bd_intf_pins axi_register_slice_3/M_AXI]
   connect_bd_intf_net -intf_net example_0_m_axi_a_V [get_bd_intf_pins axi_interconnect_1/S01_AXI] [get_bd_intf_pins example_0/m_axi_a_V]
 
   # Create port connections
@@ -476,51 +476,51 @@ preplace inst example_0 -pg 1 -lvl 3 -y 200 -defaultsOSRD
 preplace inst axi_register_slice_1 -pg 1 -lvl 5 -y 900 -defaultsOSRD
 preplace inst util_vector_logic_2 -pg 1 -lvl 3 -y 780 -defaultsOSRD
 preplace inst axi_register_slice_2 -pg 1 -lvl 1 -y -20 -defaultsOSRD
-preplace inst axi_register_slice_3 -pg 1 -lvl 2 -y 530 -defaultsOSRD
+preplace inst axi_register_slice_3 -pg 1 -lvl 2 -y 570 -defaultsOSRD
 preplace inst util_vector_logic_3 -pg 1 -lvl 3 -y 880 -defaultsOSRD
 preplace inst util_vector_logic_4 -pg 1 -lvl 3 -y 980 -defaultsOSRD
 preplace inst axi_interconnect_1 -pg 1 -lvl 4 -y 720 -defaultsOSRD
 preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 2 -y 160 -defaultsOSRD
 preplace netloc S_AXI_LITE_1 1 0 1 -20
 preplace netloc i_soft_rst_n_1 1 0 2 NJ 390 N
-preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 2 1 860
-preplace netloc M03_ARESETN_1 1 3 2 1230 980 1550J
+preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 2 1 890
+preplace netloc M03_ARESETN_1 1 3 2 1240 980 1580J
 preplace netloc axi_register_slice_0_M_AXI 1 5 1 NJ
-preplace netloc s_axi_aclk_1 1 0 4 -10 610 450 610 890 610 1240
+preplace netloc s_axi_aclk_1 1 0 4 -10 -90 450 -90 910 -90 1250
 preplace netloc axi_interconnect_1_M01_AXI 1 4 2 NJ 710 NJ
-preplace netloc s_axi_aresetn_1 1 0 4 0 160 440J 340 820J 390 1230
-preplace netloc c3_ddr4_ui_clk1_1 1 0 5 NJ 830 NJ 830 NJ 830 1210 940 1520J
+preplace netloc s_axi_aresetn_1 1 0 4 0 160 440J 340 830J 400 1240
+preplace netloc c3_ddr4_ui_clk1_1 1 0 5 NJ 830 NJ 830 NJ 830 1230 950 1560J
 preplace netloc c1_ddr4_ui_clk_1 1 0 4 NJ 730 NJ 730 NJ 730 NJ
 preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 2 4 890J 10 NJ 10 N 10 NJ
 preplace netloc usr_irq_ack_1 1 0 2 10 120 N
-preplace netloc example_0_ap_done 1 1 2 460 -20 910
+preplace netloc example_0_ap_done 1 1 2 460 -10 920
 preplace netloc axislave_cu_apctrl_0_ap_start 1 2 1 N
-preplace netloc util_vector_logic_0_Res 1 2 1 910
-preplace netloc example_0_m_axi_a_V 1 3 1 1240
+preplace netloc util_vector_logic_0_Res 1 2 1 820
+preplace netloc example_0_m_axi_a_V 1 3 1 1260
 preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 2 1 870
-preplace netloc axi_interconnect_1_M02_AXI 1 4 1 1550
-preplace netloc c3_ddr4_ui_clk_1 1 0 5 NJ 930 NJ 930 NJ 930 1220 950 1540J
+preplace netloc axi_interconnect_1_M02_AXI 1 4 1 1560
+preplace netloc c3_ddr4_ui_clk_1 1 0 5 NJ 930 NJ 930 NJ 930 1250 940 1570J
 preplace netloc c1_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 780 NJ 780 NJ
-preplace netloc M02_ARESETN_1 1 3 2 1240 930 1530J
-preplace netloc example_0_ap_idle 1 1 2 470J -10 900J
+preplace netloc M02_ARESETN_1 1 3 2 1260 930 1540J
+preplace netloc example_0_ap_idle 1 1 2 470J 0 900J
 preplace netloc example_0_ap_ready 1 1 2 480 10 880
 preplace netloc c3_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 980 NJ 980 NJ
-preplace netloc c1_ddr4_ui_clk1_1 1 0 4 NJ 630 NJ 630 NJ 630 1220J
-preplace netloc axislave_cu_apctrl_0_array_len 1 2 1 840
+preplace netloc c1_ddr4_ui_clk1_1 1 0 4 0J 640 NJ 640 870J 630 1220J
+preplace netloc axislave_cu_apctrl_0_array_len 1 2 1 850
 preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 2 1 N
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 2 1 850
-preplace netloc axi_interconnect_1_M03_AXI 1 4 1 1540
-preplace netloc M00_ARESETN_1 1 3 1 1210J
+preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 2 1 860
+preplace netloc axi_interconnect_1_M03_AXI 1 4 1 1550
+preplace netloc M00_ARESETN_1 1 3 1 1230J
 preplace netloc axi_register_slice_1_M_AXI 1 5 1 NJ
 preplace netloc axi_interconnect_1_M00_AXI 1 4 2 NJ 690 NJ
 preplace netloc c2_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 880 NJ 880 NJ
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 2 1 830
+preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 2 1 840
 preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 2 1 N
 preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 2 1 N
 preplace netloc axi_register_slice_2_M_AXI 1 1 1 440
 preplace netloc c0_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 680 NJ 680 NJ
 preplace netloc M01_ARESETN_1 1 3 1 1220J
-levelinfo -pg 1 -40 330 650 1060 1380 1660 1790 -top -120 -bot 1410
+levelinfo -pg 1 -40 330 650 1070 1400 1690 1820 -top -120 -bot 1020
 ",
 }
 
