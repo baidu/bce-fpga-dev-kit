@@ -561,7 +561,7 @@ static int xdma_performance_submit(struct xdma_dev *lro, struct xdma_engine *eng
     u8 *buffer_virt = NULL;
     u32 max_consistent_size = 128 * 32 * 1024; /* 1024 pages, 4MB */
     dma_addr_t buffer_bus; /* bus address */
-    struct xdma_transfer *transfer;
+    struct xdma_transfer *transfer = NULL;
     u64 ep_addr = 0;
     int num_desc_in_a_loop = 128;
     int size_in_desc = engine->xdma_perf->transfer_size;
