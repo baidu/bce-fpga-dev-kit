@@ -110,7 +110,8 @@ int main(int argc, char **argv)
     for (int i = 0; i < nthreads; ++i) {
         threads_input[i].i = i;
         threads_input[i].dma_size = dma_size;
-        threads_input[i].ddr_addr = (2 << 20)/* HUGE_PAGE_SIZE 2MB */ * i;
+        //threads_input[i].ddr_addr = (2 << 20)[> HUGE_PAGE_SIZE 2MB <] * i;
+        threads_input[i].ddr_addr = dma_size * i;
         threads_input[i].iteration = iteration;
 
         pthread_create(&threads[i], NULL, &thread_func, &threads_input[i]);
