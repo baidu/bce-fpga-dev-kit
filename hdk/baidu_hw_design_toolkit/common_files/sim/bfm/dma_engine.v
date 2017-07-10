@@ -449,7 +449,7 @@ module dma_engine #(
          axi_wr_true_addr_r <= 'd0;
       end
       else if (start_r) begin
-         axi_wr_true_addr_r <= wr_start_addr_align;
+         axi_wr_true_addr_r <= wr_start_addr_align_r;
       end
       else if (wready && wvalid) begin
          axi_wr_true_addr_r <= axi_wr_true_addr_r + MASK_WIDTH;
