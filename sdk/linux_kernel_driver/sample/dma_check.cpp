@@ -50,7 +50,7 @@ void *thread_func(void *p)
         return NULL;
     }
 
-    if (g_perf == O_RDONLY) {
+    if (g_perf == 1) {
         StopWatch sw;
         sw.start();
         for (uint64_t i = 0; i < iteration; ++i) {
@@ -65,7 +65,7 @@ void *thread_func(void *p)
         }
         sw.stop();
         pargs->timecost_usec = sw.timecost_usec();
-    } else if (g_perf == O_WRONLY) {
+    } else if (g_perf == 2) {
         StopWatch sw;
         sw.start();
         for (uint64_t i = 0; i < iteration; ++i) {
@@ -143,9 +143,9 @@ int main(int argc, char **argv)
     }
     if (argc == 5) {
         if (strncmp(argv[4], "rd", 2) == 0) {
-            g_perf = O_RDONLY;
+            g_perf = 1;
         } else if (strncmp(argv[4], "wr", 2) == 0) {
-            g_perf = O_WRONLY;
+            g_perf = 2;
         }
     }
 
@@ -178,7 +178,7 @@ int main(int argc, char **argv)
             }
             double latency = (double)total_usec / nthreads / iteration;
             double bandwidth = ((double)dma_size * iteration) / ((double)total_usec / nthreads);
-            printf("latency = %.2f, bandwidth = %.2f\n", latency, bandwidth);
+            printf("latency = %.2fus, bandwidth = %.2fMB/s\n", latency, bandwidth);
         }
         return 0;
     }
