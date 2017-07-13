@@ -561,7 +561,7 @@ static int xdma_performance_submit(struct xdma_dev *lro, struct xdma_engine *eng
     u8 *buffer_virt = NULL;
     u32 max_consistent_size = 128 * 32 * 1024; /* 1024 pages, 4MB */
     dma_addr_t buffer_bus; /* bus address */
-    struct xdma_transfer *transfer;
+    struct xdma_transfer *transfer = NULL;
     u64 ep_addr = 0;
     int num_desc_in_a_loop = 128;
     int size_in_desc = engine->xdma_perf->transfer_size;
@@ -1196,7 +1196,7 @@ struct xdma_transfer *engine_transfer_completion(struct xdma_engine *engine,
     } else {
         /* synchronous I/O? */
         /* awake task on transfer's wait queue */
-        wake_up_interruptible(&transfer->wq);
+        wake_up(&transfer->wq);
     }
 
     return transfer;
@@ -3230,7 +3230,7 @@ static loff_t char_sgdma_llseek(struct file *file, loff_t off, int whence)
 static int transfer_monitor(struct xdma_engine *engine, struct xdma_transfer *transfer)
 {
     u32 desc_count;
-    int rc;
+    int rc = 0;
 
     /*
      * When polling, determine how many descriptors have been queued
@@ -3249,8 +3249,15 @@ static int transfer_monitor(struct xdma_engine *engine, struct xdma_transfer *tr
     } else {
         /* the function servicing the engine will wake us */
         rc = wait_event_interruptible(transfer->wq, transfer->state != TRANSFER_STATE_SUBMITTED);
-        if (rc) {
+        if (rc == -ERESTARTSYS) {
+            /* signal received (Ctrl+C pressed) */
             dbg_tfr("wait_event_interruptible=%d\n", rc);
+            /*
+             * XXX: MUST wait for completion here so that **transfer** can be safely deleted
+             * in **transfer_data**. Retval can be ignored.
+             */
+            wait_event_timeout(transfer->wq, transfer->state != TRANSFER_STATE_SUBMITTED,
+                    (POLL_TIMEOUT_SECONDS * HZ));
         }
     }
 
@@ -3312,7 +3319,6 @@ static ssize_t transfer_data(struct xdma_engine *engine, char *transfer_addr,
                 res = -EIO;
             }
             dbg_tfr("transfer %p completed\n", transfer);
-            transfer_destroy(lro, transfer);
             /* interrupted by a signal / polling detected error */
         } else if (rc != 0) {
             /* transfer can still be in-flight */
@@ -3321,6 +3327,7 @@ static ssize_t transfer_data(struct xdma_engine *engine, char *transfer_addr,
 
             res = -ERESTARTSYS;
         }
+        transfer_destroy(lro, transfer);
 
         /* If an error has occurred, clear counts tracking progress */
         if (res != 0) {

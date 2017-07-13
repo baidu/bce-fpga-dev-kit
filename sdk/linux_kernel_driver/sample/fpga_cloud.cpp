@@ -39,12 +39,12 @@ void mmap_func(void)
 {
     int fd = open("/dev/xdma0_user", O_RDWR | O_SYNC);
     if (fd == -1) {
-        printf("Fail to open /dev/xdma0_user\n");
+        printf("Fail to open /dev/xdma0_user, errno=%d\n", errno);
         abort();
     }
 
-    /* map 132KB */
-    mmap_base = mmap(0, (128 + 4) << 10, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    /* map 192KB */
+    mmap_base = mmap(0, (128 + 64) << 10, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     if (mmap_base == (void *)-1) {
         printf("map_base == -1\n");
         abort();
@@ -112,19 +112,21 @@ int fpga_memcpy(int dev, uint64_t dest, uint64_t src, size_t n, int to_dev)
     if (to_dev) {
         int fd = open("/dev/xdma0_h2c_0", O_WRONLY);
         if (fd == -1) {
+            printf("Fail to open /dev/xdma0_h2c_0, errno=%d\n", errno);
             return -ENODEV;
         }
 
-        off_t offset = lseek(fd, static_cast<off_t>(dest), SEEK_SET);
-        if (offset == -1) {
-            close(fd);
-            return -errno;
-        }
+        /* XXX: bytes written may be less than **count** in 3.10.0_2-0-0-2, buggy kernel? */
+        size_t remaining = n;
+        while (remaining > 0) {
+            ssize_t nbytes = pwrite(fd, reinterpret_cast<void *>(src + n - remaining), remaining,
+                                    static_cast<off_t>(dest + n - remaining));
+            if (nbytes < 0) {
+                close(fd);
+                return -errno;
+            }
 
-        int nbytes = write(fd, reinterpret_cast<void *>(src), n);
-        if (nbytes != n) {
-            close(fd);
-            return -errno;
+            remaining -= nbytes;
         }
 
         close(fd);
@@ -132,19 +134,20 @@ int fpga_memcpy(int dev, uint64_t dest, uint64_t src, size_t n, int to_dev)
     } else {
         int fd = open("/dev/xdma0_c2h_0", O_RDONLY);
         if (fd == -1) {
+            printf("Fail to open /dev/xdma0_c2h_0, errno=%d\n", errno);
             return -ENODEV;
         }
 
-        off_t offset = lseek(fd, static_cast<off_t>(src), SEEK_SET);
-        if (offset == -1) {
-            close(fd);
-            return -errno;
-        }
+        size_t remaining = n;
+        while (remaining > 0) {
+            ssize_t nbytes = pread(fd, reinterpret_cast<void *>(dest + n - remaining), remaining,
+                                   static_cast<off_t>(src + n - remaining));
+            if (nbytes < 0) {
+                close(fd);
+                return -errno;
+            }
 
-        int nbytes = read(fd, reinterpret_cast<void *>(dest), n);
-        if (nbytes != n) {
-            close(fd);
-            return -errno;
+            remaining -= nbytes;
         }
 
         close(fd);
