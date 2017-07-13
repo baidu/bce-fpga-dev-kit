@@ -1,4 +1,0 @@
-example_fadd_32nsbkb
-example_buff_a
-example_a_V_m_axi
-example
