@@ -364,7 +364,19 @@ static const struct file_operations ctrl_fops = {
 #endif
 };
 
+extern long char_user_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
+static const struct file_operations user_fops = {
+    .owner          = THIS_MODULE,
+    .open           = char_open,
+    .release        = char_close,
+    .read           = char_ctrl_read,
+    .write          = char_ctrl_write,
+    .mmap           = bridge_mmap,
+    .unlocked_ioctl = char_user_ioctl,
+};
+
 /*
+ *
  * character device file operations for bypass operation
  */
 static const struct file_operations bypass_fops = {
@@ -5650,6 +5662,8 @@ static const struct file_operations *select_file_ops(enum chardev_type type)
         }
         break;
     case CHAR_USER:
+        fops = &user_fops;
+        break;
     case CHAR_CTRL:
         fops = &ctrl_fops;
         break;

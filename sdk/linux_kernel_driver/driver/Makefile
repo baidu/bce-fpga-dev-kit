@@ -1,5 +1,5 @@
 obj-m += xdma_xvc.o
-xdma_xvc-objs := xdma-core.o xdma-sgm.o xdma-ioctl.o xdma-bit.o xvc-pcie-driver.o xvc-core.o
+xdma_xvc-objs := xdma-core.o xdma-sgm.o xdma-ioctl.o xdma-bit.o xvc-pcie-driver.o xvc-core.o extensible_framework.o
 
 KERNELDIR ?= /usr/src/kernels/$(shell uname -r)
 PWD := $(shell pwd)
@@ -37,3 +37,4 @@ CFLAGS_xvc-pcie-driver.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
 #CFLAGS_xvc-mmconfig-shared.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
 #CFLAGS_xvc-mmconfig_64.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
 CFLAGS_xvc-core.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
+CFLAGS_extensible_framework.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
