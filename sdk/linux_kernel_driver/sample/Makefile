@@ -1,7 +1,7 @@
 CC ?= gcc
 CXX ?= g++
 
-all: reg_write_32 reg_read_32 sample sample_user_irq dma_check ioctl_test
+all: reg_write_32 reg_read_32 sample sample_user_irq dma_check sample_ioctl
 
 reg_write_32: reg_write_32.o fpga_cloud.o
 	$(CXX) -lrt -lpthread -o $@ $^ -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGE_FILE_SOURCE
@@ -18,12 +18,12 @@ sample_user_irq: sample_user_irq.o fpga_cloud.o
 dma_check: dma_check.o fpga_cloud.o
 	$(CXX) -lrt -lpthread -o $@ $^ -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGE_FILE_SOURCE
 
-ioctl_test: ioctl_test.o fpga_cloud.o
+sample_ioctl: sample_ioctl.o fpga_cloud.o
 	$(CXX) -lrt -lpthread -o $@ $^ -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGE_FILE_SOURCE
 
 %.o: %.cpp
 	$(CXX) -c -std=c++0x -o $@ $< -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_LARGE_FILE_SOURCE
 
 clean:
-	rm -rf *.o reg_write_32 reg_read_32 sample sample_user_irq dma_check ioctl_test
+	rm -rf *.o reg_write_32 reg_read_32 sample sample_user_irq dma_check sample_ioctl
 
