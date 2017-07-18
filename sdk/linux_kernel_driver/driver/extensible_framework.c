@@ -29,9 +29,18 @@
 #include "xdma-ioctl.h"
 #include "xbar_sys_parameters.h"
 
+/**************************************************************************************/
+/*                               Define IOCTL cmd here                                */
+/*                                    Pls. refer to                                   */
+/* https://github.com/torvalds/linux/blob/master/Documentation/ioctl/ioctl-number.txt */
+/**************************************************************************************/
 #define IOCTL_AXI_SLAVE_DMA                 _IOWR(XDMA_IOC_MAGIC, 1, int)
 
-long do_axi_slave_dma(struct xdma_dev *lro) {
+/**************************************************************************************/
+/*                               Define IOCTL impl. here                              */
+/**************************************************************************************/
+long do_axi_slave_dma(struct xdma_dev *lro)
+{
     int rc = 0;
     unsigned long vaddr = 0;
     dma_addr_t paddr = 0;
@@ -49,16 +58,18 @@ long do_axi_slave_dma(struct xdma_dev *lro) {
         goto free;
     }
 
+    /* axi slave dma write */
     printk(KERN_DEBUG "before write_register\n");
     write_register((u32)paddr, reg + 0x4);
     write_register((u32)(paddr >> 32), reg + 0x8);
-    write_register(0, reg+ 0xC);
-    write_register(0, reg+ 0x10);
-    write_register(PAGE_SIZE, reg+ 0x14);
-    write_register(1, reg+ 0x18);
-    write_register(1, reg+ 0x0);
+    write_register(0, reg + 0xC);
+    write_register(0, reg + 0x10);
+    write_register(PAGE_SIZE, reg + 0x14);
+    write_register(1, reg + 0x18);
+    write_register(1, reg + 0x0);
     printk(KERN_DEBUG "after write_register\n");
 
+    /* wait for interrupt */
     printk(KERN_DEBUG "before wait_event_interruptible\n");
     rc = wait_event_interruptible(user_irq->events_wq, user_irq->events_irq != 0);
     if (rc == -ERESTARTSYS) {
@@ -69,16 +80,18 @@ long do_axi_slave_dma(struct xdma_dev *lro) {
     spin_unlock_irqrestore(&user_irq->events_lock, flags);
     printk(KERN_DEBUG "after wait_event_interruptible\n");
 
+    /* axi slave dma read */
     printk(KERN_DEBUG "before write_register\n");
-    write_register(0, reg+ 0x4);
-    write_register(0, reg+ 0x8);
+    write_register(0, reg + 0x4);
+    write_register(0, reg + 0x8);
     write_register((u32)(paddr + PAGE_SIZE), reg + 0xC);
     write_register((u32)((paddr + PAGE_SIZE) >> 32), reg + 0x10);
-    write_register(PAGE_SIZE, reg+ 0x14);
-    write_register(0, reg+ 0x18);
-    write_register(1, reg+ 0x0);
+    write_register(PAGE_SIZE, reg + 0x14);
+    write_register(0, reg + 0x18);
+    write_register(1, reg + 0x0);
     printk(KERN_DEBUG "after write_register\n");
 
+    /* wait for interrupt */
     printk(KERN_DEBUG "before wait_event_interruptible\n");
     rc = wait_event_interruptible(user_irq->events_wq, user_irq->events_irq != 0);
     if (rc == -ERESTARTSYS) {
@@ -88,6 +101,11 @@ long do_axi_slave_dma(struct xdma_dev *lro) {
     user_irq->events_irq = 0;
     spin_unlock_irqrestore(&user_irq->events_lock, flags);
     printk(KERN_DEBUG "after wait_event_interruptible\n");
+
+    if (memcmp((void *)vaddr, (void *)(vaddr + PAGE_SIZE), PAGE_SIZE)) {
+        printk(KERN_DEBUG "data diff in dma read/write\n");
+        rc = -EINVAL;
+    }
 
 free:
     if (paddr) {
@@ -129,12 +147,15 @@ long char_user_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
         return -EFAULT;
     }
 
+    /**************************************************************************************/
+    /*                               Dispatch via IOCTL cmd here                          */
+    /**************************************************************************************/
     switch (cmd) {
-        case IOCTL_AXI_SLAVE_DMA:
-            result = do_axi_slave_dma(lro);
-            break;
-        default:
-            break;
+    case IOCTL_AXI_SLAVE_DMA:
+        result = do_axi_slave_dma(lro);
+        break;
+    default:
+        break;
     }
 
     return result;
