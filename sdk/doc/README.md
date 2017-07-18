@@ -96,7 +96,7 @@ if (r < 0) {
 close(fd);
 ```
 
-如需自定义ISR来实现高级功能，如支持多线程事件等待唤醒机制，请参考后文[可扩展框架](#extensible_framework)部分。
+一些简单的非竞态事件等待可以参照以上示例代码通过poll某个event设备文件来完成。若需自定义ISR来实现高级功能，如支持多线程事件等待唤醒机制，请参考后文[可扩展框架](#extensible_framework)部分。
 
 <a name="xvc_support"></a>
 ## XVC支持
@@ -187,3 +187,154 @@ close(fd);
 
 <a name="extensible_framework"></a>
 ## 可扩展框架
+
+一些特殊操作仅可在内核态进行，例如分配多页物理连续内存，又如在收到用户中断后唤醒指定线程，开发者不可避免要去修改驱动代码。为了降低开发难度、提升开发效率，该驱动自带了可扩展框架。该框架代码与驱动其他模块松耦合，支持用户态程序对`/dev/xdma0_user`设备文件发起的IOCTL调用，开发者宜基于此快速搭建自定义业务接口，详情请见[extensible_framework.c](../linux_kernel_driver/driver/extensible_framework.c)。
+
+### 自定义init和exit函数
+
+开发者宜自定义`ext_init()`和`ext_exit()`函数来管理框架其余部分可能用到的资源，其分别在`probe()`函数尾部和`remove()`函数头部被调用。**如开发环境实例中存在多块FPGA设备，则以上函数会被调用多次，分别对应了每一块FPGA设备的初始化和释放，此时开发者可以依据传入参数`lro`中的成员`instance`来作区分。**
+
+```c
+/**************************************************************************************/
+/*                               Define init/exit function here                       */
+/**************************************************************************************/
+void ext_init(struct xdma_dev *lro)                                                     
+{                                                                                       
+    dbg_ext("lro=%p, lro->instance=%d\n", lro, lro->instance);                          
+    /* alloc resources that may be used in IRQ handler or user-defined IOCTL */         
+    return;                                                                             
+}                                                                                       
+                                                                                        
+void ext_exit(struct xdma_dev *lro)                                                     
+{                                                                                       
+    dbg_ext("lro=%p, lro->instance=%d\n", lro, lro->instance);                          
+    /* free resources alloc-ed in `ext_init()` */                                       
+    return;                                                                             
+}                                                                                       
+```
+
+### 自定义用户中断处理
+
+开发者能为16个用户中断自定义处理逻辑。首先，请定义原型为`void user_irq_handler(struct xdma_irq *)`的中断处理函数，再将函数指针数组`ext_user_irq_handler_tbl`的对应项赋值，该中断处理函数即会在用户中断到来后被自动调用。若开发者未定义处理函数或未对数组项赋值，则驱动的默认处理例程是唤醒在`user_irq->events_wq`上等待的线程。**请注意，应避免在中断处理函数中睡眠或做耗时较长的复杂操作。**
+
+```c
+/**************************************************************************************/
+/*                               Define User IRQ handler here                         */
+/**************************************************************************************/
+static void user_irq_0_handler(struct xdma_irq *user_irq)
+{
+    struct xdma_dev *lro = user_irq->lro;
+    dbg_ext("lro=%p, lro->instance=%d\n", lro, lro->instance);
+    return;
+}
+
+static void dummy_irq_handler(struct xdma_irq *user_irq)
+{
+    return;
+}
+
+const user_irq_handler ext_user_irq_handler_tbl[MAX_USER_IRQ] = {
+    [0] = &user_irq_0_handler,
+	[1..15] = &dummy_irq_handler,
+};
+```
+
+### 自定义IOCTL接口
+
+开发者可在该框架中自定义业务相关的IOCTL接口，为用户态应用程序提供语义清晰、易于使用的高层API。首先，请用`_IO/_IOW/_IOR/_IOWR`宏定义一个不重复的IOCTL命令字`cmd`，再定义该接口的具体实现函数`do_xxx()`（典型流程为准备数据->写寄存器发起命令->等待命令完成->写回数据->释放资源），最后在`ext_user_ioctl()`函数的switch语句内依据`cmd`做调用分派。用户态应用程序对`/dev/xdma0_user`设备文件发起IOCTL调用后，执行流最终会进入该具体实现函数`do_xxx()`。
+
+```c
+/**************************************************************************************/
+/*                               Define IOCTL cmd here                                */
+/*                                    Pls. refer to                                   */
+/* https://github.com/torvalds/linux/blob/master/Documentation/ioctl/ioctl-number.txt */
+/**************************************************************************************/
+#define IOCTL_AXI_SLAVE_DMA                 _IOWR(XDMA_IOC_MAGIC, 1, int)
+
+/**************************************************************************************/
+/*                               Define IOCTL impl. here                              */
+/**************************************************************************************/
+static long do_axi_slave_dma(struct xdma_dev *lro)
+{
+    int rc = 0;
+    unsigned long vaddr = 0;
+    dma_addr_t paddr = 0;
+    /* XXX: refer to https://github.com/Cwndmiao/bce-fpga-dev-kit/tree/master/sdk/doc#bar_layout */
+    void *reg = lro->bar[lro->user_bar_idx] + (64 << 10);
+    struct xdma_irq *user_irq = &lro->user_irq[0];
+    unsigned long flags;
+    static DEFINE_MUTEX(axi_slave_dma_mutex);
+
+    mutex_lock(&axi_slave_dma_mutex);
+    vaddr = __get_free_pages(GFP_KERNEL, 1);
+    if (!vaddr) {
+        goto free;
+    }
+    paddr = dma_map_single(&lro->pci_dev->dev, (void *)vaddr, PAGE_SIZE << 1, DMA_BIDIRECTIONAL);
+    if (!paddr) {
+        goto free;
+    }
+
+    /* axi slave dma write */
+    dbg_ext("before write_register\n");
+    write_register((u32)paddr, reg + 0x4);
+    write_register((u32)(paddr >> 32), reg + 0x8);
+    write_register(0, reg + 0xC);
+    write_register(0, reg + 0x10);
+    write_register(PAGE_SIZE, reg + 0x14);
+    write_register(1, reg + 0x18);
+    write_register(1, reg + 0x0);
+    dbg_ext("after write_register\n");
+
+    /* wait for interrupt */
+    dbg_ext("before wait_event_interruptible\n");
+    rc = wait_event_interruptible(user_irq->events_wq, user_irq->events_irq != 0);
+    if (rc == -ERESTARTSYS) {
+        goto free;
+    }
+    spin_lock_irqsave(&user_irq->events_lock, flags);
+    user_irq->events_irq = 0;
+    spin_unlock_irqrestore(&user_irq->events_lock, flags);
+    dbg_ext("after wait_event_interruptible\n");
+
+    ......
+
+    if (memcmp((void *)vaddr, (void *)(vaddr + PAGE_SIZE), PAGE_SIZE)) {
+        dbg_ext("data diff in dma read/write\n");
+        rc = -EINVAL;
+    }
+
+free:
+    if (paddr) {
+        dma_unmap_single(&lro->pci_dev->dev, paddr, PAGE_SIZE << 1, DMA_BIDIRECTIONAL);
+    }
+    if (vaddr) {
+        free_pages(vaddr, 1);
+    }
+    mutex_unlock(&axi_slave_dma_mutex);
+    return rc;
+}
+
+long ext_user_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+{
+    struct xdma_dev *lro;
+    struct xdma_char *lro_char = (struct xdma_char *)filp->private_data;
+    long result = 0;
+
+    ......
+
+    /**************************************************************************************/
+    /*                               Dispatch via IOCTL cmd here                          */
+    /**************************************************************************************/
+    switch (cmd) {
+    case IOCTL_AXI_SLAVE_DMA:
+        result = do_axi_slave_dma(lro);
+        break;
+    default:
+        break;
+    }
+
+    return result;
+}
+```
+
