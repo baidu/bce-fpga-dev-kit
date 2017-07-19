@@ -46,14 +46,9 @@ case $fpga_type in
     qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((2*8)))
     fpga_temperature=$(echo "${qword}*501.37/4096-273.68" | bc)
     ;;
-"rsa")
+"rsa"|"dev")
     qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((32*8)))
     fpga_temperature=$(echo "${qword}*503.98/4096-273.15" | bc)
-    ;;
-"dev")
-    # TODO unsupported
-    #qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((2*8)))
-    #fpga_temperature=$(echo "${qword}*501.37/4096-273.68" | bc)
     ;;
 esac
 
@@ -66,14 +61,9 @@ if [[ $(echo "${fpga_temperature}>200.0" | bc) == "1" ]]; then
         qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((2*8)))
         fpga_temperature=$(echo "${qword}*501.37/4096-273.68" | bc)
         ;;
-    "rsa")
+    "rsa"|"dev")
         qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((32*8)))
         fpga_temperature=$(echo "${qword}*503.98/4096-273.15" | bc)
-        ;;
-    "dev")
-        # TODO unsupported
-        #qword=$($__dir/mmap_readq $fpga_sysfs_path/resource0 $((2*8)))
-        #fpga_temperature=$(echo "${qword}*501.37/4096-273.68" | bc)
         ;;
     esac
 
