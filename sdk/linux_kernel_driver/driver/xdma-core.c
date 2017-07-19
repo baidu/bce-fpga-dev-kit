@@ -364,7 +364,6 @@ static const struct file_operations ctrl_fops = {
 #endif
 };
 
-extern long char_user_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
 static const struct file_operations user_fops = {
     .owner          = THIS_MODULE,
     .open           = char_open,
@@ -372,7 +371,7 @@ static const struct file_operations user_fops = {
     .read           = char_ctrl_read,
     .write          = char_ctrl_write,
     .mmap           = bridge_mmap,
-    .unlocked_ioctl = char_user_ioctl,
+    .unlocked_ioctl = ext_user_ioctl,
 };
 
 /*
@@ -1731,6 +1730,9 @@ static irqreturn_t xdma_user_irq(int irq, void *dev_id)
     user_irq = (struct xdma_irq *)dev_id;
 
     user_irq_service(user_irq);
+    if (ext_user_irq_handler_tbl[user_irq->irq_idx]) {
+        ext_user_irq_handler_tbl[user_irq->irq_idx](user_irq);
+    }
 
     return IRQ_HANDLED;
 }
@@ -4422,6 +4424,7 @@ static int msix_irq_setup(struct xdma_dev *lro)
     write_msix_vectors(lro);
 
     for (i = 0; i < MAX_USER_IRQ; i++) {
+        lro->user_irq[i].irq_idx = i;
         rc = request_irq(lro->entry[i].vector, xdma_user_irq, 0, DRV_NAME, &lro->user_irq[i]);
         if (rc) {
             dbg_init("Couldn't use IRQ#%d, rc=%d\n", lro->entry[i].vector, rc);
@@ -5133,6 +5136,8 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
         printk(KERN_DEBUG "Device file created successfully\n");
     }
 
+    ext_init(lro);
+
     if (rc == 0) {
         goto end;
     }
@@ -5184,6 +5189,8 @@ static void remove(struct pci_dev *pdev)
         dbg_sg("pdev->dev.driver_data->pci_dev(0x%lx) != pdev(0x%lx)\n",
                (unsigned long)lro->pci_dev, (unsigned long)pdev);
     }
+
+    ext_exit(lro);
 
     channel_interrupts_disable(lro, ~0);
     user_interrupts_disable(lro, ~0);
@@ -5887,11 +5894,10 @@ static int __init xdma_init(void)
         rc = -1;
         goto err_class;
     }
-    rc = pci_register_driver(&pci_driver);
-
     for (i = 0; i < MAX_XDMA_DEVICES; i++) {
         dev_present[i] = 0;
     }
+    rc = pci_register_driver(&pci_driver);
 
 err_class:
     return rc;

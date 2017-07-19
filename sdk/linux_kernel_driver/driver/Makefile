@@ -37,4 +37,4 @@ CFLAGS_xvc-pcie-driver.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
 #CFLAGS_xvc-mmconfig-shared.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
 #CFLAGS_xvc-mmconfig_64.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
 CFLAGS_xvc-core.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
-CFLAGS_extensible_framework.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS)
+CFLAGS_extensible_framework.o := $(XILINXINCLUDE) $(EXTRA_CFLAGS) -DDEBUG
