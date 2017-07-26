@@ -64,6 +64,9 @@ export_ip_user_files -of_objects [get_files  $projDir/${projName}.srcs/sources_1
 # Set the PR region as OOC
 create_fileset -blockset -define_from rp_wrapper rp_wrapper
 add_file -fileset rp_wrapper $commonDir/constraints/rp_wrapper_ooc.xdc
+set_property PROCESSING_ORDER EARLY [get_files rp_wrapper_ooc.xdc]
+set_property USED_IN {synthesis implementation OUT_OF_CONTEXT} [get_files rp_wrapper_ooc.xdc]
+update_compile_order -fileset rp_wrapper
 
 # Error and Message Reporting
 set warningCount [get_msg_config -severity {Warning} -count]
