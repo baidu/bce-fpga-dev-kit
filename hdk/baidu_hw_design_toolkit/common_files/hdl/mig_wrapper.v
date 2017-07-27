@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 `timescale 1 ps / 1 ps
-`include "usr_ddr4_define.vh"
+`include "rp_if_define.vh"
 
 module mig_wrapper (
 `ifdef AXI_DDR

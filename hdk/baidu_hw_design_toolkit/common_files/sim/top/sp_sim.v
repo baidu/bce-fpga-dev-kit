@@ -71,6 +71,51 @@ module sp_sim #(
    output [MASK_WIDTH-1:0]  M_AXI_wstrb,
    output                   M_AXI_wvalid,
 
+   // AXI Slave AW channel
+   input  [ADDR_WIDTH-1:0]  S_AXI_araddr,
+   input  [1:0]             S_AXI_arburst,
+   input  [3:0]             S_AXI_arcache,
+   input  [ID_WIDTH-1:0]    S_AXI_arid,
+   input  [7:0]             S_AXI_arlen,
+   input                    S_AXI_arlock,
+   input  [2:0]             S_AXI_arprot,
+   input  [3:0]             S_AXI_arqos,
+   input  [3:0]             S_AXI_arregion,
+   output                   S_AXI_arready,
+   input  [2:0]             S_AXI_arsize,
+   input                    S_AXI_arvalid,
+   // AXI Slave AR channel
+   input  [ADDR_WIDTH-1:0]  S_AXI_awaddr,
+   input  [1:0]             S_AXI_awburst,
+   input  [3:0]             S_AXI_awcache,
+   input  [ID_WIDTH-1:0]    S_AXI_awid,
+   input  [7:0]             S_AXI_awlen,
+   input                    S_AXI_awlock,
+   input  [2:0]             S_AXI_awprot,
+   input  [3:0]             S_AXI_awqos,
+   input  [3:0]             S_AXI_awregion,
+   output                   S_AXI_awready,
+   input  [2:0]             S_AXI_awsize,
+   input                    S_AXI_awvalid,
+   // AXI Slave B channel
+   output [ID_WIDTH-1:0]    S_AXI_bid,
+   input                    S_AXI_bready,
+   output [1:0]             S_AXI_bresp,
+   output                   S_AXI_bvalid,
+   // AXI Slave R channel
+   output [DATA_WIDTH-1:0]  S_AXI_rdata,
+   output [ID_WIDTH-1:0]    S_AXI_rid,
+   output                   S_AXI_rlast,
+   input                    S_AXI_rready,
+   output [1:0]             S_AXI_rresp,
+   output                   S_AXI_rvalid,
+   // AXI Slave W channel
+   input  [DATA_WIDTH-1:0]  S_AXI_wdata,
+   input                    S_AXI_wlast,
+   output                   S_AXI_wready,
+   input  [MASK_WIDTH-1:0]  S_AXI_wstrb,
+   input                    S_AXI_wvalid,
+
    // AXI Lite Master AW channel
    output [15:0]            M_AXI_LITE_araddr,
    output [2:0]             M_AXI_LITE_arprot,
@@ -109,6 +154,15 @@ module sp_sim #(
    wire                     hostmem_rd_data_vld;
    wire                     hostmem_rd_en;
    wire   [ADDR_WIDTH-1:0]  hostmem_rd_addr;
+
+   // Host Memory Interface for rp
+   wire   [DATA_WIDTH-1:0]  rp_hostmem_wr_data;
+   wire   [MASK_WIDTH-1:0]  rp_hostmem_wr_datastrb;
+   wire   [ADDR_WIDTH-1:0]  rp_hostmem_wr_addr;
+   wire   [DATA_WIDTH-1:0]  rp_hostmem_rd_data;
+   wire                     rp_hostmem_rd_data_vld;
+   wire                     rp_hostmem_rd_en;
+   wire   [ADDR_WIDTH-1:0]  rp_hostmem_rd_addr;
 
    // Host Memory Interface for testbench
    reg    [DATA_WIDTH-1:0]  tb_wr_data;
@@ -230,9 +284,76 @@ axi_master_bfm #(
    .normal_wr_datastrb(normal_wr_datastrb)
 );
 
+// AXI Slave
+axi_slave_bfm #(
+   .DATA_WIDTH(DATA_WIDTH),
+   .ADDR_WIDTH(ADDR_WIDTH),
+   .MASK_WIDTH(MASK_WIDTH),
+   .ID_WIDTH(ID_WIDTH)
+)axi_slave_bfm_c0(
+   .clk(clk),
+   .rst(rst),
+
+   // AXI Slave AW channel
+   .araddr(S_AXI_araddr),
+   .arburst(S_AXI_arburst),
+   .arcache(S_AXI_arcache),
+   .arid(S_AXI_arid),
+   .arlen(S_AXI_arlen),
+   .arlock(S_AXI_arlock),
+   .arprot(S_AXI_arprot),
+   .arqos(S_AXI_arqos),
+   .arregion(S_AXI_arregion),
+   .arready(S_AXI_arready),
+   .arsize(S_AXI_arsize),
+   .arvalid(S_AXI_arvalid),
+   // AXI Slave AR channel
+   .awaddr(S_AXI_awaddr),
+   .awburst(S_AXI_awburst),
+   .awcache(S_AXI_awcache),
+   .awid(S_AXI_awid),
+   .awlen(S_AXI_awlen),
+   .awlock(S_AXI_awlock),
+   .awprot(S_AXI_awprot),
+   .awqos(S_AXI_awqos),
+   .awregion(S_AXI_awregion),
+   .awready(S_AXI_awready),
+   .awsize(S_AXI_awsize),
+   .awvalid(S_AXI_awvalid),
+   // AXI Slave B channel
+   .bid(S_AXI_bid),
+   .bready(S_AXI_bready),
+   .bresp(S_AXI_bresp),
+   .bvalid(S_AXI_bvalid),
+   // AXI Slave R channel
+   .rdata(S_AXI_rdata),
+   .rid(S_AXI_rid),
+   .rlast(S_AXI_rlast),
+   .rready(S_AXI_rready),
+   .rresp(S_AXI_rresp),
+   .rvalid(S_AXI_rvalid),
+   // AXI Slave W channel
+   .wdata(S_AXI_wdata),
+   .wlast(S_AXI_wlast),
+   .wready(S_AXI_wready),
+   .wstrb(S_AXI_wstrb),
+   .wvalid(S_AXI_wvalid),
+
+   // Card Memory Interface
+   .mem_wr_cmd_rdy(1'b1),
+   .mem_wr_data(rp_hostmem_wr_data),
+   .mem_wr_datastrb(rp_hostmem_wr_datastrb),
+   .mem_wr_addr(rp_hostmem_wr_addr),
+   .mem_rd_cmd_rdy(1'b1),
+   .mem_rd_data(rp_hostmem_rd_data),
+   .mem_rd_data_vld(rp_hostmem_rd_data_vld),
+   .mem_rd_en(rp_hostmem_rd_en),
+   .mem_rd_addr(rp_hostmem_rd_addr)
+);
+
 //HOST Memory Simulate
 
-mem_2ports #(
+mem_3ports #(
    .DATA_WIDTH(DATA_WIDTH),
    .ADDR_WIDTH(ADDR_WIDTH),
    .HOST_MEM_SIZE(256*1024)
@@ -254,46 +375,54 @@ mem_2ports #(
    .c2_rd_data(tb_rd_data),
    .c2_rd_data_vld(tb_rd_data_vld),
    .c2_rd_en(tb_rd_en),
-   .c2_rd_addr(tb_rd_addr)
+   .c2_rd_addr(tb_rd_addr),
+
+   .c3_wr_data(rp_hostmem_wr_data),
+   .c3_wr_datastrb(rp_hostmem_wr_datastrb),
+   .c3_wr_addr(rp_hostmem_wr_addr),
+   .c3_rd_data(rp_hostmem_rd_data),
+   .c3_rd_data_vld(rp_hostmem_rd_data_vld),
+   .c3_rd_en(rp_hostmem_rd_en),
+   .c3_rd_addr(rp_hostmem_rd_addr)
 );
 
-   axi_l_master_bfm #(
-      .DATA_WIDTH(32),
-      .ADDR_WIDTH(16)
-   )normal_req_processor(
-      .clk(clk),
-      .rst(rst),
+axi_l_master_bfm #(
+   .DATA_WIDTH(32),
+   .ADDR_WIDTH(16)
+)normal_req_processor(
+   .clk(clk),
+   .rst(rst),
 
-      .normal_rd_cmd_rdy(),
-      .normal_rd_addr(normal_lite_rd_addr),
-      .normal_rd_en(normal_lite_rd_en),
-      .normal_rd_data_vld(normal_lite_rd_data_vld),
-      .normal_rd_data(normal_lite_rd_data),
-      .normal_wr_cmd_rdy(),
-      .normal_wr_addr(normal_lite_wr_addr),
-      .normal_wr_data(normal_lite_wr_data),
-      .normal_wr_datastrb(normal_lite_wr_datastrb),
+   .normal_rd_cmd_rdy(),
+   .normal_rd_addr(normal_lite_rd_addr),
+   .normal_rd_en(normal_lite_rd_en),
+   .normal_rd_data_vld(normal_lite_rd_data_vld),
+   .normal_rd_data(normal_lite_rd_data),
+   .normal_wr_cmd_rdy(),
+   .normal_wr_addr(normal_lite_wr_addr),
+   .normal_wr_data(normal_lite_wr_data),
+   .normal_wr_datastrb(normal_lite_wr_datastrb),
 
-      .araddr(M_AXI_LITE_araddr),
-      .arprot(M_AXI_LITE_arprot),
-      .arready(M_AXI_LITE_arready),
-      .arvalid(M_AXI_LITE_arvalid),
-      .awaddr(M_AXI_LITE_awaddr),
-      .awprot(M_AXI_LITE_awprot),
-      .awready(M_AXI_LITE_awready),
-      .awvalid(M_AXI_LITE_awvalid),
-      .bready(M_AXI_LITE_bready),
-      .bresp(M_AXI_LITE_bresp),
-      .bvalid(M_AXI_LITE_bvalid),
-      .rdata(M_AXI_LITE_rdata),
-      .rready(M_AXI_LITE_rready),
-      .rresp(M_AXI_LITE_rresp),
-      .rvalid(M_AXI_LITE_rvalid),
-      .wdata(M_AXI_LITE_wdata),
-      .wready(M_AXI_LITE_wready),
-      .wstrb(M_AXI_LITE_wstrb),
-      .wvalid(M_AXI_LITE_wvalid)
-   );
+   .araddr(M_AXI_LITE_araddr),
+   .arprot(M_AXI_LITE_arprot),
+   .arready(M_AXI_LITE_arready),
+   .arvalid(M_AXI_LITE_arvalid),
+   .awaddr(M_AXI_LITE_awaddr),
+   .awprot(M_AXI_LITE_awprot),
+   .awready(M_AXI_LITE_awready),
+   .awvalid(M_AXI_LITE_awvalid),
+   .bready(M_AXI_LITE_bready),
+   .bresp(M_AXI_LITE_bresp),
+   .bvalid(M_AXI_LITE_bvalid),
+   .rdata(M_AXI_LITE_rdata),
+   .rready(M_AXI_LITE_rready),
+   .rresp(M_AXI_LITE_rresp),
+   .rvalid(M_AXI_LITE_rvalid),
+   .wdata(M_AXI_LITE_wdata),
+   .wready(M_AXI_LITE_wready),
+   .wstrb(M_AXI_LITE_wstrb),
+   .wvalid(M_AXI_LITE_wvalid)
+);
 
 ///////////task define////////////
 task axi_wr;
@@ -526,7 +655,6 @@ task interrupt_wait;
       @(posedge clk);
       #0.1;
       usr_irq_ack[num] = 1'b1;
-      axi_l_wr(16'hfc00,{16'h1 << num},4'hf);
       wait (~usr_irq_req[num]);
       @(posedge clk);
       #0.1;

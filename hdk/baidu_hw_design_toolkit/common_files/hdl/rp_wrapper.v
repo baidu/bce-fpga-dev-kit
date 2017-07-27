@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 `timescale 1 ps / 1 ps
-`include "usr_ddr4_define.vh"
+`include "rp_if_define.vh"
 
 module rp_wrapper(
    `include "rp_wrapper_port.vh"
@@ -46,7 +46,7 @@ module rp_wrapper(
       .S_AXI_arlock(S_AXI_arlock),
       .S_AXI_arprot(S_AXI_arprot),
       .S_AXI_arqos(S_AXI_arqos),
-      .S_AXI_arregion(S_AXI_arregion),
+      //.S_AXI_arregion(S_AXI_arregion),
       .S_AXI_arready(S_AXI_arready),
       .S_AXI_arsize(S_AXI_arsize),
       .S_AXI_arvalid(S_AXI_arvalid),
@@ -58,7 +58,7 @@ module rp_wrapper(
       .S_AXI_awlock(S_AXI_awlock),
       .S_AXI_awprot(S_AXI_awprot),
       .S_AXI_awqos(S_AXI_awqos),
-      .S_AXI_awregion(S_AXI_awregion),
+      //.S_AXI_awregion(S_AXI_awregion),
       .S_AXI_awready(S_AXI_awready),
       .S_AXI_awsize(S_AXI_awsize),
       .S_AXI_awvalid(S_AXI_awvalid),
@@ -77,6 +77,47 @@ module rp_wrapper(
       .S_AXI_wready(S_AXI_wready),
       .S_AXI_wstrb(S_AXI_wstrb),
       .S_AXI_wvalid(S_AXI_wvalid),
+      `ifdef RP_AXI_MASTER
+      .M_AXI_araddr(M_AXI_araddr),
+      .M_AXI_arburst(M_AXI_arburst),
+      .M_AXI_arcache(M_AXI_arcache),
+      .M_AXI_arid(M_AXI_arid),
+      .M_AXI_arlen(M_AXI_arlen),
+      .M_AXI_arlock(M_AXI_arlock),
+      .M_AXI_arprot(M_AXI_arprot),
+      .M_AXI_arqos(M_AXI_arqos),
+      .M_AXI_arregion(M_AXI_arregion),
+      .M_AXI_arready(M_AXI_arready),
+      .M_AXI_arsize(M_AXI_arsize),
+      .M_AXI_arvalid(M_AXI_arvalid),
+      .M_AXI_awaddr(M_AXI_awaddr),
+      .M_AXI_awburst(M_AXI_awburst),
+      .M_AXI_awcache(M_AXI_awcache),
+      .M_AXI_awid(M_AXI_awid),
+      .M_AXI_awlen(M_AXI_awlen),
+      .M_AXI_awlock(M_AXI_awlock),
+      .M_AXI_awprot(M_AXI_awprot),
+      .M_AXI_awqos(M_AXI_awqos),
+      .M_AXI_awregion(M_AXI_awregion),
+      .M_AXI_awready(M_AXI_awready),
+      .M_AXI_awsize(M_AXI_awsize),
+      .M_AXI_awvalid(M_AXI_awvalid),
+      .M_AXI_bid(M_AXI_bid),
+      .M_AXI_bready(M_AXI_bready),
+      .M_AXI_bresp(M_AXI_bresp),
+      .M_AXI_bvalid(M_AXI_bvalid),
+      .M_AXI_rdata(M_AXI_rdata),
+      .M_AXI_rid(M_AXI_rid),
+      .M_AXI_rlast(M_AXI_rlast),
+      .M_AXI_rready(M_AXI_rready),
+      .M_AXI_rresp(M_AXI_rresp),
+      .M_AXI_rvalid(M_AXI_rvalid),
+      .M_AXI_wdata(M_AXI_wdata),
+      .M_AXI_wlast(M_AXI_wlast),
+      .M_AXI_wready(M_AXI_wready),
+      .M_AXI_wstrb(M_AXI_wstrb),
+      .M_AXI_wvalid(M_AXI_wvalid),
+      `endif
       .S_AXI_LITE_araddr(S_AXI_LITE_araddr),
       .S_AXI_LITE_arprot(S_AXI_LITE_arprot),
       .S_AXI_LITE_arready(S_AXI_LITE_arready),
@@ -146,6 +187,14 @@ module rp_wrapper(
       assign C3_DDR4_S_AXI_CTRL_rready  = 1'b1;
       assign C3_DDR4_S_AXI_CTRL_bready  = 1'b1;
    `endif
+`endif
+
+`ifndef RP_AXI_MASTER
+   assign M_AXI_arvalid = 1'b0;
+   assign M_AXI_awvalid = 1'b0;
+   assign M_AXI_wvalid  = 1'b0;
+   assign M_AXI_bready  = 1'b0;
+   assign M_AXI_rready  = 1'b0;
 `endif
 
    pr_region_dbg_bridge pr_region_dbg_bridge_i (
