@@ -50,9 +50,9 @@ file mkdir $bitDir/$updateName
 # Generate bitfiles
 write_bitstream -force -bin_file -file $bitDir/$updateName/${updateName}.bit > $bitDir/$updateName/${updateName}_write_bitstream.log
 write_debug_probes $bitDir/$updateName/${updateName}.ltx
-exec rm -rf $bitDir/$updateName/${updateName}.bit 
-exec rm -rf $bitDir/$updateName/${updateName}.bin 
-exec rm -rf $bitDir/$updateName/${updateName}.ltx 
+exec rm -rf $bitDir/$updateName/${updateName}.bit
+exec rm -rf $bitDir/$updateName/${updateName}.bin
+exec rm -rf $bitDir/$updateName/${updateName}.ltx
 
 # Error and Message Reporting
 set warningCount [get_msg_config -severity {Warning} -count]
