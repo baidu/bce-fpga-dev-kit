@@ -14,6 +14,9 @@ if { $rtfSandbox != "none" } {
 
 # Add source files and IPs to the project.
 # Add the top-level source files.
+if { ![ file isdirectory $usrRtlPath ] }  {
+    exec mkdir $usrRtlPath
+}
 add_files $usrRtlPath
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     add_files -fileset constrs_1 -norecurse $xdcfile
@@ -21,7 +24,7 @@ foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
 
 # Add the PR region .bd design and associated wrapper. This file can be updated by
 # modifying the .bd design and using the following command to overwrite the existing
-# rp_bd.tcl file. 
+# rp_bd.tcl file.
 #     - write_bd_tcl -force -no_ip_version ./scripts/rp_bd.tcl
 source $scriptDir/rp_bd.tcl
 
