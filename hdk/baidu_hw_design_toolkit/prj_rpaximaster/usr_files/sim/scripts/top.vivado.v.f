@@ -34,7 +34,6 @@ ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_rs_w_1.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_us_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_us_1.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_ila_0_0.v
-${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_system_ila_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd.v
 
 
