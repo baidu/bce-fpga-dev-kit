@@ -4,20 +4,19 @@ if { ![ file isdirectory $usrDir/include ] }  {
     exec mkdir $usrDir/include
 }
 
-if { ![ file isdirectory $usrDir/usr_xdc] }  {
+if { ![ file isdirectory $usrDir/usr_xdc ] }  {
     exec mkdir $usrDir/usr_xdc
 }
 
-set refDir $commonDir/ref_xdc
+set refDir $commonDir/template/ref_xdc
 set usrXdcDir $usrDir/usr_xdc
-set ddrIncFile $usrDir/include/usr_ddr4_define.vh
+set ddrIncFile $usrDir/include/rp_if_define.vh
 set comment "#"
 set fp_define [open $ddrIncFile w]
 exec rm -f $usrXdcDir/ddr_c0.xdc
 exec rm -f $usrXdcDir/ddr_c1.xdc
 exec rm -f $usrXdcDir/ddr_c2.xdc
 exec rm -f $usrXdcDir/ddr_c3.xdc
-
 
 if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_DDR4_C3 == 1)} {
     puts $fp_define "`define USE_DDR 1"
@@ -37,6 +36,9 @@ if { $USE_DDR4_C2 == 1} {
 if { $USE_DDR4_C3 == 1} {
     exec cp $refDir/ddr_c3.xdc $usrXdcDir
     puts $fp_define "`define USE_DDR4_C3 1"
+}
+if { $USE_RP_AXI_MASTER == 1} {
+    puts $fp_define "`define RP_AXI_MASTER 1"
 }
 if { $USE_AXI_DDR == 1} {
     puts $fp_define "`define AXI_DDR 1"

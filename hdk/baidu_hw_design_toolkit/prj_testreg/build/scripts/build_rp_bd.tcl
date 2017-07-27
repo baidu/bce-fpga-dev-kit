@@ -14,7 +14,7 @@ if { $rtfSandbox != "none" } {
 
 # Add source files and IPs to the project.
 # Add the top-level source files.
-
+add_files $usrRtlPath
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     add_files -fileset constrs_1 -norecurse $xdcfile
 }

@@ -45,3 +45,5 @@ set USE_DDR4_C2 0
 set USE_DDR4_C3 0
 # Use AXI mig core
 set USE_AXI_DDR 0
+# RP has a AXI master to SP
+set USE_RP_AXI_MASTER 0
