@@ -6,16 +6,18 @@ FPGA云镜像工程的总体框架如下图所示，FPGA逻辑包含了静态和
 
 动态部分（RP_wrapper）可由用户自定义生成，包含了RP_bd和一些支撑模块如MIG_wrapper和debug bridge(图中没画出来)。我们建议用户不要修改RP_wrapper中的支撑模块，只实现RP_bd模块即可。如果RP_bd的逻辑不需要DDR，可在build/scripts/step_00_setup.tcl中关闭所有的DDR通道，FPGA云镜像工程在build环节就不会生成DDR控制器占用逻辑资源。
 
-SP与RP_bd之间包含一个256Bit的AXI4总线和一个32bit的AXI-lite总线，两个AXI总线的master端都位于SP，slave端都在RP_bd。
+SP与RP_bd之间包含2个256Bit的AXI4总线和一个32bit的AXI-lite总线，其中AXI_rp_slave和AXI-lite总线的master端位于SP，slave端在RP_bd。AXI_rp_master总线的master端位于RP_bd，slave端在SP。
 
- - AXI4是xdma输出的总线，host发出的dma操作，所需访问card空间的读写请求会出现在该总线上。 
+ - AXI_rp_slave是xdma输出的总线，host发出的dma操作，所需访问card空间的读写请求会出现在该总线上。 
  - AXI-lite的地址范围是64KB，host访问bar0空间64KB ~ 128KB的地址范围的请求会出现在该总线上。 
+ - AXI_rp_master给RP_bd提供了发起AXI请求的接口，动态逻辑可实现主动的h2c和c2h的DMA请求，而无需host端软件发起。
 
 # 2.RP_bd模块的接口
 在制作FPGA云服务镜像时，您开发的逻辑就是RP_wrapper中的RP_bd模块。这意味着用户逻辑的顶层模块，接口名称和信号位宽需与RP_bd模块保持一致。下表总结了RP_bd模块的所有接口信号。
 
-名称 | 方向 | 功能说明 
+名称 | 方向 | 功能说明
 ----| ---- |----
+M_AXI_*	| Master	| 256bit的axi4总线，支持由卡上逻辑发起AXI操作，可用于动态逻辑与主机之间交换批量数据。
 S_AXI_*	| Slave	| 256bit的axi4总线，支持xdma的dma操作，可用于动态逻辑与主机之间交换批量数据。
 S_AXI_LITE_* 	| 	Slave	| 	32bit的axi lite总线，支持xdma的reg操作，可用于动态逻辑与主机之间传输配置命令。这段空间在bar上的偏移地址为64K ~ 128K。用户可以通过在软件侧读写地址为64K~128K之间的寄存器来访问该AXI_LITE总线上的设备。
 s_axi_aclk	| 	input	| 	两个AXI总线的工作时钟，250M。
