@@ -437,6 +437,12 @@ static int check_load_partial_logic()
     struct bce_fpga_load_partial_logic_cmd& load_partial_logic =
                 g_bce_fpga_cmd.payload.load_partial_logic;
 
+    if (pci_device_has_kernel_driver(&g_bce_fpga_devices[load_partial_logic.slot].pci_device)) {
+        LOG(WARNING) << "Slot [" << load_partial_logic.slot
+                     << "] is occupied by kernel driver, please `rmmod` first.";
+        return -1;
+    }
+
     /* Check partial_bin_path */
     if (load_partial_logic.partial_bin_path.size() == 0) {
         LOG(WARNING) << "You MUST specify a valid partial bin path "
