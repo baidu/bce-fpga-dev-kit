@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(bce_fpga_mgmt_tool)
 
 add_subdirectory(third_party/mcap)
+add_subdirectory(../llapi third_party/llapi)
 
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
@@ -30,12 +31,14 @@ include_directories("${PROJECT_SOURCE_DIR}/third_party/gflags/include")
 include_directories("${PROJECT_SOURCE_DIR}/third_party/glog/include")
 include_directories("${PROJECT_SOURCE_DIR}/third_party/pciaccess/include")
 include_directories("${PROJECT_SOURCE_DIR}/third_party/jsoncpp/include")
+include_directories("${PROJECT_SOURCE_DIR}/../llapi")
 
 link_directories("${PROJECT_SOURCE_DIR}/third_party/gflags/lib")
 link_directories("${PROJECT_SOURCE_DIR}/third_party/glog/lib")
 link_directories("${PROJECT_SOURCE_DIR}/third_party/pciutils/lib")
 link_directories("${PROJECT_SOURCE_DIR}/third_party/pciaccess/lib")
 link_directories("${PROJECT_SOURCE_DIR}/third_party/jsoncpp/lib")
+link_directories("${PROJECT_SOURCE_DIR}/third_party/llapi")
 
 link_libraries(glog)
 link_libraries(gflags)
@@ -45,6 +48,7 @@ link_libraries(pciaccess)
 link_libraries(mcap)
 link_libraries(pciutils)
 link_libraries(jsoncpp)
+link_libraries(llapi)
 
 aux_source_directory(. SRC_LIST)
 

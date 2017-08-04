@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #include "llapi.h"
 
 #include <assert.h>
@@ -60,6 +76,10 @@ namespace {  /*anonymous namespace */                                \
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
+namespace baidu {
+namespace fpga {
+namespace llapi {
+
 struct bce_fpga_device g_bce_fpga_devices[NR_MAX_SLOTS];
 
 int reg_read_32(int slot, uint64_t addr, uint32_t *value)
@@ -94,8 +114,14 @@ int reg_write_32(int slot, uint64_t addr, uint32_t value)
     return 0;
 }
 
+} // namespace llapi
+} // namespace fpga
+} // namespace baidu
+
 static int probe_all_slots()
 {
+    namespace llapi = baidu::fpga::llapi;
+
     int ret = 0;
     struct pci_device_iterator *it = NULL;
     struct pci_device *dev = NULL;
@@ -114,7 +140,7 @@ static int probe_all_slots()
     };
     int slot = 0;
 
-    memset(&g_bce_fpga_devices, 0, sizeof(g_bce_fpga_devices));
+    memset(&llapi::g_bce_fpga_devices, 0, sizeof(llapi::g_bce_fpga_devices));
     it = pci_id_match_iterator_create(&xilinx_match);
     if (!it) {
         //LOG(WARNING) << "Error calling pci_id_match_iterator_create";
@@ -161,8 +187,8 @@ static int probe_all_slots()
             goto err_it;
         }
 
-        g_bce_fpga_devices[slot].present = true;
-        g_bce_fpga_devices[slot].pci_device = *dev;
+        llapi::g_bce_fpga_devices[slot].present = true;
+        llapi::g_bce_fpga_devices[slot].pci_device = *dev;
         ++slot;
     }
 

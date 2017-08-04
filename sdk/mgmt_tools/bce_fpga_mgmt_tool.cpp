@@ -1,16 +1,17 @@
 /*
- * Copyright 2015-2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"). You may
- * not use this file except in compliance with the License. A copy of the
- * License is located at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *     http://aws.amazon.com/apache2.0/
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * or in the "license" file accompanying this file. This file is distributed
- * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
- * express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 #include <fcntl.h>
@@ -45,8 +46,11 @@
 #include "config.h"
 #include "string_printf.h"
 #include "fd_guard.h"
+#include "llapi.h"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+
+namespace llapi = baidu::fpga::llapi;
 
 static Json::Value g_db;
 static const std::string g_tmp_dir_path = "/tmp/bce_fpga_dev_kit";
@@ -80,195 +84,30 @@ static std::string get_fmt_time_string()
     return std::string(fmt_time);
 }
 
-/*
- *static int fpga_pci_get_id(const char *path, uint16_t *id)
- *{
- *    CHECK_NOTNULL(path);
- *    CHECK_NOTNULL(id);
- *
- *    int ret = 0;
- *    FILE *fp = fopen(path, "r");
- *    if (!fp) {
- *        LOG(WARNING) << "Error opening " << path;
- *        ret = -1;
- *        goto err;
- *    }
- *
- *    uint32_t tmp_id;
- *    ret = fscanf(fp, "%x", &tmp_id);
- *    if (ret < 0) {
- *        LOG(WARNING) << "Error parsing " << path;
- *        ret = -1;
- *        goto err_close;
- *    } else {
- *        ret = 0;
- *    }
- *
- *    *id = (uint16_t)tmp_id;
- *
- *err_close:
- *    fclose(fp);
- *err:
- *    return ret;
- *}
- */
-
-/*
- *static int write_loop(int fd, const char *buf, size_t count)
- *{
- *    CHECK(fd > 0);
- *
- *    ssize_t cur = 0;
- *
- *    for (size_t sent = 0; sent < count; sent += cur) {
- *        do {
- *            cur = write(fd, buf + sent, count - sent);
- *        } while (cur == -1 && errno == EINTR);
- *
- *        if (cur < 0) {
- *            return -1;
- *        }
- *
- *        if (cur == 0) {
- *            return 1;
- *        }
- *    }
- *
- *    return 0;
- *}
- */
-
-/*
- *static int fpga_pci_write_one2file(const char *path)
- *{
- *    CHECK_NOTNULL(path);
- *
- *    int ret = 0;
- *
- *    int fd = open(path, O_WRONLY);
- *    if (fd < 0) {
- *        LOG(WARNING) << "Error opening " << path;
- *        ret = -1;
- *        goto err;
- *    }
- *
- *    const static char buf[] = "1";
- *    ret = write_loop(fd, buf, sizeof(buf));
- *    if (ret) {
- *        LOG(WARNING) << "Error writing " << path;
- *        ret = -1;
- *    }
- *
- *err_close:
- *    close(fd);
- *err:
- *    return ret;
- *}
- */
-
-static struct bce_fpga_device {
-    bool present;
-    struct pci_device pci_device;
-} g_bce_fpga_devices[8];
-
-static int reg_read_32(int slot, uint64_t addr, uint32_t *value)
+static bool std_string_a_ends_with_b(const std::string& a, const std::string& b)
 {
-    CHECK((slot >= 0) && (slot < 8));
-    CHECK(g_bce_fpga_devices[slot].present);
-    CHECK_NOTNULL(g_bce_fpga_devices[slot].pci_device.regions[0].memory);
-
-    *value = *(uint32_t *)((uint64_t)g_bce_fpga_devices[slot].pci_device.regions[0].memory + addr);
-    return 0;
+    if ((a.size() < b.size()) || (a.substr(a.size() - b.size(), b.size()) != b)) {
+        return false;
+    }
+    return true;
 }
 
-static int reg_write_32(int slot, uint64_t addr, uint32_t value)
+static bool regular_file_readable(const std::string& path)
 {
-    CHECK((slot >= 0) && (slot < 8));
-    CHECK(g_bce_fpga_devices[slot].present);
-    CHECK_NOTNULL(g_bce_fpga_devices[slot].pci_device.regions[0].memory);
-
-    *(uint32_t *)((uint64_t)g_bce_fpga_devices[slot].pci_device.regions[0].memory + addr) = value;
-    return 0;
-}
-
-static int probe_all_slots()
-{
-    int ret = 0;
-    struct pci_device_iterator *it = NULL;
-    struct pci_device *dev = NULL;
-
-    ret = pci_system_init();
-    if (ret) {
-        LOG(WARNING) << "Error calling pci_system_init";
-        return -1;
+    if (access(path.c_str(), R_OK)) {
+        return false;
     }
 
-    struct pci_id_match xilinx_match = {
-        0x10ee,          /* vendor_id */
-        PCI_MATCH_ANY,   /* device_id */
-        PCI_MATCH_ANY,   /* subvendor_id */
-        PCI_MATCH_ANY,   /* subdevice_id */
-    };
-    int slot = 0;
-
-    memset(&g_bce_fpga_devices, 0, sizeof(g_bce_fpga_devices));
-    it = pci_id_match_iterator_create(&xilinx_match);
-    if (!it) {
-        LOG(WARNING) << "Error calling pci_id_match_iterator_create";
-        ret = -1;
-        goto err;
+    struct stat s;
+    if (stat(path.c_str(), &s)) {
+        return false;
     }
-    for (;;) {
-        dev = pci_device_next(it);
-        if (!dev) {
-            /* End of iteration */
-            goto err_it;
-        }
-
-        /**
-         * pci_enable_device - Initialize device before it's used by a driver.
-         * @dev: PCI device to be initialized
-         *
-         *  Initialize device before it's used by a driver. Ask low-level code
-         *  to enable I/O and memory. Wake up the device if it was suspended.
-         *  Beware, this function can fail.
-         *
-         *  Note we don't actually enable the device many times if we call
-         *  this function repeatedly (we just increment the count).
-         */
-        /* equalvalent with `echo 1 > /sys/bus/pci/devices/.../enable` */
-        pci_device_enable(dev);
-
-        /* Probes a PCI device to learn various information about the device. Before calling this
-         * function, the only public fields in the pci_device structure that have valid values are
-         * pci_device::domain, pci_device::bus, pci_device::dev, and pci_device::func. */
-        ret = pci_device_probe(dev);
-        if (ret) {
-            LOG(WARNING) << "Error calling pci_device_probe";
-            ret = -1;
-            goto err_it;
-        }
-
-        /* mmap BAR0 */
-        ret = pci_device_map_range(dev, dev->regions[0].base_addr, dev->regions[0].size,
-                                   PCI_DEV_MAP_FLAG_WRITABLE, &dev->regions[0].memory);
-        if (ret) {
-            LOG(WARNING) << "Error calling pci_device_map_range";
-            ret = -1;
-            goto err_it;
-        }
-
-        g_bce_fpga_devices[slot].present = true;
-        g_bce_fpga_devices[slot].pci_device = *dev;
-        ++slot;
+    if (!S_ISREG(s.st_mode)) {
+        /* Not a regular file */
+        return false;
     }
 
-err_it:
-    pci_iterator_destroy(it);
-err:
-    /* XXX: pci_system_cleanup() would munmap all PCI BARs... */
-    //pci_system_cleanup();
-    return ret;
+    return true;
 }
 
 enum BCE_FPGA_CMD_WORD {
@@ -365,13 +204,13 @@ static void describe_one_slot(int slot)
     printf(" %10d |", slot);
     char dbdf[13];
     snprintf(dbdf, sizeof(dbdf), "%04x:%02x:%02x.%01x",
-             g_bce_fpga_devices[slot].pci_device.domain,
-             g_bce_fpga_devices[slot].pci_device.bus,
-             g_bce_fpga_devices[slot].pci_device.dev,
-             g_bce_fpga_devices[slot].pci_device.func);
+             llapi::g_bce_fpga_devices[slot].pci_device.domain,
+             llapi::g_bce_fpga_devices[slot].pci_device.bus,
+             llapi::g_bce_fpga_devices[slot].pci_device.dev,
+             llapi::g_bce_fpga_devices[slot].pci_device.func);
     printf(" %15s |", dbdf);
-    printf(" %#10x |", g_bce_fpga_devices[slot].pci_device.vendor_id);
-    printf(" %#10x |", g_bce_fpga_devices[slot].pci_device.device_id);
+    printf(" %#10x |", llapi::g_bce_fpga_devices[slot].pci_device.vendor_id);
+    printf(" %#10x |", llapi::g_bce_fpga_devices[slot].pci_device.device_id);
     printf(" %20s |", "<TODO>");
     printf(" %20s |", "<TODO>");
     printf(" %20s |", "<TODO>");
@@ -393,12 +232,12 @@ static int do_describe_slot()
     if (g_bce_fpga_cmd.payload.describe_slot.slot == -1) {
         /* show all slots */
         for (int i = 0; i < 8; ++i) {
-            if (g_bce_fpga_devices[i].present) {
+            if (llapi::g_bce_fpga_devices[i].present) {
                 describe_one_slot(i);
             }
         }
     } else {
-        if (g_bce_fpga_devices[g_bce_fpga_cmd.payload.describe_slot.slot].present) {
+        if (llapi::g_bce_fpga_devices[g_bce_fpga_cmd.payload.describe_slot.slot].present) {
             describe_one_slot(g_bce_fpga_cmd.payload.describe_slot.slot);
         }
     }
@@ -406,38 +245,13 @@ static int do_describe_slot()
     return 0;
 }
 
-static bool std_string_a_ends_with_b(const std::string& a, const std::string& b)
-{
-    if ((a.size() < b.size()) || (a.substr(a.size() - b.size(), b.size()) != b)) {
-        return false;
-    }
-    return true;
-}
-
-static bool regular_file_readable(const std::string& path)
-{
-    if (access(path.c_str(), R_OK)) {
-        return false;
-    }
-
-    struct stat s;
-    if (stat(path.c_str(), &s)) {
-        return false;
-    }
-    if (!S_ISREG(s.st_mode)) {
-        /* Not a regular file */
-        return false;
-    }
-
-    return true;
-}
-
 static int check_load_partial_logic()
 {
     struct bce_fpga_load_partial_logic_cmd& load_partial_logic =
                 g_bce_fpga_cmd.payload.load_partial_logic;
 
-    if (pci_device_has_kernel_driver(&g_bce_fpga_devices[load_partial_logic.slot].pci_device)) {
+    if (pci_device_has_kernel_driver(
+                &llapi::g_bce_fpga_devices[load_partial_logic.slot].pci_device)) {
         LOG(WARNING) << "Slot [" << load_partial_logic.slot
                      << "] is occupied by kernel driver, please `rmmod` first.";
         return -1;
@@ -545,7 +359,7 @@ static int parse_load_default_partial_logic(int argc, char **argv)
         ret = -1;
         goto show_usage;
     }
-    if (!g_bce_fpga_devices[load_partial_logic.slot].present) {
+    if (!llapi::g_bce_fpga_devices[load_partial_logic.slot].present) {
         LOG(WARNING) << "Slot [" << load_partial_logic.slot << "] is not present.";
         ret = -1;
         goto show_usage;
@@ -639,7 +453,7 @@ static int parse_load_partial_logic(int argc, char **argv)
         ret = -1;
         goto show_usage;
     }
-    if (!g_bce_fpga_devices[load_partial_logic.slot].present) {
+    if (!llapi::g_bce_fpga_devices[load_partial_logic.slot].present) {
         LOG(WARNING) << "Slot [" << load_partial_logic.slot << "] is not present.";
         ret = -1;
         goto show_usage;
@@ -738,7 +552,7 @@ static int do_load_partial_logic()
                 g_bce_fpga_cmd.payload.load_partial_logic;
 
     LOG(INFO) << "Set decouple";
-    reg_write_32(load_partial_logic.slot, 8, 1);
+    llapi::reg_write_32(load_partial_logic.slot, 8, 1);
     sleep(1);
     LOG(INFO) << "Set decouple done";
 
@@ -763,12 +577,12 @@ static int do_load_partial_logic()
     LOG(INFO) << "Download partial bin done";
 
     LOG(INFO) << "Unset decouple";
-    reg_write_32(load_partial_logic.slot, 8, 0);
+    llapi::reg_write_32(load_partial_logic.slot, 8, 0);
     sleep(1);
     LOG(INFO) << "Unset decouple done";
 
     LOG(INFO) << "Reset";
-    reg_write_32(load_partial_logic.slot, 248, 0);
+    llapi::reg_write_32(load_partial_logic.slot, 248, 0);
     LOG(INFO) << "Reset done";
 
     std::string fmt_time = get_fmt_time_string();
@@ -870,7 +684,7 @@ static int prologue()
         return -1;
     }
     for (int i = 0; i < 8; ++i) {
-        if (g_bce_fpga_devices[i].present) {
+        if (llapi::g_bce_fpga_devices[i].present) {
             std::string slot_dir_path = base::string_printf("%s/%d", g_tmp_dir_path.c_str(), i);
             ret = mkdir(slot_dir_path.c_str(), 0777);
             if (ret && (errno != EEXIST)) {
@@ -881,7 +695,6 @@ static int prologue()
     }
 
     if (!regular_file_readable(g_db_path)) {
-regenerate_db:
         Json::Value root;
         Json::Value slots;
         Json::Value slot;
@@ -891,6 +704,7 @@ regenerate_db:
             slot["present"] = false;
             slot["status"] = 0xffffffff;
             slot["static_version"] = "testversion";
+            slot["last_clear_bin_md5"] = "testmd5";
             slots.append(slot);
         }
         root["slots"] = slots;
@@ -915,7 +729,7 @@ regenerate_db:
     //LOG(WARNING) << g_db.toStyledString();
 
     for (int i = 0; i < 8; ++i) {
-        if (g_bce_fpga_devices[i].present) {
+        if (llapi::g_bce_fpga_devices[i].present) {
             /*
              *uint32_t status;
              *reg_read_32(i, 4, &status);
@@ -924,6 +738,7 @@ regenerate_db:
             g_db["slots"][i]["present"] = true;
             g_db["slots"][i]["status"] = 0b00000;
             g_db["slots"][i]["static_version"] = "testversion";
+            g_db["slots"][i]["last_clear_bin_md5"] = "testmd5";
         }
     }
 
@@ -970,12 +785,6 @@ int main(int argc, char **argv)
     umask(0000);
 
     int ret = 0;
-    ret = probe_all_slots();
-    if (ret) {
-        LOG(WARNING) << "Error in probe_all_slots";
-        return 1;
-    }
-
     ret = prologue();
     if (ret) {
         return 1;
@@ -1002,111 +811,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
-#if 0
-/**
- * Remove the application PF for the given app map.
- *
- * @param[out]  app_map         the application device resource map to remove
- *
- * @returns
- *  0   on success
- * -1   on failure
- */
-static int
-fpga_pci_remove_app_pf(struct fpga_pci_resource_map *app_map)
-{
-    fail_on(!app_map, err, CLI_INTERNAL_ERR_STR);
-
-    /** Construct the PCI device directory name using the PCI_DEV_FMT */
-    char dir_name[NAME_MAX + 1];
-    int ret = snprintf(dir_name, sizeof(dir_name), PCI_DEV_FMT,
-                       app_map->domain, app_map->bus, app_map->dev, app_map->func);
-
-    fail_on_quiet(ret < 0, err, "Error building the dir_name");
-    fail_on_quiet((size_t) ret >= sizeof(dir_name), err, "dir_name too long");
-
-    /** Setup the path to the device's remove file */
-    char sysfs_name[NAME_MAX + 1];
-    ret = snprintf(sysfs_name, sizeof(sysfs_name),
-                   "/sys/bus/pci/devices/%s/remove", dir_name);
-
-    fail_on_quiet(ret < 0, err,
-                  "Error building the sysfs path for remove file");
-    fail_on_quiet((size_t) ret >= sizeof(sysfs_name), err,
-                  "sysfs path too long for remove file");
-
-    /** Write a "1" to the device's remove file */
-    ret = fpga_pci_write_one2file(sysfs_name);
-    fail_on_quiet(ret != 0, err, "cli_write_one2file failed");
-
-    bool done = false;
-    uint32_t retries = 0;
-    while (!done) {
-        /** Check for file existence, should fail */
-        struct stat file_stat;
-        ret = stat(sysfs_name, &file_stat);
-        if (ret != 0) {
-            done = true;
-        } else {
-            fail_on_quiet(retries >= F1_REMOVE_APP_PF_MAX_RETRIES, err,
-                          "remove failed for path=%s", sysfs_name);
-            retries++;
-            msleep(F1_REMOVE_APP_PF_DELAY_MSEC);
-        }
-    }
-
-    errno = 0;
-    return 0;
-err:
-    errno = 0;
-    return FPGA_ERR_FAIL;
-}
-
-/**
- * PCI rescan.
- *
- * @returns
- *  0   on success
- * -1   on failure
- */
-static int
-fpga_pci_rescan(void)
-{
-    /** Setup and write '1' to the PCI rescan file */
-    char sysfs_name[NAME_MAX + 1];
-    int ret = snprintf(sysfs_name, sizeof(sysfs_name), "/sys/bus/pci/rescan");
-
-    fail_on_quiet(ret < 0, err,
-                  "Error building the sysfs path for PCI rescan file");
-    fail_on_quiet((size_t) ret >= sizeof(sysfs_name), err,
-                  "sysfs path too long for PCI rescan file");
-
-    /** Write a "1" to the PCI rescan file */
-    ret = fpga_pci_write_one2file(sysfs_name);
-    fail_on_quiet(ret != 0, err, "fpga_pci_write_one2file failed");
-
-    return 0;
-err:
-    return FPGA_ERR_FAIL;
-}
-
-int
-fpga_pci_rescan_slot_app_pfs(int slot_id)
-{
-    struct fpga_slot_spec spec;
-    int ret = fpga_pci_get_slot_spec(slot_id, &spec);
-    fail_on_quiet(ret != 0, err, "fpga_pci_get_slot_spec failed");
-
-    ret = fpga_pci_remove_app_pf(&spec.map[FPGA_APP_PF]);
-    fail_on_quiet(ret != 0, err, "fpga_pci_remove_app_pf failed");
-
-    ret = fpga_pci_rescan();
-    fail_on_quiet(ret != 0, err, "fpga_pci_rescan failed");
-
-    return 0;
-err:
-    return FPGA_ERR_FAIL;
-}
-#endif
 
