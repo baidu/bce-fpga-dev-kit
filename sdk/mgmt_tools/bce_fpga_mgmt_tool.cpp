@@ -47,6 +47,7 @@
 #include "string_printf.h"
 #include "fd_guard.h"
 #include "llapi.h"
+#include "md5.h"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
@@ -57,6 +58,27 @@ static const std::string g_tmp_dir_path = "/tmp/bce_fpga_dev_kit";
 static const std::string g_db_path = g_tmp_dir_path + "/db";
 static const std::string EXPECTED_PARTIAL_SUFFIX = "partial.bin";
 static const std::string EXPECTED_CLEAR_SUFFIX = "partial_clear.bin";
+
+static std::string md5sum(const std::string& path)
+{
+    unsigned char sum[16];
+
+    FILE *fp = fopen(path.c_str(), "r");
+    if (!fp) {
+        goto err;
+    }
+    if (md5_stream(fp, &sum[0])) {
+        goto err;
+    }
+    fclose(fp);
+
+    return base::string_printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+                               sum[0], sum[1], sum[2], sum[3], sum[4], sum[5], sum[6], sum[7],
+                               sum[8], sum[9], sum[10], sum[11], sum[12], sum[13], sum[14], sum[15]);
+
+err:
+    return std::string(32, 'f');
+}
 
 static const char *g_bce_fpga_usage[] = {
     "Synopsis",
