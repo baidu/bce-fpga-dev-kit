@@ -95,6 +95,12 @@ static void print_usage(const char **usage, size_t nlines)
     }
 }
 
+static void print_version()
+{
+    printf("bce_fpga_mgmt_tool : V%d.%d\n", BCE_FPGA_MGMT_TOOL_VERSION_MAJOR,
+           BCE_FPGA_MGMT_TOOL_VERSION_MINOR);
+}
+
 static std::string get_fmt_time_string()
 {
     time_t raw_time;
@@ -164,12 +170,6 @@ static struct bce_fpga_cmd {
 
 typedef int (*bce_fpga_parse_cmd_args_func_t)(int argc, char **argv);
 typedef int (*bce_fpga_action_func_t)();
-
-static void print_version()
-{
-    printf("bce_fpga_mgmt_tool : V%d.%d\n", BCE_FPGA_MGMT_TOOL_VERSION_MAJOR,
-           BCE_FPGA_MGMT_TOOL_VERSION_MINOR);
-}
 
 static int parse_describe_slot(int argc, char **argv)
 {
@@ -796,11 +796,16 @@ int main(int argc, char **argv)
     /* only one single instance is permitted */
     base::fd_guard pid_file(open("/var/tmp/bce_fpga_dev_kit.pid", O_CREAT | O_RDWR, 0666));
     if (pid_file == -1) {
-        LOG(WARNING) << "Error opening pid file /var/tmp/bce_fpga_dev_kit.pid";
+        LOG(WARNING) << "Error opening pid file /var/tmp/bce_fpga_dev_kit.pid.";
         return 1;
     }
     if (flock(pid_file, LOCK_EX | LOCK_NB) != 0) {
-        LOG(WARNING) << "Another bce_fpga_dev_kit instance is running";
+        LOG(WARNING) << "Another bce_fpga_dev_kit instance is running.";
+        return 1;
+    }
+
+    if (geteuid() != 0) {
+        LOG(WARNING) << "bce_fpga_mgmt_tool should be run as root.";
         return 1;
     }
 
