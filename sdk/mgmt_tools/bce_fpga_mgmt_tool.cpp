@@ -62,22 +62,35 @@ static std::map<std::string, uint32_t> g_static_dcp_md5sum_2_version = {
     { "067517bb04b54a6ad5008145121c2d39", 0x00000103 }
 };
 
+static std::string md5sum_hex_2_std_string(const unsigned char hex[16])
+{
+    return base::string_printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+                               hex[0], hex[1], hex[2], hex[3], hex[4], hex[5], hex[6], hex[7],
+                               hex[8], hex[9], hex[10], hex[11], hex[12], hex[13], hex[14], hex[15]);
+}
+
+static void md5sum_std_string_2_hex(const std::string& str, unsigned char hex[16])
+{
+    CHECK(str.size() == 32);
+    for (int i = 0; i < 16; ++i) {
+        hex[i] = (unsigned char)strtol(str.substr(2 * i, 2).c_str(), NULL, 16);
+    }
+}
+
 static std::string md5sum(const std::string& path)
 {
-    unsigned char sum[16];
+    unsigned char hex[16];
 
     FILE *fp = fopen(path.c_str(), "r");
     if (!fp) {
         goto err;
     }
-    if (md5_stream(fp, &sum[0])) {
+    if (md5_stream(fp, &hex[0])) {
         goto err;
     }
     fclose(fp);
 
-    return base::string_printf("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
-                               sum[0], sum[1], sum[2], sum[3], sum[4], sum[5], sum[6], sum[7],
-                               sum[8], sum[9], sum[10], sum[11], sum[12], sum[13], sum[14], sum[15]);
+    return md5sum_hex_2_std_string(hex);
 
 err:
     return std::string(32, 'f');
@@ -394,6 +407,13 @@ static int check_load_partial_logic()
                         last_clear_meta_path) != 0) {
         return -1;
     }
+    if (!(g_db["slots"][load_partial_logic.slot]["status"].asUInt() & 0x2)) {
+        if (md5sum(load_partial_logic.last_clear_bin_path) !=
+            g_db["slots"][load_partial_logic.slot]["last_clear_bin_md5sum"].asString()) {
+            LOG(WARNING) << "Md5sum mismatch";
+            return -1;
+        }
+    }
 
     return 0;
 }
@@ -640,12 +660,12 @@ static int do_load_partial_logic()
     struct bce_fpga_load_partial_logic_cmd& load_partial_logic =
                 g_bce_fpga_cmd.payload.load_partial_logic;
 
-    LOG(INFO) << "Set decouple";
+    LOG(INFO) << "Set decouple ...";
     llapi::reg_write_32(load_partial_logic.slot, 8, 1);
     sleep(1);
     LOG(INFO) << "Set decouple done";
 
-    LOG(INFO) << "Download clear bin";
+    LOG(INFO) << "Download clear bin ...";
     argc_argv_parser clear_parser;
     clear_parser.append("mcap -x 9038 -C");
     clear_parser.append(load_partial_logic.last_clear_bin_path);
@@ -655,7 +675,7 @@ static int do_load_partial_logic()
     mcap_main(clear_parser.argc(), const_cast<char **>(clear_parser.argv()));
     LOG(INFO) << "Download clear bin done";
 
-    LOG(INFO) << "Download partial bin";
+    LOG(INFO) << "Download partial bin ...";
     argc_argv_parser partial_parser;
     partial_parser.append("mcap -x 9038 -p");
     partial_parser.append(load_partial_logic.partial_bin_path);
@@ -665,14 +685,24 @@ static int do_load_partial_logic()
     mcap_main(partial_parser.argc(), const_cast<char **>(partial_parser.argv()));
     LOG(INFO) << "Download partial bin done";
 
-    LOG(INFO) << "Unset decouple";
+    LOG(INFO) << "Unset decouple ...";
     llapi::reg_write_32(load_partial_logic.slot, 8, 0);
     sleep(1);
     LOG(INFO) << "Unset decouple done";
 
-    LOG(INFO) << "Reset";
+    LOG(INFO) << "Reset ...";
     llapi::reg_write_32(load_partial_logic.slot, 248, 0);
     LOG(INFO) << "Reset done";
+
+    LOG(INFO) << "Write clear bin md5 ...";
+    unsigned char hex[16];
+    std::string str = md5sum(load_partial_logic.clear_bin_path);
+    md5sum_std_string_2_hex(str, hex);
+    llapi::reg_write_32(load_partial_logic.slot, 0x100, *(uint32_t *)&hex[0]);
+    llapi::reg_write_32(load_partial_logic.slot, 0x104, *(uint32_t *)&hex[4]);
+    llapi::reg_write_32(load_partial_logic.slot, 0x108, *(uint32_t *)&hex[8]);
+    llapi::reg_write_32(load_partial_logic.slot, 0x10c, *(uint32_t *)&hex[12]);
+    LOG(INFO) << "Write clear bin md5 done";
 
     std::string fmt_time = get_fmt_time_string();
     {
@@ -811,7 +841,7 @@ static int prologue()
             slot["present"] = false;
             slot["status"] = 0xffffffff;
             slot["static_version"] = "n/a";
-            slot["last_clear_bin_md5"] = "n/a";
+            slot["last_clear_bin_md5sum"] = "n/a";
             slots.append(slot);
         }
         root["slots"] = slots;
@@ -843,6 +873,13 @@ static int prologue()
             g_db["slots"][i]["status"] = value;
             llapi::reg_read_32(i, 0, &value);
             g_db["slots"][i]["static_version"] = value;
+
+            unsigned char hex[16];
+            llapi::reg_read_32(i, 0x100, (uint32_t *)&hex[0]);
+            llapi::reg_read_32(i, 0x104, (uint32_t *)&hex[4]);
+            llapi::reg_read_32(i, 0x108, (uint32_t *)&hex[8]);
+            llapi::reg_read_32(i, 0x10c, (uint32_t *)&hex[12]);
+            g_db["slots"][i]["last_clear_bin_md5sum"] = md5sum_hex_2_std_string(hex);
         }
     }
 
