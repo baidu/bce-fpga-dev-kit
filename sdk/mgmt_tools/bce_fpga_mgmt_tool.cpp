@@ -58,6 +58,9 @@ static const std::string g_tmp_dir_path = "/tmp/bce_fpga_dev_kit";
 static const std::string g_db_path = g_tmp_dir_path + "/db";
 static const std::string EXPECTED_PARTIAL_SUFFIX = "partial.bin";
 static const std::string EXPECTED_CLEAR_SUFFIX = "partial_clear.bin";
+static std::map<std::string, uint32_t> g_static_dcp_md5sum_2_version = {
+    { "067517bb04b54a6ad5008145121c2d39", 0x00000103 }
+};
 
 static std::string md5sum(const std::string& path)
 {
@@ -267,6 +270,51 @@ static int do_describe_slot()
     return 0;
 }
 
+static int check_meta_file(int slot, const std::string& bin_path, const std::string& meta_path)
+{
+    if (!regular_file_readable(meta_path)) {
+        LOG(WARNING) << "Partial meta path [" << meta_path
+                     << "] is not a readable regular file.";
+        return -1;
+    }
+
+    Json::Value root;
+    std::ifstream ifs(meta_path);
+    if (!ifs.is_open()) {
+        LOG(WARNING) << "Error in ifstream";
+        return -1;
+    }
+    ifs >> root;
+
+    if (!root.isMember("md5sum")) {
+        LOG(WARNING) << "Invalid meta file, no `md5sum` member.";
+        return -1;
+    }
+    if (root["md5sum"].asString() != md5sum(bin_path)) {
+        LOG(WARNING) << "Md5sum mismatch";
+        return -1;
+    }
+
+    if (!root.isMember("my_top_static_routed_dcp_md5sum")) {
+        LOG(WARNING) << "Invalid meta file, no `my_top_static_routed_dcp_md5sum` member.";
+        return -1;
+    }
+    std::string static_dcp_md5sum = root["my_top_static_routed_dcp_md5sum"].asString();
+    auto static_version_it = g_static_dcp_md5sum_2_version.find(static_dcp_md5sum);
+    if (static_version_it == g_static_dcp_md5sum_2_version.end()) {
+        LOG(WARNING) << "Unversioned my_top_static_routed.dcp";
+        return -1;
+    }
+    uint32_t expected_static_version =
+            g_db["slots"][slot]["static_version"].asUInt();
+    if (static_version_it->second != expected_static_version) {
+        LOG(WARNING) << "Given partial logic mismatches static version";
+        return -1;
+    }
+
+    return 0;
+}
+
 static int check_load_partial_logic()
 {
     struct bce_fpga_load_partial_logic_cmd& load_partial_logic =
@@ -297,6 +345,13 @@ static int check_load_partial_logic()
         return -1;
     }
 
+    /* Check partial.bin.meta */
+    const std::string partial_meta_path = load_partial_logic.partial_bin_path + ".meta";
+    if (check_meta_file(load_partial_logic.slot, load_partial_logic.partial_bin_path,
+                        partial_meta_path) != 0) {
+        return -1;
+    }
+
     /* Check clear_bin_path */
     if (load_partial_logic.clear_bin_path.size() == 0) {
         LOG(WARNING) << "You MUST specify a valid partial clear bin path "
@@ -315,6 +370,13 @@ static int check_load_partial_logic()
         return -1;
     }
 
+    /* Check clear.bin.meta */
+    const std::string clear_meta_path = load_partial_logic.clear_bin_path + ".meta";
+    if (check_meta_file(load_partial_logic.slot, load_partial_logic.clear_bin_path,
+                        clear_meta_path) != 0) {
+        return -1;
+    }
+
     /* Check last_clear_bin_path */
     if (load_partial_logic.last_clear_bin_path.size() == 0) {
         LOG(WARNING) << "Last clear bin path is not set.";
@@ -326,7 +388,12 @@ static int check_load_partial_logic()
         return -1;
     }
 
-    /* TODO: check static logic version and bin file md5sum */
+    /* Check clear.bin.meta */
+    const std::string last_clear_meta_path = load_partial_logic.last_clear_bin_path + ".meta";
+    if (check_meta_file(load_partial_logic.slot, load_partial_logic.last_clear_bin_path,
+                        last_clear_meta_path) != 0) {
+        return -1;
+    }
 
     return 0;
 }
@@ -610,9 +677,12 @@ static int do_load_partial_logic()
     std::string fmt_time = get_fmt_time_string();
     {
         std::string clear_bin_basename = fmt_time + " partial_clear.bin";
+        std::string clear_meta_basename = fmt_time + " partial_clear.bin.meta";
         std::string cp_cmd = base::string_printf(
                                      "cp -rf \"%s\" \"%s/%d/%s\" && "
-                                     "ln -sf \"%s/%d/%s\" \"%s/%d/last_partial_clear.bin\"",
+                                     "ln -sf \"%s/%d/%s\" \"%s/%d/last_partial_clear.bin\" && "
+                                     "cp -rf \"%s\" \"%s/%d/%s\" && "
+                                     "ln -sf \"%s/%d/%s\" \"%s/%d/last_partial_clear.bin.meta\"",
                                      load_partial_logic.clear_bin_path.c_str(),
                                      g_tmp_dir_path.c_str(),
                                      load_partial_logic.slot,
@@ -621,6 +691,15 @@ static int do_load_partial_logic()
                                      load_partial_logic.slot,
                                      clear_bin_basename.c_str(),
                                      g_tmp_dir_path.c_str(),
+                                     load_partial_logic.slot,
+                                     (load_partial_logic.clear_bin_path + ".meta").c_str(),
+                                     g_tmp_dir_path.c_str(),
+                                     load_partial_logic.slot,
+                                     clear_meta_basename.c_str(),
+                                     g_tmp_dir_path.c_str(),
+                                     load_partial_logic.slot,
+                                     clear_meta_basename.c_str(),
+                                     g_tmp_dir_path.c_str(),
                                      load_partial_logic.slot);
         int sh_ret = system(cp_cmd.c_str());
         if (sh_ret) {
@@ -628,8 +707,14 @@ static int do_load_partial_logic()
         }
     }
 
+    uint32_t value;
     g_db["slots"][load_partial_logic.slot]["last_load_timestamp"] = fmt_time;
-    g_db["slots"][load_partial_logic.slot]["status_after_load"] = 0b00000;
+    g_db["slots"][load_partial_logic.slot]["last_partial_bin_path"] =
+            load_partial_logic.partial_bin_path;
+    g_db["slots"][load_partial_logic.slot]["last_clear_bin_path"] =
+            load_partial_logic.clear_bin_path;
+    llapi::reg_read_32(load_partial_logic.slot, 4, &value);
+    g_db["slots"][load_partial_logic.slot]["status_after_load"] = value;
 
     return 0;
 }
@@ -725,12 +810,12 @@ static int prologue()
             slot["slot"] = i;
             slot["present"] = false;
             slot["status"] = 0xffffffff;
-            slot["static_version"] = "testversion";
-            slot["last_clear_bin_md5"] = "testmd5";
+            slot["static_version"] = "n/a";
+            slot["last_clear_bin_md5"] = "n/a";
             slots.append(slot);
         }
         root["slots"] = slots;
-        root["version"] = "testversion";
+        root["version"] = "n/a";
         root["magic"] = "bce_fpga_mgmt_tool";
         root["created"] = get_fmt_time_string();
 
@@ -752,15 +837,12 @@ static int prologue()
 
     for (int i = 0; i < 8; ++i) {
         if (llapi::g_bce_fpga_devices[i].present) {
-            /*
-             *uint32_t status;
-             *reg_read_32(i, 4, &status);
-             *g_db["slots"][i]["status"] = status;
-             */
+            uint32_t value;
             g_db["slots"][i]["present"] = true;
-            g_db["slots"][i]["status"] = 0b00000;
-            g_db["slots"][i]["static_version"] = "testversion";
-            g_db["slots"][i]["last_clear_bin_md5"] = "testmd5";
+            llapi::reg_read_32(i, 4, &value);
+            g_db["slots"][i]["status"] = value;
+            llapi::reg_read_32(i, 0, &value);
+            g_db["slots"][i]["static_version"] = value;
         }
     }
 
@@ -786,6 +868,8 @@ int main(int argc, char **argv)
     ::google::InitGoogleLogging(argv[0]);
     FLAGS_alsologtostderr = 1;
 
+    /* ignore signals like SIGINT/SIGTERM/SIGQUIT, some key process
+     * in this program can not be interrupted */
     struct sigaction ignore_signal;
     memset(&ignore_signal, 0, sizeof(struct sigaction));
     ignore_signal.sa_handler = SIG_IGN;
