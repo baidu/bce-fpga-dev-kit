@@ -409,7 +409,7 @@ static int check_load_partial_logic()
         return -1;
     }
 
-    /* Check partial_bin_path */
+    /* Check partial.bin */
     if (load_partial_logic.partial_bin_path.size() == 0) {
         LOG(WARNING) << "You MUST specify a valid partial bin path "
                      << "with `--partial-bin-path` option.";
@@ -434,7 +434,7 @@ static int check_load_partial_logic()
         return -1;
     }
 
-    /* Check clear_bin_path */
+    /* Check partial_clear.bin */
     if (load_partial_logic.clear_bin_path.size() == 0) {
         LOG(WARNING) << "You MUST specify a valid partial clear bin path "
                      << "with `--partial-clear-bin-path` option.";
@@ -452,14 +452,14 @@ static int check_load_partial_logic()
         return -1;
     }
 
-    /* Check clear.bin.meta */
+    /* Check partial_clear.bin.meta */
     const std::string clear_meta_path = load_partial_logic.clear_bin_path + ".meta";
     if (check_meta_file(load_partial_logic.slot, load_partial_logic.clear_bin_path,
                         clear_meta_path) != 0) {
         return -1;
     }
 
-    /* Check last_clear_bin_path */
+    /* Check last_partial_clear.bin */
     if (load_partial_logic.last_clear_bin_path.size() == 0) {
         LOG(WARNING) << "Last clear bin path is not set.";
         return -1;
@@ -470,7 +470,7 @@ static int check_load_partial_logic()
         return -1;
     }
 
-    /* Check clear.bin.meta */
+    /* Check last_partial_clear.bin.meta */
     const std::string last_clear_meta_path = load_partial_logic.last_clear_bin_path + ".meta";
     if (check_meta_file(load_partial_logic.slot, load_partial_logic.last_clear_bin_path,
                         last_clear_meta_path) != 0) {
