@@ -19,7 +19,7 @@
 
 /* Written by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.  */
 
-#include <config.h>
+//#include <config.h>
 
 #if HAVE_OPENSSL_MD5
 # define GL_OPENSSL_INLINE _GL_EXTERN_INLINE
