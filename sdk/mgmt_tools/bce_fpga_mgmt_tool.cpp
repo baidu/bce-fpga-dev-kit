@@ -38,6 +38,7 @@
 #include <algorithm>
 #include <iterator>
 #include <iomanip>
+#include <functional>
 
 #include <pciaccess.h>
 #include <glog/logging.h>
@@ -236,36 +237,98 @@ out:
     return ret;
 }
 
+static const struct slot_desc_column {
+    const char *column_header;
+    bool left_aligned;
+    size_t column_width;
+    std::function<std::string(int)> gen_str;
+} g_slot_desc_columns[] = {
+    {
+        "Slot", true, 4, [](int s)
+        {
+            return base::string_printf("%d", s);
+        }
+    },
+    {
+        "DBDF", true, 12, [](int s)
+        {
+            return base::string_printf("%04x:%02x:%02x.%01x",
+                                       llapi::g_bce_fpga_devices[s].pci_device.domain,
+                                       llapi::g_bce_fpga_devices[s].pci_device.bus,
+                                       llapi::g_bce_fpga_devices[s].pci_device.dev,
+                                       llapi::g_bce_fpga_devices[s].pci_device.func);
+        }
+    },
+    {
+        "VendorID", true, 8, [](int s)
+        {
+            return base::string_printf("0x%04x", llapi::g_bce_fpga_devices[s].pci_device.vendor_id);
+        }
+    },
+    {
+        "DeviceID", true, 8, [](int s)
+        {
+            return base::string_printf("0x%04x", llapi::g_bce_fpga_devices[s].pci_device.device_id);
+        }
+    },
+    {
+        "StaticVersion", true, 13, [](int s)
+        {
+            return base::string_printf("0x%08x", g_db["slots"][s]["static_version"].asUInt());
+        }
+    },
+    {
+        "StaticStatus", true, 12, [](int s)
+        {
+            return base::string_printf("0x%08x", g_db["slots"][s]["status"].asUInt());
+        }
+    },
+    {
+        "PartialBinPath", true, 50, [](int s)
+        {
+            return g_db["slots"][s]["last_partial_bin_path"].asString();
+        }
+    },
+};
+
 static void describe_one_slot(int slot)
 {
-    printf("|");
-    printf(" %10d |", slot);
-    char dbdf[13];
-    snprintf(dbdf, sizeof(dbdf), "%04x:%02x:%02x.%01x",
-             llapi::g_bce_fpga_devices[slot].pci_device.domain,
-             llapi::g_bce_fpga_devices[slot].pci_device.bus,
-             llapi::g_bce_fpga_devices[slot].pci_device.dev,
-             llapi::g_bce_fpga_devices[slot].pci_device.func);
-    printf(" %15s |", dbdf);
-    printf(" %#10x |", llapi::g_bce_fpga_devices[slot].pci_device.vendor_id);
-    printf(" %#10x |", llapi::g_bce_fpga_devices[slot].pci_device.device_id);
-    printf(" %20s |", "<TODO>");
-    printf(" %20s |", "<TODO>");
-    printf(" %20s |", "<TODO>");
-    printf(" %20s |", "<TODO>");
-    printf(" %20s |", "<TODO>");
-    printf(" %20s |", "<TODO>");
-    printf("\n");
+    std::cout << "|";
+    for (struct slot_desc_column c : g_slot_desc_columns) {
+        std::string s = c.gen_str(slot);
+        std::cout << " ";
+        if (c.left_aligned) {
+            std::cout << std::left;
+        } else {
+            std::cout << std::right;
+        }
+        std::cout << std::setw(c.column_width) << std::setfill(' ');
+        std::cout << s.substr(0, c.column_width);
+        std::cout << " |";
+    }
+    std::cout << "\n";
 }
 
 static int do_describe_slot()
 {
-    printf("| %10s | %15s | %10s | %10s | %20s | %20s | %20s | %20s | %20s | %20s |\n",
-           "Slot", "DBDF", "VendorId", "DeviceId",
-           "StaticVersion", "StaticStatusCode", "StaticStatus",
-           "PartialUUID", "PartialStatusCode", "PartialStatus");
-    printf("%s\n",
-           std::string(10 + 15 + 10 + 10 + 20 + 20 + 20 + 20 + 20 + 20 + 10 * 3 + 1, '-').c_str());
+    std::cout << "+";
+    for (struct slot_desc_column c : g_slot_desc_columns) {
+        std::cout << std::string(c.column_width + 2, '-') << "+";
+    }
+    std::cout << "\n";
+
+    std::cout << "|";
+    for (struct slot_desc_column c : g_slot_desc_columns) {
+        std::cout << " " << std::left << std::setw(c.column_width)  << std::setfill(' ')
+                  << c.column_header << " |";
+    }
+    std::cout << "\n";
+
+    std::cout << "+";
+    for (struct slot_desc_column c : g_slot_desc_columns) {
+        std::cout << std::string(c.column_width + 2, '-') << "+";
+    }
+    std::cout << "\n";
 
     if (g_bce_fpga_cmd.payload.describe_slot.slot == -1) {
         /* show all slots */
@@ -279,6 +342,12 @@ static int do_describe_slot()
             describe_one_slot(g_bce_fpga_cmd.payload.describe_slot.slot);
         }
     }
+
+    std::cout << "+";
+    for (struct slot_desc_column c : g_slot_desc_columns) {
+        std::cout << std::string(c.column_width + 2, '-') << "+";
+    }
+    std::cout << "\n";
 
     return 0;
 }
