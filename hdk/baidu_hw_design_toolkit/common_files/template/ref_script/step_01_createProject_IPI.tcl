@@ -19,8 +19,6 @@ source $scriptDir/ddr_define.tcl
 # Add the top-level source files.
 add_files -norecurse $commonDir/hdl
 add_files -norecurse $usrIncPath
-add_files -norecurse $usrRtlPath
-add_files -norecurse $commonDir/constraints
 
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     add_files -fileset constrs_1 -norecurse $xdcfile

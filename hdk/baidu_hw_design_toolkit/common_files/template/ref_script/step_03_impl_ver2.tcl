@@ -50,9 +50,32 @@ file mkdir $bitDir/$updateName
 # Generate bitfiles
 write_bitstream -force -bin_file -file $bitDir/$updateName/${updateName}.bit > $bitDir/$updateName/${updateName}_write_bitstream.log
 write_debug_probes $bitDir/$updateName/${updateName}.ltx
-exec rm -rf $bitDir/$updateName/${updateName}.bit 
-exec rm -rf $bitDir/$updateName/${updateName}.bin 
-exec rm -rf $bitDir/$updateName/${updateName}.ltx 
+exec rm -rf $bitDir/$updateName/${updateName}.bit
+exec rm -rf $bitDir/$updateName/${updateName}.bin
+exec rm -rf $bitDir/$updateName/${updateName}.ltx
+
+#generate meta_file for target_file
+set target_file1 $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin
+#get md5 of target_file
+set md5_result1 [lindex [exec md5sum $target_file1] 0]
+#get time
+set timestamp [exec date "+%Y-%m-%d %H:%M:%S"]
+#write meta_file
+set meta_file  $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin.meta
+set fp_define [open $meta_file w]
+puts $fp_define "{\"md5sum\":\"${md5_result1}\",\"timestamp\":\"${timestamp}\"}"
+close $fp_define
+#generate meta_file for target_file
+set target_file1 $bitDir/$updateName/${updateName}_pr_region_partial.bin
+set meta_file  $bitDir/$updateName/${updateName}_pr_region_partial.bin.meta
+#get md5 of target_file
+set md5_result1 [lindex [exec md5sum $target_file1] 0]
+#get time
+set timestamp [exec date "+%Y-%m-%d %H:%M:%S"]
+#write meta_file
+set fp_define [open $meta_file w]
+puts $fp_define "{\"md5sum\":\"${md5_result1}\",\"timestamp\":\"${timestamp}\"}"
+close $fp_define
 
 # Error and Message Reporting
 set warningCount [get_msg_config -severity {Warning} -count]
