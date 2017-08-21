@@ -16,8 +16,11 @@
 
 #include "llapi.h"
 
+#include <unistd.h>
+#include <fcntl.h>
+
+#include <errno.h>
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -112,6 +115,55 @@ int reg_write_32(int slot, uint64_t addr, uint32_t value)
 
     *(uint32_t *)((uint64_t)g_bce_fpga_devices[slot].pci_device.regions[0].memory + addr) = value;
     return 0;
+}
+
+int fpga_memcpy(int slot, uint64_t dest, uint64_t src, size_t n, int to_fpga)
+{
+    /* TODO: use slot */
+    if (to_fpga) {
+        int fd = open("/dev/xdma0_h2c_0", O_WRONLY);
+        if (fd == -1) {
+            printf("Fail to open /dev/xdma0_h2c_0, errno=%d\n", errno);
+            return -ENODEV;
+        }
+
+        /* XXX: bytes written may be less than **count** in 3.10.0_2-0-0-2, buggy kernel? */
+        size_t remaining = n;
+        while (remaining > 0) {
+            ssize_t nbytes = pwrite(fd, reinterpret_cast<void *>(src + n - remaining), remaining,
+                                    static_cast<off_t>(dest + n - remaining));
+            if (nbytes < 0) {
+                close(fd);
+                return -errno;
+            }
+
+            remaining -= nbytes;
+        }
+
+        close(fd);
+        return 0;
+    } else {
+        int fd = open("/dev/xdma0_c2h_0", O_RDONLY);
+        if (fd == -1) {
+            printf("Fail to open /dev/xdma0_c2h_0, errno=%d\n", errno);
+            return -ENODEV;
+        }
+
+        size_t remaining = n;
+        while (remaining > 0) {
+            ssize_t nbytes = pread(fd, reinterpret_cast<void *>(dest + n - remaining), remaining,
+                                   static_cast<off_t>(src + n - remaining));
+            if (nbytes < 0) {
+                close(fd);
+                return -errno;
+            }
+
+            remaining -= nbytes;
+        }
+
+        close(fd);
+        return 0;
+    }
 }
 
 } // namespace llapi

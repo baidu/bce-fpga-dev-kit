@@ -17,6 +17,7 @@
 #ifndef LLAPI_H
 #define LLAPI_H
 
+#include <stddef.h>
 #include <pciaccess.h>
 
 namespace baidu {
@@ -32,8 +33,55 @@ struct bce_fpga_device {
 
 extern struct bce_fpga_device g_bce_fpga_devices[NR_MAX_SLOTS];
 
+/**
+ * @brief   Read register in 32-bit
+ *
+ * @param [in]  slot    : slot number
+ * @param [in]  addr    : register offset
+ * @param [out] value   : output value
+ *
+ * @return  return 0 on success, or error code while failed
+ *
+ * @note
+ *
+ * @author  miaotianxiang@baidu.com
+ * @date    2017-08-25
+ **/
 int reg_read_32(int slot, uint64_t addr, uint32_t *value);
+
+/**
+ * @brief   Write register in 32-bit
+ *
+ * @param [in] slot     : slot number
+ * @param [in] addr     : register offset
+ * @param [in] value    : input value
+ *
+ * @return  return 0 on success, or error code while failed
+ *
+ * @note
+ *
+ * @author  miaotianxiang@baidu.com
+ * @date    2017-08-25
+ **/
 int reg_write_32(int slot, uint64_t addr, uint32_t value);
+
+/**
+ * @brief   DMA between host main memory and FPGA DDR
+ *
+ * @param [in] slot     : slot number
+ * @param [in] dest     : DMA dest addr
+ * @param [in] src      : DMA src addr
+ * @param [in] n        : DMA length
+ * @param [in] to_fpga  : DMA direction, [1] for host->fpga and [0] for fpga->host
+ *
+ * @return  return 0 on success, or error code while failed
+ *
+ * @note
+ *
+ * @author  miaotianxiang@baidu.com
+ * @date    2017-08-25
+ **/
+int fpga_memcpy(int slot, uint64_t dest, uint64_t src, size_t n, int to_fpga);
 
 } // namespace llapi
 } // namespace fpga
