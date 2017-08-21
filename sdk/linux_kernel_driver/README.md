@@ -30,19 +30,19 @@
 
 执行`sudo lspci -d 10ee:`，输出非空证明FPGA设备已被正确透传给虚拟机。
 
-![kernel-lspci](./img/kernel-lspci.png)
+![kernel-lspci](../doc/img/kernel-lspci.png)
 
 确保虚拟机内已正确安装了编译工具链和内核模块编译支持。如否，请执行`sudo yum -y install gcc gcc-c++ binutils kernel-devel`。最后，请确认`/usr/src/kernels/`目录下存在与当前内核版本`uname -r`同名的文件夹，如下图所示。
 
-![kernel-version](./img/kernel-version.png)
+![kernel-version](../doc/img/kernel-version.png)
 
 在当前目录执行`make -C ./driver clean && make -C ./driver`，生成编译产出内核模块`./driver/xdma_xvc.ko`，打印下图红框所示部分说明编译成功。
 
-![kernel-make](./img/kernel-make.png)
+![kernel-make](../doc/img/kernel-make.png)
 
 执行`sudo insmod ./driver/xdma_xvc.ko`加载上一步生成的内核模块，`/dev`目录下出现下图红框所示设备文件说明驱动加载成功。
 
-![kernel-insmod](./img/kernel-insmod.png)
+![kernel-insmod](../doc/img/kernel-insmod.png)
 
 默认该驱动创建的设备文件权限为600，即仅允许root用户访问，可能导致后续操作提示权限不足。如需让普通用户获得访问权限，请在当前目录执行`sudo cp ./etc/udev/rules.d/* /etc/udev/rules.d/`将udev规则拷贝至系统目录，并执行`sudo rmmod xdma_xvc && sudo insmod ./driver/xdma_xvc.ko`重新加载驱动。或者，直接执行`sudo chmod 666 /dev/xil_xvc/cfg_ioc0 /dev/xdma0_*`，以上修改权限操作仅单次生效。
 
@@ -51,7 +51,7 @@
 
 使用lspci查看透传后的FPGA设备如图所示，FPGA作为一个PCIe设备提供了两个BAR空间，即BAR 0和Bar 2，大小分别为256K和64K。该驱动加载后会调用pci_iomap()函数来映射这些BAR空间。
 
-![kernel-bar](./img/kernel-bar.png)
+![kernel-bar](../doc/img/kernel-bar.png)
 
 当前版本的BAR空间详细布局如下表所示，后续版本中可能会对其进行调整，请以github上的最新文档为准。
 
@@ -69,7 +69,7 @@
 
 该驱动理论上能够支持Legacy Interrupt、MSI、MSI-X三种类型的中断。目前，出于性能和便捷度等因素考虑，百度云FPGA开发环境仅使用了[MSI-X](https://en.wikipedia.org/wiki/Message_Signaled_Interrupts#MSI-X)中断。驱动加载后会使能设备的MSI-X中断并为其分配中断向量，此时可以通过dmesg看到如下信息，每个中断向量的作用已在图上标示。如需获取更详细的中断信息，譬如中断计数和亲核性，请查看`/proc/interrupts`和`/proc/irq/<irq number>/`下的相关内容。
 
-![kernel-irq](./img/kernel-irq.png)
+![kernel-irq](../doc/img/kernel-irq.png)
 
 开发者可以在Vivado工程中自定义FPGA的动态逻辑，并使用上图标示的16个用户中断来实现事件完成通知。**驱动在收到用户中断后，ISR即中断处理函数的默认处理例程是唤醒一个在该中断对应之wait_queue_t上等待的线程，此后该线程会从阻塞的`read()`或`poll()`系统调用中返回用户态。**
 
