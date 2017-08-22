@@ -99,10 +99,56 @@ err:
 
 static const char *g_bce_fpga_usage[] = {
     "Synopsis",
-    "   bce_fpga_mgmt_tool <general option> [general option args] [-h]",
-    "General Option",
+    "   bce_fpga_mgmt_tool <general command> [<general command args>]",
+    "   bce_fpga_mgmt_tool -h",
+    "   bce_fpga_mgmt_tool --version",
+    "General Command",
     "   LoadPartialLogic/LoadDefaultPartialLogic/DescribeSlot",
+};
 
+static const char *g_load_partial_logic_usage[] = {
+    "Synopsis",
+    "   bce_fpga_mgmt_tool LoadPartialLogic -S <Slot#> --partial-bin-path=<path_to_partial_bin>",
+    "                                       [--partial-clear-bin-path=<path_to_partial_clear_bin>] [--force]",
+    "   bce_fpga_mgmt_tool LoadPartialLogic -h",
+    "   bce_fpga_mgmt_tool LoadPartialLogic --version",
+    "Description",
+    "   Load tcl/vivado generated partial bin to FPGA specified by <Slot#>",
+    "Option",
+    "   -S/--slot                               FPGA slot#",
+    "   -P/--partial-bin-path                   Path to tcl/vivado generated partial bin",
+    "   -C/--partial-clear-bin-path             Path to tcl/vivado generated partial clear bin",
+    "   -f/--force                              Don't enforce filename validness check",
+    "   -h/--help                               Print this usage",
+    "   -V/--version                            Print version",
+};
+
+static const char *g_load_default_partial_logic_usage[] = {
+    "Synopsis",
+    "   bce_fpga_mgmt_tool LoadDefaultPartialLogic -S <Slot#>",
+    "   bce_fpga_mgmt_tool LoadDefaultPartialLogic -h",
+    "   bce_fpga_mgmt_tool LoadDefaultPartialLogic --version",
+    "Description",
+    "   Load default partial logic to FPGA specified by <Slot#>",
+    "Option",
+    "   -S/--slot                               FPGA slot#",
+    "   -h/--help                               Print this usage",
+    "   -V/--version                            Print version",
+};
+
+static const char *g_describe_slot_usage[] = {
+    "Synopsis",
+    "   bce_fpga_mgmt_tool DescribeSlot",
+    "   bce_fpga_mgmt_tool DescribeSlot -S <Slot#>",
+    "   bce_fpga_mgmt_tool DescribeSlot -h",
+    "   bce_fpga_mgmt_tool DescribeSlot --version",
+    "Description",
+    "   The default action is to describe all FPGAs passthroughed to current VM instance. If <Slot#>",
+    "   is specified, it will print extra information and performance metrics about this slot.",
+    "Option",
+    "   -S/--slot                               FPGA slot#",
+    "   -h/--help                               Print this usage",
+    "   -V/--version                            Print version",
 };
 
 static void print_usage(const char **usage, size_t nlines)
@@ -232,7 +278,10 @@ static int parse_describe_slot(int argc, char **argv)
         }
     }
 
+    goto out;
+
 show_usage:
+    print_usage(g_describe_slot_usage, ARRAY_SIZE(g_describe_slot_usage));
 out:
     return ret;
 }
@@ -563,6 +612,7 @@ static int parse_load_default_partial_logic(int argc, char **argv)
     }
 
 show_usage:
+    print_usage(g_load_default_partial_logic_usage, ARRAY_SIZE(g_load_default_partial_logic_usage));
 out:
     return ret;
 }
@@ -662,6 +712,7 @@ static int parse_load_partial_logic(int argc, char **argv)
     }
 
 show_usage:
+    print_usage(g_load_partial_logic_usage, ARRAY_SIZE(g_load_partial_logic_usage));
 out:
     return ret;
 }
