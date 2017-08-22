@@ -348,7 +348,11 @@ static const struct slot_desc_column {
     {
         "PartialBinPath", true, 50, [](int s)
         {
-            return g_db["slots"][s]["last_partial_bin_path"].asString();
+            if (g_db["slots"][s]["status"].asUInt() & 0x2) {
+                return std::string("base");
+            } else {
+                return g_db["slots"][s]["last_partial_bin_path"].asString();
+            }
         }
     },
 };
