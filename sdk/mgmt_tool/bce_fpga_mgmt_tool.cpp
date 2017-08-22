@@ -164,6 +164,19 @@ static void print_version()
            BCE_FPGA_MGMT_TOOL_VERSION_MINOR);
 }
 
+static std::string normalize_path(const std::string& path)
+{
+    /* To handle relative path beginning with ~/$HOME */
+    if (path.compare(0, 2, "~/") == 0) {
+        std::string ret;
+        ret = getenv("HOME");
+        ret += path.substr(1);
+        return ret;
+    }
+
+    return path;
+}
+
 static std::string get_fmt_time_string()
 {
     time_t raw_time;
@@ -654,10 +667,10 @@ static int parse_load_partial_logic(int argc, char **argv)
             }
             break;
         case 'P':
-            partial_bin_path = optarg;
+            partial_bin_path = normalize_path(optarg);
             break;
         case 'C':
-            clear_bin_path = optarg;
+            clear_bin_path = normalize_path(optarg);
             break;
         case 'f':
             load_partial_logic.force = true;
