@@ -60,7 +60,7 @@ static const std::string g_db_path = g_tmp_dir_path + "/db";
 static const std::string EXPECTED_PARTIAL_SUFFIX = "partial.bin";
 static const std::string EXPECTED_CLEAR_SUFFIX = "partial_clear.bin";
 static std::map<std::string, uint32_t> g_static_dcp_md5sum_2_version = {
-    { "067517bb04b54a6ad5008145121c2d39", 0x00000103 }
+    { "e41a401bcf6637eb0cf79643660df28c", 0x00000103 }
 };
 
 static std::string md5sum_hex_2_std_string(const unsigned char hex[16])
