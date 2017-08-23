@@ -32,7 +32,7 @@ build存放制作FPGA云服务器逻辑镜像所要执行的脚本，如果您�
 ## 仿真testreg工程
 首先确认testreg工程的当前ddr设置
 ```bash
-$ cd ~/hdk/baidu_fpga/baidu_hw_design_toolkit/prj_testreg/build/scripts/
+$ cd ~/hdk/baidu_hw_design_toolkit/prj_testreg/build/scripts/
 $ cat step_00_setup.tcl
 ```
 确认如下五行是否一致
@@ -44,7 +44,7 @@ $ cat step_00_setup.tcl
 
 执行仿真脚本
 ```bash
-$ cd ~/hdk/baidu_fpga/baidu_hw_design_toolkit/prj_testreg/usr_files/sim/script
+$ cd ~/hdk/baidu_hw_design_toolkit/prj_testreg/usr_files/sim/script
 //寄存器仿真，只检查工程中的功能寄存器
 $ sh sim_vivado.sh  
 //增加对于ddr的仿真，采用快速ddr仿真模式
@@ -55,7 +55,7 @@ $ sh sim_vivado.sh -d USE_APP_DDR -d USE_DDR4_C0 -d USE_DDR
 ## 仿真vectoradd_ddr工程
 首先确认testreg工程的当前ddr设置
 ```bash
-$ cd ~/hdk/baidu_fpga/baidu_hw_design_toolkit/prj_vectoradd_ddr/build/scripts/
+$ cd ~/hdk/baidu_hw_design_toolkit/prj_vectoradd_ddr/build/scripts/
 $ cat step_00_setup.tcl
 ```
 确认如下五行是否一致
@@ -66,7 +66,7 @@ $ cat step_00_setup.tcl
  -- set USE_AXI_DDR 1
 执行仿真脚本
 ```bash
-$ cd ~/hdk/baidu_fpga/baidu_hw_design_toolkit/prj_vectoradd_ddr/usr_files/sim/script
+$ cd ~/hdk/baidu_hw_design_toolkit/prj_vectoradd_ddr/usr_files/sim/script
 //IPI工程仿真，采用快速ddr仿真模式
 $ sh sim_vivado.sh -ipi -d FAST_SIM 
 //IPI工程仿真，采用标准ddr仿真模式
@@ -75,7 +75,7 @@ $ sh sim_vivado.sh -ipi
 ## 仿真vectoradd_ram工程
 首先确认testreg工程的当前ddr设置
 ```bash
-$ cd ~/hdk/baidu_fpga/baidu_hw_design_toolkit/vectoradd_ram/build/scripts/
+$ cd ~/hdk/baidu_hw_design_toolkit/vectoradd_ram/build/scripts/
 $ cat step_00_setup.tcl
 ```
 确认如下五行是否一致
@@ -86,7 +86,7 @@ $ cat step_00_setup.tcl
  -- set USE_AXI_DDR 0
 执行仿真脚本
 ```bash
-$ cd ~/hdk/baidu_fpga/baidu_hw_design_toolkit/vectoradd_ram/usr_files/sim/script
+$ cd ~/hdk/baidu_hw_design_toolkit/vectoradd_ram/usr_files/sim/script
 //IPI工程仿真
 $ sh sim_vivado.sh -ipi
 ```
@@ -161,61 +161,38 @@ build/projDir/Bitstreams/ver2/ | *.bit *.ltx *.bin  | 	含有您开发的动态�
 
 ## 准备事项
 
-在bin_pr_tools目录下，含有您更换您的FPGA动态部分逻辑的必要工具。
-在使用该工具包前，您需要确保FPGA的驱动程序已经加载。
-在您更换动态逻辑以前，目前动态部分已有的逻辑称为base module，您打算更换的动态逻辑称为update module。
+在sdk/mgmt_tool目录下，含有更换您的FPGA动态部分逻辑的必要工具。
+
 
 请注意：
 
-1）更换动态逻辑前，您必须已经生成了update module对应的partial.bin文件。
+1）更换动态逻辑前，您必须已经生成了自己的动态逻辑对应的partial.bin文件。
 
 您可以在如下路径找到您需要的bin文件：
 
 路径是您开发动态逻辑时使用的Baidu_HW_design_toolkit/prj_vectoradd_ddr/build/projDir/Bitstreams/ver2/
 
-2）如果目前的base module是您自己开发的，您需要准备好base module对应的partial_clear.bin文件。
+2）您需要准备好对应的partial_clear.bin文件。路径与上述一致。
 
-3）如果目前的base module是百度提供给您的最初版本，您不需要准备partial_clear.bin文件。
 
 ## 更换逻辑
 
-下面使用bin_pr_tools目录下的load_pr_bin.sh脚本。
+下面使用sdk/mgmt_tool目录下的bce_fpga_mgmt_tool更换逻辑
 
-如果您目前的base module是百度提供的最初版本。请输入以下命令：
+$ ./bce_fpga_mgmt_tool LoadPartialLogic -S 0 -P [您的动态逻辑partial.bin文件路径]
 
-$sudo sh load_pr_bin.sh base [您的动态逻辑partial.bin文件路径]
+您还可以使用bce_fpga_mgmt_tool恢复成FPGA的初始动态逻辑
 
-如果您目前的base module是您自己开发的逻辑。请输入以下命令：
-
-$sudo sh load_pr_bin.sh [您目前的base module对应的partial_clear.bin文件路径] [您的动态逻辑partial.bin文件路径]
-
-输入类似：
-```bash
-$sudo sh load_pr_bin.sh base ../baidu_hw_design_toolkit/prj_vectoradd_ram/build/projDir/Bitstreams/ver2/ver2_pr_region_partial.bin  
-OK set decouple! ...  
-OK loading clear bin! ...  
-OK loading pr region bin! ...  
-OK unset decouple! ...  
-OK soft reset rp_bd ...  
-successfully load custom bitstream!  
-partial clear bin: ./base/base_pr_region_partial_clear.bin  
-partial bin: ./ver2/ver2_pr_region_partial.bin  
-found clear bin base_pr_region_partial_clear.bin in the current partial bin file's directory  
-copy bin base_pr_region_partial_clear.bin into 'last_clear_bin' directory  
-```
-## 版本维护
-
-您使用工具包成功更换逻辑后，务必保存好update module所对应的clear bin文件，以便下次更新动态逻辑时使用；我们的工具包会尝试寻找您本次更新的update module所对应的clear bin文件，并将其拷贝到工具包的last_clear_bin目录下，并记录本次更新到last_operation.log目录。
+$ ./bce_fpga_mgmt_tool LoadDefaultPartialLogic -S 0
 
 ## 目录说明
 
 目录 | 文件 | 说明 
 ----|------|----
-bin |	含有对FPGA进行配置的bin | 不允许用户修改
-mcap | 含有对FPGA进行配置的bin  | 不允许用户修改
-last_clear_bin | 存放上一次操作时，烧录进FPGA的动态逻辑所对应的clear.bin | 如果上一次使用本工具包成功操作更换过动态逻辑，这之后又没有使用其他工具包来更新动态逻辑，那么如果您要再次更换动态逻辑，就可以用这个目录里面的clear.bit来作为base module.
+bin | 含有对FPGA进行配置的bin | 不允许用户修改
+mcap | 含有对FPGA进行配置的工具  | 不允许用户修改
 base | 含有初始状态下的base module | 不允许用户修改
-load_pr_bin.sh | 更换动态逻辑的脚本  | 	用户可以运行
+
 
 # 6.使用Vivado对您的动态逻辑进行调试
 
@@ -248,7 +225,7 @@ $open_hw_target -xvc_url 127.0.0.1:10200
 
 您可以在如下路径找到您需要的probe file文件：
 
-路径是您开发动态逻辑时使用的~/baidu_fpga/baidu_HW_design_toolkit/build/projDir/Bitstreams/ver2/ver2_rp_bd_i_partial.ltx
+路径是您开发动态逻辑时使用的~/baidu_HW_design_toolkit/prj_***/build/projDir/Bitstreams/ver2/ver2_rp_bd_i_partial.ltx
 
 <img src="./img/guide/build/img05.png"> 
 

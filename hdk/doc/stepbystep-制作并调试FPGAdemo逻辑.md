@@ -78,22 +78,13 @@ $ ll /dev/xdma0_*
 
 # 3.加载FPGA镜像
 
-在bin_pr_tools目录下，含有加载新生成的FPGA镜像的必要工具。在执行下述命令之前，您需要确保FPGA的驱动程序已经加载。
+在sdk/mgmt_tool目录下，含有加载新生成的FPGA镜像的必要工具。执行方式如下
 
 ```bash
 
-$ cd ~/hdk/bin_pr_tools
-$ sudo sh load_pr_bin.sh base ../baidu_hw_design_toolkit/prj_vectoradd_ram/build/projDir/Bitstreams/ver2/ver2_pr_region_partial.bin 
-OK set decouple! ...
-OK loading clear bin! ...
-OK loading pr region bin! ...
-OK unset decouple! ...
-OK soft reset rp_bd ...
-successfully load custom bitstream!
-partial clear bin: ./base/base_pr_region_partial_clear.bin
-partial bin: ./ver2/ver2_pr_region_partial.bin
-found clear bin base_pr_region_partial_clear.bin in the current partial bin file's directory
-copy bin base_pr_region_partial_clear.bin into 'last_clear_bin' directory
+$ cd ~/sdk/mgmt_tool
+$ ./bce_fpga_mgmt_tool LoadPartialLogic -S 0 -P ../../hdk/baidu_hw_design_toolkit/prj_vectoradd_ram/build/projDir/Bitstreams/ver2/ver2_pr_region_partial.bin
+
 ```
 
 # 4.编译&执行测试程序
