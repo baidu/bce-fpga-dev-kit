@@ -53,27 +53,32 @@ write_debug_probes $bitDir/$updateName/${updateName}.ltx
 #exec rm -rf $bitDir/$updateName/${updateName}.bit 
 #exec rm -rf $bitDir/$updateName/${updateName}.bin 
 #exec rm -rf $bitDir/$updateName/${updateName}.ltx 
+
 #generate meta_file for target_file
-set target_file $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin
-set meta_file  $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin.meta
+set target_file1 $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin
+set target_file2 $implDir/$updateName/${topModuleName}_route_design.dcp
+set target_file3 $commonDir/static_fix_dcp/${topModuleName}_static_routed.dcp
 #get md5 of target_file
-set md5_result [lindex [exec md5sum $target_file] 0]
+set md5_result1 [lindex [exec md5sum $target_file1] 0]
+set md5_result2 [lindex [exec md5sum $target_file2] 0]
+set md5_result3 [lindex [exec md5sum $target_file3] 0]
 #get time
 set timestamp [exec date "+%Y-%m-%d %H:%M:%S"]
 #write meta_file
+set meta_file  $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin.meta
 set fp_define [open $meta_file w]
-puts $fp_define "{\"md5sum\":${md5_result},\"timestamp\":${timestamp}}"
+puts $fp_define "{\"md5sum\":\"${md5_result1}\",\"timestamp\":\"${timestamp}\",\"my_top_route_design_dcp_md5sum\":\"${md5_result2}\",\"my_top_static_routed_dcp_md5sum\":\"${md5_result3}\"}"
 close $fp_define
 #generate meta_file for target_file
-set target_file $bitDir/$updateName/${updateName}_pr_region_partial.bin
+set target_file1 $bitDir/$updateName/${updateName}_pr_region_partial.bin
 set meta_file  $bitDir/$updateName/${updateName}_pr_region_partial.bin.meta
 #get md5 of target_file
-set md5_result [lindex [exec md5sum $target_file] 0]
+set md5_result1 [lindex [exec md5sum $target_file1] 0]
 #get time
 set timestamp [exec date "+%Y-%m-%d %H:%M:%S"]
 #write meta_file
 set fp_define [open $meta_file w]
-puts $fp_define "{\"md5sum\":${md5_result},\"timestamp\":${timestamp}}"
+puts $fp_define "{\"md5sum\":\"${md5_result1}\",\"timestamp\":\"${timestamp}\",\"my_top_route_design_dcp_md5sum\":\"${md5_result2}\",\"my_top_static_routed_dcp_md5sum\":\"${md5_result3}\"}"
 close $fp_define
 
 # Error and Message Reporting
