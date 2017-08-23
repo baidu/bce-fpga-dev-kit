@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<Runs Version="1" Minor="0">
-	<Run Id="rp_bd_wrapper_synth_1" LaunchDir="/home/ruanyuan/CLOUD/fpga_cloud/0509/fpga-cloud/baidu_hw_design_toolkit/build/projDir/myProj.runs/rp_bd_wrapper_synth_1" FlowId="Vivado_Synthesis" FromStepId="vivado" ToStepId="vivado"/>
-</Runs>
-

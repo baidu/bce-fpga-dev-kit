@@ -194,6 +194,7 @@
 
 /* disable debugging */
 #if (XDMA_DEBUG == 0)
+# define dbg_ext(...)
 # define dbg_desc(...)
 # define dbg_io(...)
 # define dbg_fops(...)
@@ -204,6 +205,7 @@
 # define dbg_init(...)
 #else
 /* descriptor, ioread/write, scatter-gather, transfer debugging */
+# define dbg_ext(fmt, ...) pr_debug("%s():" fmt, __func__, ##__VA_ARGS__)
 # define dbg_desc(fmt, ...) pr_debug("%s():" fmt, __func__, ##__VA_ARGS__)
 # define dbg_io(fmt, ...) pr_debug("%s():" fmt, __func__, ##__VA_ARGS__)
 # define dbg_fops(fmt, ...) pr_debug("%s():" fmt, __func__, ##__VA_ARGS__)
@@ -528,6 +530,7 @@ struct xdma_char {
 
 struct xdma_irq {
     struct xdma_dev *lro;        /* parent device */
+    u8 irq_idx;
     u8 events_irq;               /* accumulated IRQs */
     spinlock_t events_lock;      /* lock to safely update events_irq */
     wait_queue_head_t events_wq; /* wait queue to sync waiting threads */
@@ -595,6 +598,12 @@ void freeAXIGate(struct xdma_dev *lro);
 long reset_device_if_running(struct xdma_dev *lro);
 u64 featureid(struct xdma_dev *lro);
 #endif
+
+typedef void (*user_irq_handler)(struct xdma_irq *);
+extern const user_irq_handler ext_user_irq_handler_tbl[MAX_USER_IRQ];
+void ext_init(struct xdma_dev *lro);
+void ext_exit(struct xdma_dev *lro);
+long ext_user_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
 
 #endif /* XDMA_CORE_H */
 
