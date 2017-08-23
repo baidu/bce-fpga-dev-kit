@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 `timescale 1 ps / 1 ps
-`include "usr_ddr4_define.vh"
+`include "rp_if_define.vh"
 //`define FAST_SIM
 module ddr_sim #(
    parameter DATA_WIDTH = 512,
@@ -481,7 +481,7 @@ module ddr_sim #(
       `ifdef AXI_DDR
       // AXI_DDR_MIG
          ddr4_0 u_ddr4_1
-           (
+         (
             .sys_rst                          (reset_rtl),
 
             .c0_sys_clk_p                     (C1_SYS_CLK_clk_p),
@@ -777,7 +777,7 @@ module ddr_sim #(
       `ifdef AXI_DDR
       // AXI_DDR_MIG
          ddr4_0 u_ddr4_2
-           (
+         (
             .sys_rst                          (reset_rtl),
 
             .c0_sys_clk_p                     (C2_SYS_CLK_clk_p),

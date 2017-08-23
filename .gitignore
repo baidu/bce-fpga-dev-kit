@@ -97,3 +97,7 @@ CTestTestfile.cmake
 
 # astyle
 *.orig
+
+# vivado related
+.Xil/*
+usr_hls_prj/*

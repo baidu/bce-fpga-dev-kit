@@ -6,7 +6,7 @@
 source scripts/step_00_setup.tcl
 
 # Create the project.
-source scripts/step_01_createProject_nonIPI.tcl
+source scripts/step_01_createProject_IPI.tcl
 
 # Run Synthesis of the PR region.
 source scripts/step_02_synth_rp_ver2.tcl

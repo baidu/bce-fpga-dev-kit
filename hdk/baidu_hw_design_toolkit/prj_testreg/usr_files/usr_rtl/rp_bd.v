@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 `timescale 1 ps / 1 ps
-`include "usr_ddr4_define.vh"
+`include "rp_if_define.vh"
 
 module rp_bd #(
    parameter DATA_WIDTH = 256,
@@ -203,7 +203,8 @@ vio_0 vio_0 (
 
 axi_lite_ila axi_lite_ila(
    .clk(s_axi_aclk),
-   .probe0(S_AXI_LITE_arready),
+   //.probe0(S_AXI_LITE_arready),
+   .probe0(c0_init_calib_complete),
    .probe1(S_AXI_LITE_araddr),
    .probe2(S_AXI_LITE_bresp),
    .probe3(S_AXI_LITE_arvalid),

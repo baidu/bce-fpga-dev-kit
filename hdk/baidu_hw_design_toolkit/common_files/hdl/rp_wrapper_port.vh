@@ -37,6 +37,47 @@
     S_AXI_wready,
     S_AXI_wstrb,
     S_AXI_wvalid,
+
+    M_AXI_araddr,
+    M_AXI_arburst,
+    M_AXI_arcache,
+    M_AXI_arid,
+    M_AXI_arlen,
+    M_AXI_arlock,
+    M_AXI_arprot,
+    M_AXI_arqos,
+    M_AXI_arregion,
+    M_AXI_arready,
+    M_AXI_arsize,
+    M_AXI_arvalid,
+    M_AXI_awaddr,
+    M_AXI_awburst,
+    M_AXI_awcache,
+    M_AXI_awid,
+    M_AXI_awlen,
+    M_AXI_awlock,
+    M_AXI_awprot,
+    M_AXI_awqos,
+    M_AXI_awregion,
+    M_AXI_awready,
+    M_AXI_awsize,
+    M_AXI_awvalid,
+    M_AXI_bid,
+    M_AXI_bready,
+    M_AXI_bresp,
+    M_AXI_bvalid,
+    M_AXI_rdata,
+    M_AXI_rid,
+    M_AXI_rlast,
+    M_AXI_rready,
+    M_AXI_rresp,
+    M_AXI_rvalid,
+    M_AXI_wdata,
+    M_AXI_wlast,
+    M_AXI_wready,
+    M_AXI_wstrb,
+    M_AXI_wvalid,
+
     S_AXI_LITE_araddr,
     S_AXI_LITE_arprot,
     S_AXI_LITE_arready,
@@ -187,6 +228,47 @@
   output [0:0]S_AXI_wready;
   input [31:0]S_AXI_wstrb;
   input [0:0]S_AXI_wvalid;
+
+  output[63:0]M_AXI_araddr;
+  output[1:0]M_AXI_arburst;
+  output[3:0]M_AXI_arcache;
+  output[3:0]M_AXI_arid;
+  output[7:0]M_AXI_arlen;
+  output[0:0]M_AXI_arlock;
+  output[2:0]M_AXI_arprot;
+  output[3:0]M_AXI_arqos;
+  output[3:0]M_AXI_arregion;
+  input  [0:0]M_AXI_arready;
+  output[2:0]M_AXI_arsize;
+  output[0:0]M_AXI_arvalid;
+  output[63:0]M_AXI_awaddr;
+  output[1:0]M_AXI_awburst;
+  output[3:0]M_AXI_awcache;
+  output[3:0]M_AXI_awid;
+  output[7:0]M_AXI_awlen;
+  output[0:0]M_AXI_awlock;
+  output[2:0]M_AXI_awprot;
+  output[3:0]M_AXI_awqos;
+  output[3:0]M_AXI_awregion;
+  input  [0:0]M_AXI_awready;
+  output[2:0]M_AXI_awsize;
+  output[0:0]M_AXI_awvalid;
+  input  [3:0]M_AXI_bid;
+  output[0:0]M_AXI_bready;
+  input  [1:0]M_AXI_bresp;
+  input  [0:0]M_AXI_bvalid;
+  input  [255:0]M_AXI_rdata;
+  input  [3:0]M_AXI_rid;
+  input  [0:0]M_AXI_rlast;
+  output[0:0]M_AXI_rready;
+  input  [1:0]M_AXI_rresp;
+  input  [0:0]M_AXI_rvalid;
+  output[255:0]M_AXI_wdata;
+  output[0:0]M_AXI_wlast;
+  input  [0:0]M_AXI_wready;
+  output[31:0]M_AXI_wstrb;
+  output[0:0]M_AXI_wvalid;
+
   input [15:0]S_AXI_LITE_araddr;
   input [2:0]S_AXI_LITE_arprot;
   output S_AXI_LITE_arready;
@@ -277,7 +359,7 @@
 
   input s_axi_aclk;
   input s_axi_aresetn;
-  
+
   input pe_clk;
   input pe_clk_rst;
   input i_soft_rst_n;
@@ -338,6 +420,47 @@
   wire [0:0]S_AXI_wready;
   wire [31:0]S_AXI_wstrb;
   wire [0:0]S_AXI_wvalid;
+
+  wire [63:0]M_AXI_araddr;
+  wire [1:0]M_AXI_arburst;
+  wire [3:0]M_AXI_arcache;
+  wire [3:0]M_AXI_arid;
+  wire [7:0]M_AXI_arlen;
+  wire [0:0]M_AXI_arlock;
+  wire [2:0]M_AXI_arprot;
+  wire [3:0]M_AXI_arqos;
+  wire [3:0]M_AXI_arregion;
+  wire [0:0]M_AXI_arready;
+  wire [2:0]M_AXI_arsize;
+  wire [0:0]M_AXI_arvalid;
+  wire [63:0]M_AXI_awaddr;
+  wire [1:0]M_AXI_awburst;
+  wire [3:0]M_AXI_awcache;
+  wire [3:0]M_AXI_awid;
+  wire [7:0]M_AXI_awlen;
+  wire [0:0]M_AXI_awlock;
+  wire [2:0]M_AXI_awprot;
+  wire [3:0]M_AXI_awqos;
+  wire [3:0]M_AXI_awregion;
+  wire [0:0]M_AXI_awready;
+  wire [2:0]M_AXI_awsize;
+  wire [0:0]M_AXI_awvalid;
+  wire [3:0]M_AXI_bid;
+  wire [0:0]M_AXI_bready;
+  wire [1:0]M_AXI_bresp;
+  wire [0:0]M_AXI_bvalid;
+  wire [255:0]M_AXI_rdata;
+  wire [3:0]M_AXI_rid;
+  wire [0:0]M_AXI_rlast;
+  wire [0:0]M_AXI_rready;
+  wire [1:0]M_AXI_rresp;
+  wire [0:0]M_AXI_rvalid;
+  wire [255:0]M_AXI_wdata;
+  wire [0:0]M_AXI_wlast;
+  wire [0:0]M_AXI_wready;
+  wire [31:0]M_AXI_wstrb;
+  wire [0:0]M_AXI_wvalid;
+
   wire [15:0]S_AXI_LITE_araddr;
   wire [2:0]S_AXI_LITE_arprot;
   wire S_AXI_LITE_arready;

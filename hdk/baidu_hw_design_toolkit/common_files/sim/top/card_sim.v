@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 `timescale 1ns / 1ps
-`include "usr_ddr4_define.vh"
+`include "rp_if_define.vh"
 module card_sim ();
 
    localparam DATA_WIDTH = 256;
@@ -85,6 +85,50 @@ module card_sim ();
    wire                     AXI_wready;
    wire   [MASK_WIDTH-1:0]  AXI_wstrb;
    wire                     AXI_wvalid;
+
+   wire   [ADDR_WIDTH-1:0]  S_AXI_araddr;
+   wire   [1:0]             S_AXI_arburst;
+   wire   [3:0]             S_AXI_arcache;
+   wire   [ID_WIDTH-1:0]    S_AXI_arid;
+   wire   [7:0]             S_AXI_arlen;
+   wire                     S_AXI_arlock;
+   wire   [2:0]             S_AXI_arprot;
+   wire   [3:0]             S_AXI_arqos;
+   wire   [3:0]             S_AXI_arregion;
+   wire                     S_AXI_arready;
+   wire   [2:0]             S_AXI_arsize;
+   wire                     S_AXI_arvalid;
+   // AXI Slave AR channel
+   wire   [ADDR_WIDTH-1:0]  S_AXI_awaddr;
+   wire   [1:0]             S_AXI_awburst;
+   wire   [3:0]             S_AXI_awcache;
+   wire   [ID_WIDTH-1:0]    S_AXI_awid;
+   wire   [7:0]             S_AXI_awlen;
+   wire                     S_AXI_awlock;
+   wire   [2:0]             S_AXI_awprot;
+   wire   [3:0]             S_AXI_awqos;
+   wire   [3:0]             S_AXI_awregion;
+   wire                     S_AXI_awready;
+   wire   [2:0]             S_AXI_awsize;
+   wire                     S_AXI_awvalid;
+   // AXI Slave B channel
+   wire   [ID_WIDTH-1:0]    S_AXI_bid;
+   wire                     S_AXI_bready;
+   wire   [1:0]             S_AXI_bresp;
+   wire                     S_AXI_bvalid;
+   // AXI Slave R channel
+   wire   [DATA_WIDTH-1:0]  S_AXI_rdata;
+   wire   [ID_WIDTH-1:0]    S_AXI_rid;
+   wire                     S_AXI_rlast;
+   wire                     S_AXI_rready;
+   wire   [1:0]             S_AXI_rresp;
+   wire                     S_AXI_rvalid;
+   // AXI Slave W channel
+   wire   [DATA_WIDTH-1:0]  S_AXI_wdata;
+   wire                     S_AXI_wlast;
+   wire                     S_AXI_wready;
+   wire   [MASK_WIDTH-1:0]  S_AXI_wstrb;
+   wire                     S_AXI_wvalid;
 
    // AXI Lite Master AW channel
    wire   [15:0]            AXI_LITE_araddr;
@@ -253,6 +297,7 @@ module card_sim ();
    sp_sim sp_sim(
       .clk(axi_clk),
       .rst(rst),
+
       // AXI Master AW channel
       .M_AXI_araddr(AXI_araddr),
       .M_AXI_arburst(AXI_arburst),
@@ -297,6 +342,51 @@ module card_sim ();
       .M_AXI_wready(AXI_wready),
       .M_AXI_wstrb(AXI_wstrb),
       .M_AXI_wvalid(AXI_wvalid),
+
+      // AXI Slave AW channel
+      .S_AXI_araddr(S_AXI_araddr),
+      .S_AXI_arburst(S_AXI_arburst),
+      .S_AXI_arcache(S_AXI_arcache),
+      .S_AXI_arid(S_AXI_arid),
+      .S_AXI_arlen(S_AXI_arlen),
+      .S_AXI_arlock(S_AXI_arlock),
+      .S_AXI_arprot(S_AXI_arprot),
+      .S_AXI_arqos(S_AXI_arqos),
+      .S_AXI_arregion(S_AXI_arregion),
+      .S_AXI_arready(S_AXI_arready),
+      .S_AXI_arsize(S_AXI_arsize),
+      .S_AXI_arvalid(S_AXI_arvalid),
+      // AXI Slave AR channel
+      .S_AXI_awaddr(S_AXI_awaddr),
+      .S_AXI_awburst(S_AXI_awburst),
+      .S_AXI_awcache(S_AXI_awcache),
+      .S_AXI_awid(S_AXI_awid),
+      .S_AXI_awlen(S_AXI_awlen),
+      .S_AXI_awlock(S_AXI_awlock),
+      .S_AXI_awprot(S_AXI_awprot),
+      .S_AXI_awqos(S_AXI_awqos),
+      .S_AXI_awregion(S_AXI_awregion),
+      .S_AXI_awready(S_AXI_awready),
+      .S_AXI_awsize(S_AXI_awsize),
+      .S_AXI_awvalid(S_AXI_awvalid),
+      // AXI Slave B channel
+      .S_AXI_bid(S_AXI_bid),
+      .S_AXI_bready(S_AXI_bready),
+      .S_AXI_bresp(S_AXI_bresp),
+      .S_AXI_bvalid(S_AXI_bvalid),
+      // AXI Slave R channel
+      .S_AXI_rdata(S_AXI_rdata),
+      .S_AXI_rid(S_AXI_rid),
+      .S_AXI_rlast(S_AXI_rlast),
+      .S_AXI_rready(S_AXI_rready),
+      .S_AXI_rresp(S_AXI_rresp),
+      .S_AXI_rvalid(S_AXI_rvalid),
+      // AXI Slave W channel
+      .S_AXI_wdata(S_AXI_wdata),
+      .S_AXI_wlast(S_AXI_wlast),
+      .S_AXI_wready(S_AXI_wready),
+      .S_AXI_wstrb(S_AXI_wstrb),
+      .S_AXI_wvalid(S_AXI_wvalid),
 
       // AXI Lite Master AW channel
       .M_AXI_LITE_araddr(AXI_LITE_araddr),
@@ -386,6 +476,45 @@ module card_sim ();
       .S_AXI_LITE_wready(AXI_LITE_wready),
       .S_AXI_LITE_wstrb(AXI_LITE_wstrb),
       .S_AXI_LITE_wvalid(AXI_LITE_wvalid),
+      .M_AXI_araddr(S_AXI_araddr),
+      .M_AXI_arburst(S_AXI_arburst),
+      .M_AXI_arcache(S_AXI_arcache),
+      .M_AXI_arid(S_AXI_arid),
+      .M_AXI_arlen(S_AXI_arlen),
+      .M_AXI_arlock(S_AXI_arlock),
+      .M_AXI_arprot(S_AXI_arprot),
+      .M_AXI_arqos(S_AXI_arqos),
+      .M_AXI_arregion(S_AXI_arregion),
+      .M_AXI_arready(S_AXI_arready),
+      .M_AXI_arsize(S_AXI_arsize),
+      .M_AXI_arvalid(S_AXI_arvalid),
+      .M_AXI_awaddr(S_AXI_awaddr),
+      .M_AXI_awburst(S_AXI_awburst),
+      .M_AXI_awcache(S_AXI_awcache),
+      .M_AXI_awid(S_AXI_awid),
+      .M_AXI_awlen(S_AXI_awlen),
+      .M_AXI_awlock(S_AXI_awlock),
+      .M_AXI_awprot(S_AXI_awprot),
+      .M_AXI_awqos(S_AXI_awqos),
+      .M_AXI_awregion(S_AXI_awregion),
+      .M_AXI_awready(S_AXI_awready),
+      .M_AXI_awsize(S_AXI_awsize),
+      .M_AXI_awvalid(S_AXI_awvalid),
+      .M_AXI_bid(S_AXI_bid),
+      .M_AXI_bready(S_AXI_bready),
+      .M_AXI_bresp(S_AXI_bresp),
+      .M_AXI_bvalid(S_AXI_bvalid),
+      .M_AXI_rdata(S_AXI_rdata),
+      .M_AXI_rid(S_AXI_rid),
+      .M_AXI_rlast(S_AXI_rlast),
+      .M_AXI_rready(S_AXI_rready),
+      .M_AXI_rresp(S_AXI_rresp),
+      .M_AXI_rvalid(S_AXI_rvalid),
+      .M_AXI_wdata(S_AXI_wdata),
+      .M_AXI_wlast(S_AXI_wlast),
+      .M_AXI_wready(S_AXI_wready),
+      .M_AXI_wstrb(S_AXI_wstrb),
+      .M_AXI_wvalid(S_AXI_wvalid),
 
       .C0_DDR4_act_n(C0_DDR4_act_n),
       .C0_DDR4_adr(C0_DDR4_adr),
