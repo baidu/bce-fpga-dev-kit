@@ -110,10 +110,15 @@ sudo ./sample_user_irq
 
 
 进入xvc_server工具包，该工具包用于支持vivado工具使用虚拟jtag；运行工具包内的工具如下：
-
+如果是第一次执行，需要编译工具，操作如下：
 ```bash
 $ cd ~/hdk/xvc_server
-$ sudo ./xvc_pcie
+$ make
+```
+启动xvc_pcie程序，执行如下命令
+```bash
+$ cd ~/hdk/xvc_server
+$ sudo ./bin/xvc_pcie
 ```
 
 程序会在前台保持运行，您当前看不到任何输出，是正常的。
