@@ -103,7 +103,7 @@ static const char *g_bce_fpga_usage[] = {
     "   bce_fpga_mgmt_tool -h",
     "   bce_fpga_mgmt_tool --version",
     "General Command",
-    "   LoadPartialLogic/LoadDefaultPartialLogic/DescribeSlot",
+    "   LoadPartialLogic/LoadDefaultPartialLogic/DescribeSlot/ResetPartialLogic/ResetStaticLogic",
 };
 
 static const char *g_load_partial_logic_usage[] = {
@@ -145,6 +145,32 @@ static const char *g_describe_slot_usage[] = {
     "Description",
     "   The default action is to describe all FPGAs passthroughed to current VM instance. If <Slot#>",
     "   is specified, it will print extra information and performance metrics about this slot.",
+    "Option",
+    "   -S/--slot                               FPGA slot#",
+    "   -h/--help                               Print this usage",
+    "   -V/--version                            Print version",
+};
+
+static const char *g_reset_partial_logic_usage[] = {
+    "Synopsis",
+    "   bce_fpga_mgmt_tool ResetPartialLogic -S <Slot#>",
+    "   bce_fpga_mgmt_tool ResetPartialLogic -h",
+    "   bce_fpga_mgmt_tool ResetPartialLogic --version",
+    "Description",
+    "   Generate a RESET to **partial** logic of FPGA in <Slot#>",
+    "Option",
+    "   -S/--slot                               FPGA slot#",
+    "   -h/--help                               Print this usage",
+    "   -V/--version                            Print version",
+};
+
+static const char *g_reset_static_logic_usage[] = {
+    "Synopsis",
+    "   bce_fpga_mgmt_tool ResetStaticLogic -S <Slot#>",
+    "   bce_fpga_mgmt_tool ResetStaticLogic -h",
+    "   bce_fpga_mgmt_tool ResetStaticLogic --version",
+    "Description",
+    "   Generate a RESET to **static** logic of FPGA in <Slot#>",
     "Option",
     "   -S/--slot                               FPGA slot#",
     "   -h/--help                               Print this usage",
@@ -218,6 +244,8 @@ enum BCE_FPGA_CMD_WORD {
     LOAD_PARTIAL_LOGIC = 1,
     LOAD_DEFAULT_PARTIAL_LOGIC,
     DESCRIBE_SLOT,
+    RESET_PARTIAL_LOGIC,
+    RESET_STATIC_LOGIC,
 };
 
 struct bce_fpga_load_partial_logic_cmd {
@@ -233,6 +261,14 @@ struct bce_fpga_describe_slot_cmd {
     bool show_mgmt_functions;
 };
 
+struct bce_fpga_reset_partial_logic_cmd {
+    int slot;
+};
+
+struct bce_fpga_reset_static_logic_cmd {
+    int slot;
+};
+
 static struct bce_fpga_cmd {
     enum BCE_FPGA_CMD_WORD cmd;
     bool finished;
@@ -241,6 +277,8 @@ static struct bce_fpga_cmd {
     struct {
         struct bce_fpga_load_partial_logic_cmd load_partial_logic;
         struct bce_fpga_describe_slot_cmd describe_slot;
+        struct bce_fpga_reset_partial_logic_cmd reset_partial_logic;
+        struct bce_fpga_reset_static_logic_cmd reset_static_logic;
     } payload;
 } g_bce_fpga_cmd;
 
@@ -886,6 +924,150 @@ static int do_load_partial_logic()
     return 0;
 }
 
+static int parse_reset_partial_logic(int argc, char **argv)
+{
+    g_bce_fpga_cmd.payload.reset_partial_logic.slot = -1;
+
+    static struct option long_options[] = {
+        { "slot", required_argument, 0, 'S' },
+        { "help", no_argument, 0, 'h' },
+        { "version", no_argument, 0, 'V' },
+        { 0, 0, 0, 0 },
+    };
+
+    int opt = 0;
+    int long_index = 0;
+    int ret = 0;
+    optind = 2;
+    while ((opt = getopt_long(argc, argv, "S:?hV", long_options, &long_index)) != -1) {
+        switch (opt) {
+        case 'S':
+            g_bce_fpga_cmd.payload.reset_partial_logic.slot = atoi(optarg);
+            if ((g_bce_fpga_cmd.payload.reset_partial_logic.slot < 0)
+                || (g_bce_fpga_cmd.payload.reset_partial_logic.slot >= 8)) {
+                LOG(WARNING) << "Slot should be >= 0 and < 8.";
+                ret = -1;
+                goto show_usage;
+            }
+            break;
+        case 'h':
+            g_bce_fpga_cmd.finished = true;
+            goto show_usage;
+        case 'V':
+            print_version();
+            g_bce_fpga_cmd.finished = true;
+            goto out;
+        default:
+            ret = -1;
+            goto show_usage;
+        }
+    }
+
+    /* Check slot */
+    if (g_bce_fpga_cmd.payload.reset_partial_logic.slot == -1) {
+        LOG(WARNING) << "You MUST specify a valid slot with `-S` option.";
+        ret = -1;
+        goto show_usage;
+    }
+    if (!llapi::g_bce_fpga_devices[g_bce_fpga_cmd.payload.reset_partial_logic.slot].present) {
+        LOG(WARNING) << "Slot [" << g_bce_fpga_cmd.payload.reset_partial_logic.slot
+                     << "] is not present.";
+        ret = -1;
+        goto show_usage;
+    }
+
+    goto out;
+
+show_usage:
+    print_usage(g_reset_partial_logic_usage, ARRAY_SIZE(g_reset_partial_logic_usage));
+out:
+    return ret;
+}
+
+static int do_reset_partial_logic()
+{
+    struct bce_fpga_reset_partial_logic_cmd& reset_partial_logic =
+                g_bce_fpga_cmd.payload.reset_partial_logic;
+
+    LOG(INFO) << "Reset partial logic ...";
+    llapi::reg_write_32(reset_partial_logic.slot, 248, 0);
+    LOG(INFO) << "Reset partial logic done";
+
+    return 0;
+}
+
+static int parse_reset_static_logic(int argc, char **argv)
+{
+    g_bce_fpga_cmd.payload.reset_static_logic.slot = -1;
+
+    static struct option long_options[] = {
+        { "slot", required_argument, 0, 'S' },
+        { "help", no_argument, 0, 'h' },
+        { "version", no_argument, 0, 'V' },
+        { 0, 0, 0, 0 },
+    };
+
+    int opt = 0;
+    int long_index = 0;
+    int ret = 0;
+    optind = 2;
+    while ((opt = getopt_long(argc, argv, "S:?hV", long_options, &long_index)) != -1) {
+        switch (opt) {
+        case 'S':
+            g_bce_fpga_cmd.payload.reset_static_logic.slot = atoi(optarg);
+            if ((g_bce_fpga_cmd.payload.reset_static_logic.slot < 0)
+                || (g_bce_fpga_cmd.payload.reset_static_logic.slot >= 8)) {
+                LOG(WARNING) << "Slot should be >= 0 and < 8.";
+                ret = -1;
+                goto show_usage;
+            }
+            break;
+        case 'h':
+            g_bce_fpga_cmd.finished = true;
+            goto show_usage;
+        case 'V':
+            print_version();
+            g_bce_fpga_cmd.finished = true;
+            goto out;
+        default:
+            ret = -1;
+            goto show_usage;
+        }
+    }
+
+    /* Check slot */
+    if (g_bce_fpga_cmd.payload.reset_static_logic.slot == -1) {
+        LOG(WARNING) << "You MUST specify a valid slot with `-S` option.";
+        ret = -1;
+        goto show_usage;
+    }
+    if (!llapi::g_bce_fpga_devices[g_bce_fpga_cmd.payload.reset_static_logic.slot].present) {
+        LOG(WARNING) << "Slot [" << g_bce_fpga_cmd.payload.reset_static_logic.slot
+                     << "] is not present.";
+        ret = -1;
+        goto show_usage;
+    }
+
+    goto out;
+
+show_usage:
+    print_usage(g_reset_static_logic_usage, ARRAY_SIZE(g_reset_static_logic_usage));
+out:
+    return ret;
+}
+
+static int do_reset_static_logic()
+{
+    struct bce_fpga_reset_static_logic_cmd& reset_static_logic =
+                g_bce_fpga_cmd.payload.reset_static_logic;
+
+    LOG(INFO) << "Reset static logic ...";
+    llapi::reg_write_32(reset_static_logic.slot, 252, 0);
+    LOG(INFO) << "Reset static logic done";
+
+    return 0;
+}
+
 static struct bce_fpga_cmd_parse_ent {
     const char *str;
     enum BCE_FPGA_CMD_WORD cmd;
@@ -903,6 +1085,14 @@ static struct bce_fpga_cmd_parse_ent {
     {
         "DescribeSlot", DESCRIBE_SLOT,
         &parse_describe_slot, &do_describe_slot
+    },
+    {
+        "ResetPartialLogic", RESET_PARTIAL_LOGIC,
+        &parse_reset_partial_logic, &do_reset_partial_logic
+    },
+    {
+        "ResetStaticLogic", RESET_STATIC_LOGIC,
+        &parse_reset_static_logic, &do_reset_static_logic
     },
 };
 
