@@ -834,52 +834,84 @@ static int do_load_partial_logic()
 {
     struct bce_fpga_load_partial_logic_cmd& load_partial_logic =
                 g_bce_fpga_cmd.payload.load_partial_logic;
+    int ret = 0;
+    argc_argv_parser clear_parser;
+    argc_argv_parser partial_parser;
+    std::string fmt_time;
 
     LOG(INFO) << "Set decouple ...";
-    llapi::reg_write_32(load_partial_logic.slot, 8, 1);
+    ret = llapi::reg_write_32(load_partial_logic.slot, 8, 1);
+    if (ret != 0) {
+        LOG(WARNING) << "Error in llapi::reg_write_32";
+        ret = -1;
+        goto out;
+    }
     sleep(1);
     LOG(INFO) << "Set decouple done";
 
     LOG(INFO) << "Download clear bin ...";
-    argc_argv_parser clear_parser;
     clear_parser.append("mcap -x 9038 -C");
     clear_parser.append(load_partial_logic.last_clear_bin_path);
     //clear_parser.dump();
     /* there's getopt() inside mcap_main, reset `optind` first */
     optind = 1;
-    mcap_main(clear_parser.argc(), const_cast<char **>(clear_parser.argv()));
+    ret = mcap_main(clear_parser.argc(), const_cast<char **>(clear_parser.argv()));
+    if (ret != 0) {
+        LOG(WARNING) << "Error in mcap_main when downloading clear bin";
+        ret = -1;
+        goto out;
+    }
+    sleep(1);
     LOG(INFO) << "Download clear bin done";
 
     LOG(INFO) << "Download partial bin ...";
-    argc_argv_parser partial_parser;
     partial_parser.append("mcap -x 9038 -p");
     partial_parser.append(load_partial_logic.partial_bin_path);
     //partial_parser.dump();
     /* there's getopt() inside mcap_main, reset `optind` first */
     optind = 1;
-    mcap_main(partial_parser.argc(), const_cast<char **>(partial_parser.argv()));
+    ret = mcap_main(partial_parser.argc(), const_cast<char **>(partial_parser.argv()));
+    if (ret != 0) {
+        LOG(WARNING) << "Error in mcap_main when downloading partial bin";
+        ret = -1;
+        goto out;
+    }
+    sleep(1);
     LOG(INFO) << "Download partial bin done";
 
     LOG(INFO) << "Unset decouple ...";
-    llapi::reg_write_32(load_partial_logic.slot, 8, 0);
+    ret = llapi::reg_write_32(load_partial_logic.slot, 8, 0);
+    if (ret != 0) {
+        LOG(WARNING) << "Error in llapi::reg_write_32";
+        ret = -1;
+        goto out;
+    }
     sleep(1);
     LOG(INFO) << "Unset decouple done";
 
     LOG(INFO) << "Reset ...";
-    llapi::reg_write_32(load_partial_logic.slot, 248, 0);
+    ret = llapi::reg_write_32(load_partial_logic.slot, 248, 0);
+    if (ret != 0) {
+        LOG(WARNING) << "Error in llapi::reg_write_32";
+        ret = -1;
+        goto out;
+    }
+    sleep(1);
     LOG(INFO) << "Reset done";
 
     LOG(INFO) << "Write clear bin md5 ...";
-    unsigned char hex[16];
-    std::string str = md5sum(load_partial_logic.clear_bin_path);
-    md5sum_std_string_2_hex(str, hex);
-    llapi::reg_write_32(load_partial_logic.slot, 0x100, *(uint32_t *)&hex[0]);
-    llapi::reg_write_32(load_partial_logic.slot, 0x104, *(uint32_t *)&hex[4]);
-    llapi::reg_write_32(load_partial_logic.slot, 0x108, *(uint32_t *)&hex[8]);
-    llapi::reg_write_32(load_partial_logic.slot, 0x10c, *(uint32_t *)&hex[12]);
+    {
+        unsigned char hex[16];
+        std::string str = md5sum(load_partial_logic.clear_bin_path);
+        md5sum_std_string_2_hex(str, hex);
+        llapi::reg_write_32(load_partial_logic.slot, 0x100, *(uint32_t *)&hex[0]);
+        llapi::reg_write_32(load_partial_logic.slot, 0x104, *(uint32_t *)&hex[4]);
+        llapi::reg_write_32(load_partial_logic.slot, 0x108, *(uint32_t *)&hex[8]);
+        llapi::reg_write_32(load_partial_logic.slot, 0x10c, *(uint32_t *)&hex[12]);
+    }
     LOG(INFO) << "Write clear bin md5 done";
 
-    std::string fmt_time = get_fmt_time_string();
+    fmt_time = get_fmt_time_string();
     {
         std::string clear_bin_basename = fmt_time + " partial_clear.bin";
         std::string clear_meta_basename = fmt_time + " partial_clear.bin.meta";
@@ -921,7 +953,8 @@ static int do_load_partial_logic()
     llapi::reg_read_32(load_partial_logic.slot, 4, &value);
     g_db["slots"][load_partial_logic.slot]["status_after_load"] = value;
 
-    return 0;
+out:
+    return ret;
 }
 
 static int parse_reset_partial_logic(int argc, char **argv)
