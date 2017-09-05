@@ -9,7 +9,7 @@
 ## 编译安装
 
 * `bce_fpga_mgmt_tool`采用[cmake](https://cmake.org/)作为其构建系统，请确保虚拟机实例中已安装2.6版本以上的cmake。否则，请先执行`sudo yum -y install cmake`。
-* `bce_fpga_mgmt_tool`应使用支持C++11标准的较新版本g++编译，直接使用虚拟机实例中yum源内的软件包即可。如未安装g++或其余编译工具链，请先执行`sudo yum -y install binutils gcc-c++`。
+* `bce_fpga_mgmt_tool`应使用支持C++11标准的较新版本g++编译，直接使用虚拟机实例中yum源内的软件包即可。如未安装g++或其余编译工具链，请先执行`sudo yum -y install binutils gcc-c++ zlib-devel`。
 * 在当前目录下执行`cmake .`，cmake构建系统会自动检查编译环境并生成Makefile。
 * 在当前目录下执行`make`，如下图所示，命令结束后当前目录下产出`bce_fpga_mgmt_tool`可执行文件证明编译成功。
 
@@ -93,13 +93,32 @@
 
 ### RESET动态逻辑 `bce_fpga_mgmt_tool ResetPartialLogic`
 
-TBD
+执行`bce_fpga_mgmt_tool ResetPartialLogic`，程序会对指定FPGA的动态逻辑做RESET操作。 **如遇FPGA当前动态逻辑工作异常，可于卸载驱动后尝试此操作。**
+
+`ResetPartialLogic`子命令支持的参数列表如下：
+
+| 参数 | 说明 |
+| ---- | ---- |
+| **-S/--slot** | 待操作FPGA的Slot# |
+| **-h/--help** | 打印该子命令的帮助信息 |
+| **-V/--version** | 打印程序的版本信息 |
 
 ### RESET静态逻辑 `bce_fpga_mgmt_tool ResetStaticLogic`
 
-TBD
+执行`bce_fpga_mgmt_tool ResetStaticLogic`，程序会对指定FPGA的静态逻辑做RESET操作。 **如遇FPGA当前动/静态逻辑工作异常，可于卸载驱动后尝试此操作。**
+
+`ResetStaticLogic`子命令支持的参数列表如下：
+
+| 参数 | 说明 |
+| ---- | ---- |
+| **-S/--slot** | 待操作FPGA的Slot# |
+| **-h/--help** | 打印该子命令的帮助信息 |
+| **-V/--version** | 打印程序的版本信息 |
 
 ## Q&A
 
 * **Q: 为何`bce_fpga_mgmt_tool`需要以root权限运行？**
     * A: `bce_fpga_mgmt_tool`的正常工作依赖于读写透传后FPGA的PCIe配置空间或BAR空间，甚或访问内核pci_stub驱动暴露的一些sysfs文件，因此请以root权限运行该程序或于命令行首部添加`sudo`。
+
+* **Q: 编译环节报错`/usr/bin/ld: cannot find -lz`应如何解决？**
+    * A: 请在`make`前先执行`sudo yum -y install zlib-devel`从源中安装zlib编译环境。

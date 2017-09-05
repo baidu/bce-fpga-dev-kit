@@ -60,7 +60,8 @@ static const std::string g_db_path = g_tmp_dir_path + "/db";
 static const std::string EXPECTED_PARTIAL_SUFFIX = "partial.bin";
 static const std::string EXPECTED_CLEAR_SUFFIX = "partial_clear.bin";
 static std::map<std::string, uint32_t> g_static_dcp_md5sum_2_version = {
-    { "e41a401bcf6637eb0cf79643660df28c", 0x00000103 }
+    { "e41a401bcf6637eb0cf79643660df28c", 0x00000103 },
+    { "6e60f7d0e98a415c81b456adbd2da5b7", 0x00000104 },
 };
 
 static std::string md5sum_hex_2_std_string(const unsigned char hex[16])
@@ -103,7 +104,7 @@ static const char *g_bce_fpga_usage[] = {
     "   bce_fpga_mgmt_tool -h",
     "   bce_fpga_mgmt_tool --version",
     "General Command",
-    "   LoadPartialLogic/LoadDefaultPartialLogic/DescribeSlot",
+    "   LoadPartialLogic/LoadDefaultPartialLogic/DescribeSlot/ResetPartialLogic/ResetStaticLogic",
 };
 
 static const char *g_load_partial_logic_usage[] = {
@@ -145,6 +146,32 @@ static const char *g_describe_slot_usage[] = {
     "Description",
     "   The default action is to describe all FPGAs passthroughed to current VM instance. If <Slot#>",
     "   is specified, it will print extra information and performance metrics about this slot.",
+    "Option",
+    "   -S/--slot                               FPGA slot#",
+    "   -h/--help                               Print this usage",
+    "   -V/--version                            Print version",
+};
+
+static const char *g_reset_partial_logic_usage[] = {
+    "Synopsis",
+    "   bce_fpga_mgmt_tool ResetPartialLogic -S <Slot#>",
+    "   bce_fpga_mgmt_tool ResetPartialLogic -h",
+    "   bce_fpga_mgmt_tool ResetPartialLogic --version",
+    "Description",
+    "   Generate a RESET to **partial** logic of FPGA in <Slot#>",
+    "Option",
+    "   -S/--slot                               FPGA slot#",
+    "   -h/--help                               Print this usage",
+    "   -V/--version                            Print version",
+};
+
+static const char *g_reset_static_logic_usage[] = {
+    "Synopsis",
+    "   bce_fpga_mgmt_tool ResetStaticLogic -S <Slot#>",
+    "   bce_fpga_mgmt_tool ResetStaticLogic -h",
+    "   bce_fpga_mgmt_tool ResetStaticLogic --version",
+    "Description",
+    "   Generate a RESET to **static** logic of FPGA in <Slot#>",
     "Option",
     "   -S/--slot                               FPGA slot#",
     "   -h/--help                               Print this usage",
@@ -218,6 +245,8 @@ enum BCE_FPGA_CMD_WORD {
     LOAD_PARTIAL_LOGIC = 1,
     LOAD_DEFAULT_PARTIAL_LOGIC,
     DESCRIBE_SLOT,
+    RESET_PARTIAL_LOGIC,
+    RESET_STATIC_LOGIC,
 };
 
 struct bce_fpga_load_partial_logic_cmd {
@@ -233,6 +262,14 @@ struct bce_fpga_describe_slot_cmd {
     bool show_mgmt_functions;
 };
 
+struct bce_fpga_reset_partial_logic_cmd {
+    int slot;
+};
+
+struct bce_fpga_reset_static_logic_cmd {
+    int slot;
+};
+
 static struct bce_fpga_cmd {
     enum BCE_FPGA_CMD_WORD cmd;
     bool finished;
@@ -241,6 +278,8 @@ static struct bce_fpga_cmd {
     struct {
         struct bce_fpga_load_partial_logic_cmd load_partial_logic;
         struct bce_fpga_describe_slot_cmd describe_slot;
+        struct bce_fpga_reset_partial_logic_cmd reset_partial_logic;
+        struct bce_fpga_reset_static_logic_cmd reset_static_logic;
     } payload;
 } g_bce_fpga_cmd;
 
@@ -796,52 +835,84 @@ static int do_load_partial_logic()
 {
     struct bce_fpga_load_partial_logic_cmd& load_partial_logic =
                 g_bce_fpga_cmd.payload.load_partial_logic;
+    int ret = 0;
+    argc_argv_parser clear_parser;
+    argc_argv_parser partial_parser;
+    std::string fmt_time;
 
     LOG(INFO) << "Set decouple ...";
-    llapi::reg_write_32(load_partial_logic.slot, 8, 1);
+    ret = llapi::reg_write_32(load_partial_logic.slot, 8, 1);
+    if (ret != 0) {
+        LOG(WARNING) << "Error in llapi::reg_write_32";
+        ret = -1;
+        goto out;
+    }
     sleep(1);
     LOG(INFO) << "Set decouple done";
 
     LOG(INFO) << "Download clear bin ...";
-    argc_argv_parser clear_parser;
     clear_parser.append("mcap -x 9038 -C");
     clear_parser.append(load_partial_logic.last_clear_bin_path);
     //clear_parser.dump();
     /* there's getopt() inside mcap_main, reset `optind` first */
     optind = 1;
-    mcap_main(clear_parser.argc(), const_cast<char **>(clear_parser.argv()));
+    ret = mcap_main(clear_parser.argc(), const_cast<char **>(clear_parser.argv()));
+    if (ret != 0) {
+        LOG(WARNING) << "Error in mcap_main when downloading clear bin";
+        ret = -1;
+        goto out;
+    }
+    sleep(1);
     LOG(INFO) << "Download clear bin done";
 
     LOG(INFO) << "Download partial bin ...";
-    argc_argv_parser partial_parser;
     partial_parser.append("mcap -x 9038 -p");
     partial_parser.append(load_partial_logic.partial_bin_path);
     //partial_parser.dump();
     /* there's getopt() inside mcap_main, reset `optind` first */
     optind = 1;
-    mcap_main(partial_parser.argc(), const_cast<char **>(partial_parser.argv()));
+    ret = mcap_main(partial_parser.argc(), const_cast<char **>(partial_parser.argv()));
+    if (ret != 0) {
+        LOG(WARNING) << "Error in mcap_main when downloading partial bin";
+        ret = -1;
+        goto out;
+    }
+    sleep(1);
     LOG(INFO) << "Download partial bin done";
 
     LOG(INFO) << "Unset decouple ...";
-    llapi::reg_write_32(load_partial_logic.slot, 8, 0);
+    ret = llapi::reg_write_32(load_partial_logic.slot, 8, 0);
+    if (ret != 0) {
+        LOG(WARNING) << "Error in llapi::reg_write_32";
+        ret = -1;
+        goto out;
+    }
     sleep(1);
     LOG(INFO) << "Unset decouple done";
 
     LOG(INFO) << "Reset ...";
-    llapi::reg_write_32(load_partial_logic.slot, 248, 0);
+    ret = llapi::reg_write_32(load_partial_logic.slot, 248, 0);
+    if (ret != 0) {
+        LOG(WARNING) << "Error in llapi::reg_write_32";
+        ret = -1;
+        goto out;
+    }
+    sleep(1);
     LOG(INFO) << "Reset done";
 
     LOG(INFO) << "Write clear bin md5 ...";
-    unsigned char hex[16];
-    std::string str = md5sum(load_partial_logic.clear_bin_path);
-    md5sum_std_string_2_hex(str, hex);
-    llapi::reg_write_32(load_partial_logic.slot, 0x100, *(uint32_t *)&hex[0]);
-    llapi::reg_write_32(load_partial_logic.slot, 0x104, *(uint32_t *)&hex[4]);
-    llapi::reg_write_32(load_partial_logic.slot, 0x108, *(uint32_t *)&hex[8]);
-    llapi::reg_write_32(load_partial_logic.slot, 0x10c, *(uint32_t *)&hex[12]);
+    {
+        unsigned char hex[16];
+        std::string str = md5sum(load_partial_logic.clear_bin_path);
+        md5sum_std_string_2_hex(str, hex);
+        llapi::reg_write_32(load_partial_logic.slot, 0x100, *(uint32_t *)&hex[0]);
+        llapi::reg_write_32(load_partial_logic.slot, 0x104, *(uint32_t *)&hex[4]);
+        llapi::reg_write_32(load_partial_logic.slot, 0x108, *(uint32_t *)&hex[8]);
+        llapi::reg_write_32(load_partial_logic.slot, 0x10c, *(uint32_t *)&hex[12]);
+    }
     LOG(INFO) << "Write clear bin md5 done";
 
-    std::string fmt_time = get_fmt_time_string();
+    fmt_time = get_fmt_time_string();
     {
         std::string clear_bin_basename = fmt_time + " partial_clear.bin";
         std::string clear_meta_basename = fmt_time + " partial_clear.bin.meta";
@@ -883,6 +954,151 @@ static int do_load_partial_logic()
     llapi::reg_read_32(load_partial_logic.slot, 4, &value);
     g_db["slots"][load_partial_logic.slot]["status_after_load"] = value;
 
+out:
+    return ret;
+}
+
+static int parse_reset_partial_logic(int argc, char **argv)
+{
+    g_bce_fpga_cmd.payload.reset_partial_logic.slot = -1;
+
+    static struct option long_options[] = {
+        { "slot", required_argument, 0, 'S' },
+        { "help", no_argument, 0, 'h' },
+        { "version", no_argument, 0, 'V' },
+        { 0, 0, 0, 0 },
+    };
+
+    int opt = 0;
+    int long_index = 0;
+    int ret = 0;
+    optind = 2;
+    while ((opt = getopt_long(argc, argv, "S:?hV", long_options, &long_index)) != -1) {
+        switch (opt) {
+        case 'S':
+            g_bce_fpga_cmd.payload.reset_partial_logic.slot = atoi(optarg);
+            if ((g_bce_fpga_cmd.payload.reset_partial_logic.slot < 0)
+                || (g_bce_fpga_cmd.payload.reset_partial_logic.slot >= 8)) {
+                LOG(WARNING) << "Slot should be >= 0 and < 8.";
+                ret = -1;
+                goto show_usage;
+            }
+            break;
+        case 'h':
+            g_bce_fpga_cmd.finished = true;
+            goto show_usage;
+        case 'V':
+            print_version();
+            g_bce_fpga_cmd.finished = true;
+            goto out;
+        default:
+            ret = -1;
+            goto show_usage;
+        }
+    }
+
+    /* Check slot */
+    if (g_bce_fpga_cmd.payload.reset_partial_logic.slot == -1) {
+        LOG(WARNING) << "You MUST specify a valid slot with `-S` option.";
+        ret = -1;
+        goto show_usage;
+    }
+    if (!llapi::g_bce_fpga_devices[g_bce_fpga_cmd.payload.reset_partial_logic.slot].present) {
+        LOG(WARNING) << "Slot [" << g_bce_fpga_cmd.payload.reset_partial_logic.slot
+                     << "] is not present.";
+        ret = -1;
+        goto show_usage;
+    }
+
+    goto out;
+
+show_usage:
+    print_usage(g_reset_partial_logic_usage, ARRAY_SIZE(g_reset_partial_logic_usage));
+out:
+    return ret;
+}
+
+static int do_reset_partial_logic()
+{
+    struct bce_fpga_reset_partial_logic_cmd& reset_partial_logic =
+                g_bce_fpga_cmd.payload.reset_partial_logic;
+
+    LOG(INFO) << "Reset partial logic ...";
+    llapi::reg_write_32(reset_partial_logic.slot, 248, 0);
+    LOG(INFO) << "Reset partial logic done";
+
+    return 0;
+}
+
+static int parse_reset_static_logic(int argc, char **argv)
+{
+    g_bce_fpga_cmd.payload.reset_static_logic.slot = -1;
+
+    static struct option long_options[] = {
+        { "slot", required_argument, 0, 'S' },
+        { "help", no_argument, 0, 'h' },
+        { "version", no_argument, 0, 'V' },
+        { 0, 0, 0, 0 },
+    };
+
+    int opt = 0;
+    int long_index = 0;
+    int ret = 0;
+    optind = 2;
+    while ((opt = getopt_long(argc, argv, "S:?hV", long_options, &long_index)) != -1) {
+        switch (opt) {
+        case 'S':
+            g_bce_fpga_cmd.payload.reset_static_logic.slot = atoi(optarg);
+            if ((g_bce_fpga_cmd.payload.reset_static_logic.slot < 0)
+                || (g_bce_fpga_cmd.payload.reset_static_logic.slot >= 8)) {
+                LOG(WARNING) << "Slot should be >= 0 and < 8.";
+                ret = -1;
+                goto show_usage;
+            }
+            break;
+        case 'h':
+            g_bce_fpga_cmd.finished = true;
+            goto show_usage;
+        case 'V':
+            print_version();
+            g_bce_fpga_cmd.finished = true;
+            goto out;
+        default:
+            ret = -1;
+            goto show_usage;
+        }
+    }
+
+    /* Check slot */
+    if (g_bce_fpga_cmd.payload.reset_static_logic.slot == -1) {
+        LOG(WARNING) << "You MUST specify a valid slot with `-S` option.";
+        ret = -1;
+        goto show_usage;
+    }
+    if (!llapi::g_bce_fpga_devices[g_bce_fpga_cmd.payload.reset_static_logic.slot].present) {
+        LOG(WARNING) << "Slot [" << g_bce_fpga_cmd.payload.reset_static_logic.slot
+                     << "] is not present.";
+        ret = -1;
+        goto show_usage;
+    }
+
+    goto out;
+
+show_usage:
+    print_usage(g_reset_static_logic_usage, ARRAY_SIZE(g_reset_static_logic_usage));
+out:
+    return ret;
+}
+
+static int do_reset_static_logic()
+{
+    struct bce_fpga_reset_static_logic_cmd& reset_static_logic =
+                g_bce_fpga_cmd.payload.reset_static_logic;
+
+    LOG(INFO) << "Reset static logic ...";
+    llapi::reg_write_32(reset_static_logic.slot, 252, 0);
+    LOG(INFO) << "Reset static logic done";
+
     return 0;
 }
 
@@ -903,6 +1119,14 @@ static struct bce_fpga_cmd_parse_ent {
     {
         "DescribeSlot", DESCRIBE_SLOT,
         &parse_describe_slot, &do_describe_slot
+    },
+    {
+        "ResetPartialLogic", RESET_PARTIAL_LOGIC,
+        &parse_reset_partial_logic, &do_reset_partial_logic
+    },
+    {
+        "ResetStaticLogic", RESET_STATIC_LOGIC,
+        &parse_reset_static_logic, &do_reset_static_logic
     },
 };
 
