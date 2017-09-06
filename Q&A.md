@@ -1,8 +1,8 @@
 * **Q: 经百度云控制台webvnc登录桌面环境后，vivado调试时波形图不能正确显示，并可见java运行时异常，该如何解决？**
 
 <figure class="half">
-    <img src="{{ site.url }}/sdk/doc/img/qa_vivado_waveform.png">
-    <img src="{{ site.url }}/sdk/doc/img/qa_vivado_java_exception.png">
+    <img src="sdk/doc/img/qa_vivado_waveform.png">
+    <img src="sdk/doc/img/qa_vivado_java_exception.png">
 </figure>
 
 ![qa_vivado_waveform](./sdk/doc/img/qa_vivado_waveform.png)
