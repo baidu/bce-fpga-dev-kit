@@ -37,7 +37,7 @@
 #if XDMA_GPL
 MODULE_LICENSE("GPL v2");
 #else
-MODULE_LICENSE("Copyright (C) 2009-2016 Sidebranch and Xilinx, Inc.");
+MODULE_LICENSE("Copyright (C) 2009-2017 Sidebranch and Xilinx, Inc.");
 #endif
 MODULE_AUTHOR("Leon Woestenberg <leon@sidebranch.com>,"
               "Sonal Santan <sonal.santan@xilinx.com>,"
@@ -1681,8 +1681,8 @@ static irqreturn_t xdma_isr(int irq, void *dev_id)
 
     /* read user interrupts - this read also flushes the above write */
     user_irq = read_register(&irq_regs->user_int_request);
-    /* to clear already triggered user interrupts */
-    write_register(user_irq, lro->bar[0] + ((64 + 63) << 10));
+    /* XXX: to clear already triggered user interrupts */
+    /*write_register(user_irq, lro->bar[0] + ((64 + 63) << 10));*/
     dbg_irq("user_irq = 0x%08x\n", user_irq);
 
     for (user_irq_bit = 0; user_irq_bit < MAX_USER_IRQ; user_irq_bit++) {
@@ -3273,7 +3273,7 @@ static int transfer_monitor(struct xdma_engine *engine, struct xdma_transfer *tr
              * in **transfer_data**. Retval can be ignored.
              */
             wait_event_timeout(transfer->wq, transfer->state != TRANSFER_STATE_SUBMITTED,
-                    (POLL_TIMEOUT_SECONDS * HZ));
+                               (POLL_TIMEOUT_SECONDS * HZ));
         }
     }
 
@@ -3627,6 +3627,7 @@ static ssize_t char_sgdma_read_cyclic(struct file *file, char __user *buf)
     BUG_ON(!transfer);
 
     dbg_tfr("char_sgdma_read_cyclic()");
+    engine->user_buffer_index = 0;
 
     do {
         rc = transfer_monitor_cyclic(engine, transfer);
@@ -4442,9 +4443,12 @@ static int msix_irq_setup(struct xdma_dev *lro)
         while (--i >= 0) {
             free_irq(lro->entry[i].vector, &lro->user_irq[i]);
         }
+        return -1;
     }
 
-    return rc;
+    lro->irq_user_count = MAX_USER_IRQ;
+
+    return 0;
 }
 
 static void irq_teardown(struct xdma_dev *lro)
@@ -4454,7 +4458,7 @@ static void irq_teardown(struct xdma_dev *lro)
     BUG_ON(!lro);
 
     if (lro->msix_enabled) {
-        for (i = 0; i < MAX_USER_IRQ; i++) {
+        for (i = 0; i < lro->irq_user_count; i++) {
             dbg_init("Releasing IRQ#%d\n", lro->entry[i].vector);
             free_irq(lro->entry[i].vector, &lro->user_irq[i]);
         }
@@ -4948,12 +4952,11 @@ static int create_interfaces(struct xdma_dev *lro)
         lro->bypass_char_dev_base = create_sg_char(lro, lro->bypass_bar_idx, NULL, CHAR_BYPASS);
     }
 
-    return rc;
+    return 0;
 
 fail:
-    rc = -1;
     destroy_interfaces(lro);
-    return rc;
+    return -1;
 }
 
 static int probe_engines(struct xdma_dev *lro)
@@ -4978,13 +4981,13 @@ static int probe_engines(struct xdma_dev *lro)
         }
     }
 
-    return rc;
+    return 0;
 
 fail:
     dbg_init("Engine probing failed - unwinding\n");
     remove_engines(lro);
 
-    return rc;
+    return -1;
 }
 
 static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
@@ -5010,7 +5013,8 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
     /* allocate zeroed device book keeping structure */
     lro = alloc_dev_instance(pdev);
     if (!lro) {
-        goto err_alloc;
+        dbg_init("alloc_dev_instance() failed, out of memory.\n");
+        return -ENOMEM;
     }
 
 #if SD_ACCEL
@@ -5034,7 +5038,7 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
     rc = pci_enable_device(pdev);
     if (rc) {
         dbg_init("pci_enable_device() failed, rc = %d.\n", rc);
-        goto err_enable;
+        goto free_alloc;
     }
 
     /* enable bus master capability */
@@ -5043,7 +5047,7 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
 
     rc = probe_scan_for_msi(lro, pdev);
     if (rc < 0) {
-        goto err_scan_msi;
+        goto disable_msi;
     }
 
     /* known root complex's max read request sizes */
@@ -5054,12 +5058,12 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
 
     rc = request_regions(lro, pdev);
     if (rc) {
-        goto err_regions;
+        goto rel_region;
     }
 
     rc = map_bars(lro, pdev);
     if (rc) {
-        goto err_map;
+        goto unmap_bar;
     }
 
     /* SD_Accel */
@@ -5076,12 +5080,12 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
 
     rc = set_dma_mask(pdev);
     if (rc) {
-        goto err_mask;
+        goto unmap_bar;
     }
 
     rc = irq_setup(lro, pdev);
     if (rc) {
-        goto err_interrupts;
+        goto disable_irq;
     }
 
     /* enable credit system only in AXI-Stream mode*/
@@ -5095,12 +5099,12 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
 
     rc = probe_engines(lro);
     if (rc) {
-        goto err_engines;
+        goto rmv_engine;
     }
 
     rc = create_interfaces(lro);
     if (rc) {
-        goto err_interfaces;
+        goto rmv_interface;
     }
 
     /* enable user interrupts */
@@ -5134,7 +5138,7 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
     rc = device_create_file(&pdev->dev, &dev_attr_xdma_dev_instance);
     if (rc) {
         printk(KERN_DEBUG "Failed to create device file \n");
-        goto err_sgdma_cdev;
+        goto rmv_cdev;
     } else {
         printk(KERN_DEBUG "Device file created successfully\n");
     }
@@ -5142,35 +5146,41 @@ static int probe(struct pci_dev *pdev, const struct pci_device_id *id)
     ext_init(lro);
 
     if (rc == 0) {
-        goto end;
+        return 0;
     }
 
-err_sgdma_cdev:
-err_interfaces:
+rmv_cdev:
+    dev_present[lro->instance] = 0;
+    device_remove_file(&pdev->dev, &dev_attr_xdma_dev_instance);
+rmv_interface:
+    destroy_interfaces(lro);
+rmv_engine:
     remove_engines(lro);
-err_engines:
+disable_irq:
     irq_teardown(lro);
-err_interrupts:
-err_mask:
+unmap_bar:
     unmap_bars(lro, pdev);
-err_map:
+rel_region:
     if (lro->got_regions) {
         pci_release_regions(pdev);
+        lro->got_regions = 0;
     }
-err_regions:
-    if (lro->msi_enabled) {
+disable_msi:
+    if (lro->msix_enabled) {
+        pci_disable_msix(pdev);
+        lro->msix_enabled = 0;
+    } else if (lro->msi_enabled) {
         pci_disable_msi(pdev);
+        lro->msi_enabled = 0;
     }
-err_scan_msi:
     if (!lro->regions_in_use) {
         pci_disable_device(pdev);
     }
-err_enable:
+free_alloc:
     kfree(lro);
-err_alloc:
-end:
+
     dbg_init("probe() returning %d\n", rc);
-    return rc;
+    return -1;
 }
 
 static void remove(struct pci_dev *pdev)
