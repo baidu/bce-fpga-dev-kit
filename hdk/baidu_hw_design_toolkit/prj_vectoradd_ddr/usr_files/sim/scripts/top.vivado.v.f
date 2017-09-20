@@ -34,10 +34,6 @@ ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_cc_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_cc_1.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_cc_2.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_cc_3.v
-${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_us_0.v
-${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_rs_w_0.v
-${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_us_1.v
-${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_rs_w_1.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_0_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_1_0.v
