@@ -173,9 +173,9 @@ package body lmb_bram_if_funcs is
     elsif Equal_String(S, "kintexu")  or Equal_String(S, "kintexul")  or
           Equal_String(S, "qkintexu") or Equal_String(S, "qkintexul") then
       return KINTEXU;
-    elsif Equal_String(S, "zynquplus") then
+    elsif Equal_String(S, "zynquplus") or Equal_String(S, "zynquplusRFSOC") then
       return ZYNQUPLUS;
-    elsif Equal_String(S, "virtexuplus") then
+    elsif Equal_String(S, "virtexuplus") or Equal_String(S, "virtexuplusHBM") then
       return VIRTEXUPLUS;
     elsif Equal_String(S, "kintexuplus") then
       return KINTEXUPLUS;
@@ -286,8 +286,8 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity MB_LUT6 is
   generic (
@@ -353,8 +353,8 @@ end architecture IMP;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity MB_MUXCY is
   generic (
@@ -396,8 +396,8 @@ end architecture IMP;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity MB_XORCY is
   generic (
@@ -437,8 +437,8 @@ end architecture IMP;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity MB_MUXF7 is
   generic (
@@ -480,8 +480,8 @@ end architecture IMP;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity MB_MUXF8 is
   generic (
@@ -523,8 +523,8 @@ end architecture IMP;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity MB_FDRE is
   generic (
@@ -674,9 +674,9 @@ end architecture IMP;
 library ieee;
 use ieee.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.all;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.all;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity XOR18 is 
   generic (
@@ -902,8 +902,8 @@ end architecture IMP;
 library ieee;
 use ieee.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity Parity is
   generic (
@@ -1247,9 +1247,9 @@ end architecture IMP;
 library ieee;
 use ieee.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.all;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.all;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity ParityEnable is
   generic (
@@ -1418,9 +1418,9 @@ end architecture IMP;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.all;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.all;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity checkbit_handler is
   generic (
@@ -1920,9 +1920,9 @@ end architecture IMP;
 library ieee;
 use ieee.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.all;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.all;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity Correct_One_Bit is
   generic (
@@ -2260,9 +2260,9 @@ end imp;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.all;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.all;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 entity axi_interface is
   generic (
@@ -2976,8 +2976,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.all;
 
 entity lmb_bram_if_cntlr is
   generic (
@@ -3100,8 +3100,8 @@ entity lmb_bram_if_cntlr is
     Interrupt : out std_logic);
 end lmb_bram_if_cntlr;
 
-library lmb_bram_if_cntlr_v4_0_10;
-use lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_funcs.all;
+library lmb_bram_if_cntlr_v4_0_11;
+use lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_funcs.all;
 
 architecture imp of lmb_bram_if_cntlr is
 

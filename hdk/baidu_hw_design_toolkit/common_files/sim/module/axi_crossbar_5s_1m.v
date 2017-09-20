@@ -48,7 +48,7 @@
 
 
 // IP VLNV: xilinx.com:ip:axi_crossbar:2.1
-// IP Revision: 12
+// IP Revision: 13
 
 `timescale 1ns/1ps
 
@@ -291,7 +291,7 @@ input wire [0 : 0] m_axi_rvalid;
 (* X_INTERFACE_INFO = "xilinx.com:interface:aximm:1.0 M00_AXI RREADY" *)
 output wire [0 : 0] m_axi_rready;
 
-  axi_crossbar_v2_1_12_axi_crossbar #(
+  axi_crossbar_v2_1_13_axi_crossbar #(
     .C_FAMILY("kintexu"),
     .C_NUM_SLAVE_SLOTS(5),
     .C_NUM_MASTER_SLOTS(1),

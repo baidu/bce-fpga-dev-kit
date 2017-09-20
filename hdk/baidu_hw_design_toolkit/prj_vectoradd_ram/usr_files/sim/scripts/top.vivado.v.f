@@ -22,5 +22,7 @@ ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_s00_regslice_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_s01_regslice_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_m00_data_fifo_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd.v
+${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_0_0.v
+${SIMSCRIPT_DIR}/../ipi_simfiles/gigantic_mux_v1_0_cntr.v
 
 -f ${COMMON_DIR}/sim/filelists/tb.vivado.f

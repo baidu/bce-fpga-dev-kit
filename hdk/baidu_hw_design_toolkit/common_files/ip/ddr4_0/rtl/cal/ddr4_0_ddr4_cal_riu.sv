@@ -113,8 +113,9 @@ module  ddr4_0_ddr4_cal_riu #
    ,(* dont_touch = "true" *) output reg        io_write_strobe_riuclk = 1'b0
 
    ,output reg ub_rst_out_riuclk
-   ,output LMB_UE //MCS Local Memory Uncorrectable Error
-   ,output LMB_CE //MCS Local Memory Correctable Error
+   ,(* dont_touch = "true" *) output LMB_UE //MCS Local Memory Uncorrectable Error
+   ,(* dont_touch = "true" *) output LMB_CE //MCS Local Memory Correctable Error
+
    ,input  [20-1:0] riu2clb_valid_riuclk // max number of bytes possible
    ,(* dont_touch = "true" *) output reg [20-1:0] riu2clb_valid_r1_riuclk // max number of bytes possible
 

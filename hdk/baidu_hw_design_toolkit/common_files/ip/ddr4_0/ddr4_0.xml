@@ -1468,56 +1468,13 @@
   <spirit:model>
     <spirit:views>
       <spirit:view>
-        <spirit:name>xilinx_veriloginstantiationtemplate</spirit:name>
-        <spirit:displayName>Verilog Instantiation Template</spirit:displayName>
-        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:synthesis.template</spirit:envIdentifier>
-        <spirit:language>verilog</spirit:language>
-        <spirit:fileSetRef>
-          <spirit:localName>xilinx_veriloginstantiationtemplate_view_fileset</spirit:localName>
-        </spirit:fileSetRef>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Jul 01 10:03:51 UTC 2017</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>1d40488c</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>boundaryCRCversion</spirit:name>
-            <spirit:value>1</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>87c2c40a</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>6</spirit:value>
-          </spirit:parameter>
-        </spirit:parameters>
-      </spirit:view>
-      <spirit:view>
         <spirit:name>xilinx_elaborateports</spirit:name>
         <spirit:displayName>Elaborate Ports</spirit:displayName>
         <spirit:envIdentifier>:vivado.xilinx.com:elaborate.ports</spirit:envIdentifier>
         <spirit:parameters>
           <spirit:parameter>
-            <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>1d40488c</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>boundaryCRCversion</spirit:name>
-            <spirit:value>1</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>2602ee70</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>6</spirit:value>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:a7c0c86d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1530,24 +1487,27 @@
         </spirit:fileSetRef>
         <spirit:parameters>
           <spirit:parameter>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:a7c0c86d</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_veriloginstantiationtemplate</spirit:name>
+        <spirit:displayName>Verilog Instantiation Template</spirit:displayName>
+        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:synthesis.template</spirit:envIdentifier>
+        <spirit:language>verilog</spirit:language>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_veriloginstantiationtemplate_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Jul 01 10:05:19 UTC 2017</spirit:value>
+            <spirit:value>Thu Aug 17 10:50:26 UTC 2017</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
-            <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>1d40488c</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>boundaryCRCversion</spirit:name>
-            <spirit:value>1</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>2602ee70</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>6</spirit:value>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:6c58565c</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1561,23 +1521,11 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Jul 01 10:05:30 UTC 2017</spirit:value>
+            <spirit:value>Thu Aug 17 10:51:00 UTC 2017</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
-            <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>1d40488c</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>boundaryCRCversion</spirit:name>
-            <spirit:value>1</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>2602ee70</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>6</spirit:value>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:6c58565c</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1591,23 +1539,30 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Jul 01 10:05:30 UTC 2017</spirit:value>
+            <spirit:value>Thu Aug 17 10:51:00 UTC 2017</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
-            <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>1d40488c</spirit:value>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:6c58565c</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_verilogsimulationwrapper</spirit:name>
+        <spirit:displayName>Verilog Simulation Wrapper</spirit:displayName>
+        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:simulation.wrapper</spirit:envIdentifier>
+        <spirit:language>verilog</spirit:language>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_verilogsimulationwrapper_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>GENtimestamp</spirit:name>
+            <spirit:value>Thu Aug 17 10:51:04 UTC 2017</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
-            <spirit:name>boundaryCRCversion</spirit:name>
-            <spirit:value>1</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>2602ee70</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>6</spirit:value>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:522c8660</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1621,23 +1576,29 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Jul 01 10:05:30 UTC 2017</spirit:value>
+            <spirit:value>Thu Aug 17 10:51:04 UTC 2017</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
-            <spirit:name>boundaryCRC</spirit:name>
-            <spirit:value>1d40488c</spirit:value>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:6c58565c</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_versioninformation</spirit:name>
+        <spirit:displayName>Version Information</spirit:displayName>
+        <spirit:envIdentifier>:vivado.xilinx.com:docs.versioninfo</spirit:envIdentifier>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_versioninformation_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>GENtimestamp</spirit:name>
+            <spirit:value>Thu Aug 17 10:51:04 UTC 2017</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
-            <spirit:name>boundaryCRCversion</spirit:name>
-            <spirit:value>1</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>2602ee70</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>6</spirit:value>
+            <spirit:name>outputProductCRC</spirit:name>
+            <spirit:value>7:6c58565c</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -2154,7 +2115,7 @@
         <spirit:wire>
           <spirit:direction>out</spirit:direction>
           <spirit:vector>
-            <spirit:left spirit:format="long">53</spirit:left>
+            <spirit:left spirit:format="long">127</spirit:left>
             <spirit:right spirit:format="long">0</spirit:right>
           </spirit:vector>
           <spirit:wireTypeDefs>
@@ -2171,6 +2132,32 @@
           <xilinx:portInfo>
             <xilinx:enablement>
               <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.cal_r0_status" xilinx:dependency="( C0.ControllerType == &quot;DDR4_SDRAM&quot; ) &amp;&amp; ( spirit:decode(id(&apos;PARAM_VALUE.Debug_Signal&apos;)) = &quot;Enable&quot; )">false</xilinx:isEnabled>
+            </xilinx:enablement>
+          </xilinx:portInfo>
+        </spirit:vendorExtensions>
+      </spirit:port>
+      <spirit:port>
+        <spirit:name>cal_post_status</spirit:name>
+        <spirit:wire>
+          <spirit:direction>out</spirit:direction>
+          <spirit:vector>
+            <spirit:left spirit:format="long">8</spirit:left>
+            <spirit:right spirit:format="long">0</spirit:right>
+          </spirit:vector>
+          <spirit:wireTypeDefs>
+            <spirit:wireTypeDef>
+              <spirit:typeName>std_logic</spirit:typeName>
+              <spirit:viewNameRef>xilinx_anylanguagesynthesis</spirit:viewNameRef>
+            </spirit:wireTypeDef>
+          </spirit:wireTypeDefs>
+          <spirit:driver>
+            <spirit:defaultValue spirit:format="long">0</spirit:defaultValue>
+          </spirit:driver>
+        </spirit:wire>
+        <spirit:vendorExtensions>
+          <xilinx:portInfo>
+            <xilinx:enablement>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.cal_post_status" xilinx:dependency="( C0.ControllerType == &quot;DDR4_SDRAM&quot; ) &amp;&amp; ( spirit:decode(id(&apos;PARAM_VALUE.Debug_Signal&apos;)) = &quot;Enable&quot; )">false</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -2500,7 +2487,7 @@
         <spirit:vendorExtensions>
           <xilinx:portInfo>
             <xilinx:enablement>
-              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.c0_ddr4_parity" xilinx:dependency="( ( spirit:decode(id(&apos;PARAM_VALUE.C0.ControllerType&apos;)) = &quot;DDR4_SDRAM&quot; ) and ( spirit:decode(id(&apos;PARAM_VALUE.Phy_Only&apos;)) = &quot;Complete_Memory_Controller&quot; ) ) &amp;&amp; (( spirit:decode(id(&apos;PARAM_VALUE.C0.DDR4_MemoryType&apos;)) = &quot;RDIMMs&quot; ) and ( spirit:decode(id(&apos;MODELPARAM_VALUE.C0.DDR4_StackHeight&apos;)) &lt; 2 ))">false</xilinx:isEnabled>
+              <xilinx:isEnabled xilinx:resolve="dependent" xilinx:id="PORT_ENABLEMENT.c0_ddr4_parity" xilinx:dependency="( ( spirit:decode(id(&apos;PARAM_VALUE.C0.ControllerType&apos;)) = &quot;DDR4_SDRAM&quot; ) and ( spirit:decode(id(&apos;PARAM_VALUE.Phy_Only&apos;)) = &quot;Complete_Memory_Controller&quot; ) ) &amp;&amp; ((( spirit:decode(id(&apos;PARAM_VALUE.C0.DDR4_MemoryType&apos;)) = &quot;RDIMMs&quot; ) || ( spirit:decode(id(&apos;PARAM_VALUE.C0.DDR4_MemoryType&apos;)) = &quot;LRDIMMs&quot; ))and ( spirit:decode(id(&apos;MODELPARAM_VALUE.C0.DDR4_StackHeight&apos;)) &lt; 2 ))">false</xilinx:isEnabled>
             </xilinx:enablement>
           </xilinx:portInfo>
         </spirit:vendorExtensions>
@@ -6002,7 +5989,7 @@
   </spirit:model>
   <spirit:choices>
     <spirit:choice>
-      <spirit:name>choice_list_0be33969</spirit:name>
+      <spirit:name>choice_list_157065e4</spirit:name>
       <spirit:enumeration>1</spirit:enumeration>
       <spirit:enumeration>2</spirit:enumeration>
       <spirit:enumeration>3</spirit:enumeration>
@@ -6019,6 +6006,22 @@
       <spirit:enumeration>14</spirit:enumeration>
       <spirit:enumeration>15</spirit:enumeration>
       <spirit:enumeration>16</spirit:enumeration>
+      <spirit:enumeration>17</spirit:enumeration>
+      <spirit:enumeration>18</spirit:enumeration>
+      <spirit:enumeration>19</spirit:enumeration>
+      <spirit:enumeration>20</spirit:enumeration>
+      <spirit:enumeration>21</spirit:enumeration>
+      <spirit:enumeration>22</spirit:enumeration>
+      <spirit:enumeration>23</spirit:enumeration>
+      <spirit:enumeration>24</spirit:enumeration>
+      <spirit:enumeration>25</spirit:enumeration>
+      <spirit:enumeration>26</spirit:enumeration>
+      <spirit:enumeration>27</spirit:enumeration>
+      <spirit:enumeration>28</spirit:enumeration>
+      <spirit:enumeration>29</spirit:enumeration>
+      <spirit:enumeration>30</spirit:enumeration>
+      <spirit:enumeration>31</spirit:enumeration>
+      <spirit:enumeration>32</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_list_1b6cef98</spirit:name>
@@ -6191,7 +6194,7 @@
       <spirit:enumeration>RZQ/6</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
-      <spirit:name>choice_list_b9bb34f0</spirit:name>
+      <spirit:name>choice_list_b59ca9de</spirit:name>
       <spirit:enumeration>MT40A512M8RH-075E</spirit:enumeration>
       <spirit:enumeration>MT40A1G8PM-075E</spirit:enumeration>
       <spirit:enumeration>MT40A512M8HX-083</spirit:enumeration>
@@ -6206,6 +6209,10 @@
       <spirit:enumeration>MT40A1G8TRF-093E</spirit:enumeration>
       <spirit:enumeration>MT40A512M16HA-083E</spirit:enumeration>
       <spirit:enumeration>MT40A1G8WE-075E</spirit:enumeration>
+      <spirit:enumeration>MT40A2G8-083J</spirit:enumeration>
+      <spirit:enumeration>MT40A4G8-083J</spirit:enumeration>
+      <spirit:enumeration>MT40A256M16GE-083E</spirit:enumeration>
+      <spirit:enumeration>MT40A1G16WBU-083E</spirit:enumeration>
       <spirit:enumeration>MT40A1G4RH-075E</spirit:enumeration>
       <spirit:enumeration>MT40A1G4HX-083</spirit:enumeration>
       <spirit:enumeration>MT40A1G4HX-093</spirit:enumeration>
@@ -6396,17 +6403,6 @@
   </spirit:choices>
   <spirit:fileSets>
     <spirit:fileSet>
-      <spirit:name>xilinx_veriloginstantiationtemplate_view_fileset</spirit:name>
-      <spirit:file>
-        <spirit:name>ddr4_0.vho</spirit:name>
-        <spirit:userFileType>vhdlTemplate</spirit:userFileType>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>ddr4_0.veo</spirit:name>
-        <spirit:userFileType>verilogTemplate</spirit:userFileType>
-      </spirit:file>
-    </spirit:fileSet>
-    <spirit:fileSet>
       <spirit:name>xilinx_elaboratesubcores_view_fileset</spirit:name>
       <spirit:file>
         <spirit:name>ip_0/ddr4_0_microblaze_mcs.xci</spirit:name>
@@ -6426,6 +6422,17 @@
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
+      <spirit:name>xilinx_veriloginstantiationtemplate_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>ddr4_0.vho</spirit:name>
+        <spirit:userFileType>vhdlTemplate</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>ddr4_0.veo</spirit:name>
+        <spirit:userFileType>verilogTemplate</spirit:userFileType>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
       <spirit:name>xilinx_anylanguagesynthesis_view_fileset</spirit:name>
       <spirit:file>
         <spirit:name>sw/calibration_0/Debug/calibration_ddr.elf</spirit:name>
@@ -6436,341 +6443,341 @@
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_wtr.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_wtr.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ref.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ref.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_rd_wr.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_rd_wr.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_periodic.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_periodic.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_group.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_group.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ecc_merge_enc.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_merge_enc.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ecc_gen.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_gen.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ecc_fi_xor.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_fi_xor.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ecc_dec_fix.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_dec_fix.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ecc_buf.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_buf.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ecc.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_ctl.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ctl.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_cmd_mux_c.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_cmd_mux_c.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_cmd_mux_ap.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_cmd_mux_ap.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_arb_p.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_p.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_arb_mux_p.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_mux_p.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_arb_c.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_c.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_arb_a.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_a.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_act_timer.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_act_timer.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc_act_rank.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_act_rank.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/controller/ddr4_v2_1_mc.sv</spirit:name>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/ui/ddr4_v2_1_ui_wr_data.sv</spirit:name>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui_wr_data.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/ui/ddr4_v2_1_ui_rd_data.sv</spirit:name>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui_rd_data.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/ui/ddr4_v2_1_ui_cmd.sv</spirit:name>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui_cmd.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/ui/ddr4_v2_1_ui.sv</spirit:name>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/ip_top/ddr4_v2_1_1_ddr4_assert.vh</spirit:name>
+        <spirit:name>rtl/ip_top/ddr4_v2_2_0_ddr4_assert.vh</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/clocking/ddr4_v2_1_infrastructure.sv</spirit:name>
+        <spirit:name>rtl/clocking/ddr4_v2_2_infrastructure.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_xsdb_bram.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_xsdb_bram.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_write.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_write.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_wr_byte.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_wr_byte.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_wr_bit.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_wr_bit.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_sync.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_sync.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_read.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_read.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_rd_en.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_rd_en.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_pi.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_pi.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_mc_odt.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_mc_odt.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_debug_microblaze.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_debug_microblaze.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_cplx_data.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_cplx_data.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_cplx.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_cplx.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_config_rom.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_config_rom.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_addr_decode.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_addr_decode.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_top.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_top.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal_xsdb_arbiter.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_xsdb_arbiter.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_cal.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_chipscope_xsdb_slave.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_chipscope_xsdb_slave.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_dp_AB9.sv</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_dp_AB9.sv</spirit:name>
         <spirit:fileType>systemVerilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_1_chipscope_icon2xsdb_mstrbr_ver_inc.vh</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_0_chipscope_icon2xsdb_mstrbr_ver_inc.vh</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_1_cs_ver_inc.vh</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_0_cs_ver_inc.vh</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
       </spirit:file>
       <spirit:file>
-        <spirit:name>rtl/cal/ddr4_v2_1_1_cal_assert.vh</spirit:name>
+        <spirit:name>rtl/cal/ddr4_v2_2_0_cal_assert.vh</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
@@ -6816,6 +6823,378 @@
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
+      <spirit:name>xilinx_verilogsimulationwrapper_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_wtr.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ref.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_rd_wr.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_periodic.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_group.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_merge_enc.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_gen.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_fi_xor.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_dec_fix.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc_buf.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ecc.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_ctl.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_cmd_mux_c.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_cmd_mux_ap.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_p.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_mux_p.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_c.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_arb_a.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_act_timer.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc_act_rank.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/controller/ddr4_v2_2_mc.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui_wr_data.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui_rd_data.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui_cmd.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ui/ddr4_v2_2_ui.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ip_top/ddr4_v2_2_0_ddr4_assert.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/clocking/ddr4_v2_2_infrastructure.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_xsdb_bram.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_write.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_wr_byte.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_wr_bit.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_sync.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_read.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_rd_en.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_pi.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_mc_odt.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_debug_microblaze.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_cplx_data.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_cplx.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_config_rom.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_addr_decode.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_top.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal_xsdb_arbiter.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_cal.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_chipscope_xsdb_slave.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_dp_AB9.sv</spirit:name>
+        <spirit:fileType>systemVerilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_0_chipscope_icon2xsdb_mstrbr_ver_inc.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_0_cs_ver_inc.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_v2_2_0_cal_assert.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ip_top/ddr4_0.sv</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ip_top/ddr4_0_ddr4.sv</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/ip_top/ddr4_0_ddr4_mem_intfc.sv</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>rtl/cal/ddr4_0_ddr4_cal_riu.sv</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_simulation</spirit:userFileType>
+        <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>tb/microblaze_mcs_0.sv</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
       <spirit:name>xilinx_implementation_view_fileset</spirit:name>
       <spirit:file>
         <spirit:name>ddr4_0_board.xdc</spirit:name>
@@ -6823,6 +7202,13 @@
         <spirit:userFileType>USED_IN_board</spirit:userFileType>
         <spirit:userFileType>USED_IN_implementation</spirit:userFileType>
         <spirit:userFileType>USED_IN_synthesis</spirit:userFileType>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_versioninformation_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>doc/ddr4_v2_2_changelog.txt</spirit:name>
+        <spirit:userFileType>text</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
   </spirit:fileSets>
@@ -7008,7 +7394,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_MemoryPart</spirit:name>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_MemoryPart" spirit:choiceRef="choice_list_b9bb34f0" spirit:order="27">MT40A256M16GE-075E</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_MemoryPart" spirit:choiceRef="choice_list_b59ca9de" spirit:order="27">MT40A256M16GE-075E</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_Slot</spirit:name>
@@ -7103,7 +7489,7 @@
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_AxiIDWidth</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_AxiIDWidth" spirit:choiceRef="choice_list_0be33969" spirit:order="49">4</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_AxiIDWidth" spirit:choiceRef="choice_list_157065e4" spirit:order="49">4</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_Capacity</spirit:name>
@@ -7209,228 +7595,233 @@
       <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.Simulation_Mode" spirit:choiceRef="choice_list_67b045e5" spirit:order="800">BFM</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
+      <spirit:name>PARTIAL_RECONFIG_FLOW_MIG</spirit:name>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.PARTIAL_RECONFIG_FLOW_MIG" spirit:order="801">false</spirit:value>
+    </spirit:parameter>
+    <spirit:parameter>
       <spirit:name>MCS_DBG_EN</spirit:name>
-      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.MCS_DBG_EN" spirit:order="801">false</spirit:value>
+      <spirit:value spirit:format="bool" spirit:resolve="user" spirit:id="PARAM_VALUE.MCS_DBG_EN" spirit:order="802">false</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CK_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_0" spirit:order="802" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_0" spirit:order="803" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CK_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_1" spirit:order="803" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_1" spirit:order="804" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CK_SKEW_2</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_2" spirit:order="804" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_2" spirit:order="805" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CK_SKEW_3</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_3" spirit:order="805" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CK_SKEW_3" spirit:order="806" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_0" spirit:order="806" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_0" spirit:order="807" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_1" spirit:order="807" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_1" spirit:order="808" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_2</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_2" spirit:order="808" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_2" spirit:order="809" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_3</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_3" spirit:order="809" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_3" spirit:order="810" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_4</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_4" spirit:order="810" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_4" spirit:order="811" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_5</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_5" spirit:order="811" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_5" spirit:order="812" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_6</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_6" spirit:order="812" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_6" spirit:order="813" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_7</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_7" spirit:order="813" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_7" spirit:order="814" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_8</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_8" spirit:order="814" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_8" spirit:order="815" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_9</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_9" spirit:order="815" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_9" spirit:order="816" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_10</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_10" spirit:order="816" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_10" spirit:order="817" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_11</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_11" spirit:order="817" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_11" spirit:order="818" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_12</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_12" spirit:order="818" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_12" spirit:order="819" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_13</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_13" spirit:order="819" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_13" spirit:order="820" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_14</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_14" spirit:order="820" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_14" spirit:order="821" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_15</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_15" spirit:order="821" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_15" spirit:order="822" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_16</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_16" spirit:order="822" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_16" spirit:order="823" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ADDR_SKEW_17</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_17" spirit:order="823" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ADDR_SKEW_17" spirit:order="824" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_BA_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BA_SKEW_0" spirit:order="824" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BA_SKEW_0" spirit:order="825" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_BA_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BA_SKEW_1" spirit:order="825" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BA_SKEW_1" spirit:order="826" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_BG_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BG_SKEW_0" spirit:order="826" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BG_SKEW_0" spirit:order="827" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_BG_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BG_SKEW_1" spirit:order="827" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_BG_SKEW_1" spirit:order="828" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CS_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_0" spirit:order="828" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_0" spirit:order="829" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CS_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_1" spirit:order="829" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_1" spirit:order="830" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CS_SKEW_2</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_2" spirit:order="830" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_2" spirit:order="831" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CS_SKEW_3</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_3" spirit:order="831" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CS_SKEW_3" spirit:order="832" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CKE_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_0" spirit:order="832" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_0" spirit:order="833" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CKE_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_1" spirit:order="833" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_1" spirit:order="834" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CKE_SKEW_2</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_2" spirit:order="834" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_2" spirit:order="835" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_CKE_SKEW_3</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_3" spirit:order="835" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_CKE_SKEW_3" spirit:order="836" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ACT_SKEW</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ACT_SKEW" spirit:order="836" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ACT_SKEW" spirit:order="837" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_PAR_SKEW</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_PAR_SKEW" spirit:order="837" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_PAR_SKEW" spirit:order="838" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ODT_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_0" spirit:order="838" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_0" spirit:order="839" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ODT_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_1" spirit:order="839" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_1" spirit:order="840" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ODT_SKEW_2</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_2" spirit:order="840" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_2" spirit:order="841" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_ODT_SKEW_3</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_3" spirit:order="841" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_ODT_SKEW_3" spirit:order="842" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_LR_SKEW_0</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_LR_SKEW_0" spirit:order="842" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_LR_SKEW_0" spirit:order="843" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.DDR4_LR_SKEW_1</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_LR_SKEW_1" spirit:order="843" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.DDR4_LR_SKEW_1" spirit:order="844" spirit:minimum="0" spirit:maximum="75" spirit:rangeType="long">0</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.ADDR_WIDTH</spirit:name>
       <spirit:displayName>ADDR WIDTH</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.ADDR_WIDTH" spirit:order="844">17</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.ADDR_WIDTH" spirit:order="845">17</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.BANK_GROUP_WIDTH</spirit:name>
       <spirit:displayName>BANK GROUP WIDTH</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.BANK_GROUP_WIDTH" spirit:order="845">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.BANK_GROUP_WIDTH" spirit:order="846">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.LR_WIDTH</spirit:name>
       <spirit:displayName>LR WIDTH</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.LR_WIDTH" spirit:order="846">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.LR_WIDTH" spirit:order="847">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.CK_WIDTH</spirit:name>
       <spirit:displayName>CK WIDTH</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.CK_WIDTH" spirit:order="847">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.CK_WIDTH" spirit:order="848">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.CKE_WIDTH</spirit:name>
       <spirit:displayName>CKE WIDTH</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.CKE_WIDTH" spirit:order="848">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.CKE_WIDTH" spirit:order="849">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.CS_WIDTH</spirit:name>
       <spirit:displayName>CS WIDTH</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.CS_WIDTH" spirit:order="849">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.CS_WIDTH" spirit:order="850">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.ODT_WIDTH</spirit:name>
       <spirit:displayName>ODT WIDTH</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.ODT_WIDTH" spirit:order="850">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.ODT_WIDTH" spirit:order="851">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>C0.StackHeight</spirit:name>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.StackHeight" spirit:order="851">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C0.StackHeight" spirit:order="852">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>PING_PONG_PHY</spirit:name>
       <spirit:displayName>Ping Pong Phy</spirit:displayName>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.PING_PONG_PHY" spirit:order="852">1</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.PING_PONG_PHY" spirit:order="853">1</spirit:value>
     </spirit:parameter>
   </spirit:parameters>
   <spirit:vendorExtensions>
     <xilinx:coreExtensions>
       <xilinx:displayName>DDR4 SDRAM (MIG)</xilinx:displayName>
-      <xilinx:coreRevision>1</xilinx:coreRevision>
+      <xilinx:coreRevision>0</xilinx:coreRevision>
       <xilinx:configElementInfos>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C0.BANK_GROUP_WIDTH" xilinx:valueSource="user"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C0.DDR4_CLKFBOUT_MULT" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C0.DDR4_DataMask" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C0.DDR4_DataWidth" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C0.DDR4_Ecc" xilinx:valueSource="user"/>
@@ -7439,13 +7830,13 @@
       </xilinx:configElementInfos>
     </xilinx:coreExtensions>
     <xilinx:packagingInfo>
-      <xilinx:xilinxVersion>2016.4</xilinx:xilinxVersion>
-      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="e2da53c2"/>
+      <xilinx:xilinxVersion>2017.1</xilinx:xilinxVersion>
+      <xilinx:checksum xilinx:scope="busInterfaces" xilinx:value="fade2879"/>
       <xilinx:checksum xilinx:scope="memoryMaps" xilinx:value="5bb38f9a"/>
-      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="31aa3d8a"/>
-      <xilinx:checksum xilinx:scope="ports" xilinx:value="652fd4a5"/>
+      <xilinx:checksum xilinx:scope="fileGroups" xilinx:value="91a9da57"/>
+      <xilinx:checksum xilinx:scope="ports" xilinx:value="5159c248"/>
       <xilinx:checksum xilinx:scope="hdlParameters" xilinx:value="8ba4805f"/>
-      <xilinx:checksum xilinx:scope="parameters" xilinx:value="46275700"/>
+      <xilinx:checksum xilinx:scope="parameters" xilinx:value="8c829096"/>
     </xilinx:packagingInfo>
   </spirit:vendorExtensions>
 </spirit:component>

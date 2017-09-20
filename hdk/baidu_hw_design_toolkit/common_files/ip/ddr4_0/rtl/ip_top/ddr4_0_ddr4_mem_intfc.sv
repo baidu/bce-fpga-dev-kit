@@ -99,6 +99,7 @@ module ddr4_0_ddr4_mem_intfc #
    ,parameter         NUM_SLOT  = 1
    ,parameter         RANK_SLOT = 1
 
+   ,parameter         PARTIAL_RECONFIG     = "Enable" // Partial Reconfig enablement
    ,parameter         REG_CTRL             = "OFF" // RDIMM register control
    ,parameter         LRDIMM_MODE          = "OFF" // LRDIMM Mode
    ,parameter         DDR4_DB_HIF_RTT_NOM     = 4'b0011 
@@ -373,8 +374,8 @@ module ddr4_0_ddr4_mem_intfc #
    ,input  [DQ_WIDTH/8-1:0]         fi_xor_we
    ,input  [DQ_WIDTH-1:0]           fi_xor_wrdata
    ,output [DQ_WIDTH*8-1:0]         rd_data_phy2mc
-   ,output                          ddr4_mcs_lmb_ue
-   ,output                          ddr4_mcs_lmb_ce
+   ,output reg                      ddr4_mcs_lmb_ue
+   ,output reg                      ddr4_mcs_lmb_ce
 
    //Debug Port
    ,output wire [511:0]             dbg_bus
@@ -461,6 +462,10 @@ module ddr4_0_ddr4_mem_intfc #
 
    wire     [DBYTES*8-1:0] mcal_DMIn_n;
    wire     [DBYTES*8*8-1:0] mcal_DQIn;
+   wire     [CK_WIDTH*8-1:0] mcal_CK_t;
+   wire     [CK_WIDTH*8-1:0] mcal_CK_c;
+   wire                [7:0] mcCKt;
+   wire                [7:0] mcCKc;
  
 //  localparam LR_WIDTH = (S_HEIGHT > 1) ? clogb2(S_HEIGHT) : 1;
   //Debug Signals
@@ -678,6 +683,8 @@ ddr4_0_phy u_mig_ddr4_phy
      ,.io_write_strobe_riuclk          (io_write_strobe_riuclk)
      ,.riu2clb_vld_read_data           (riu2clb_vld_read_data)
      ,.riu2clb_valid_riuclk            (riu2clb_valid_riuclk)
+     ,.mcal_CK_t                       (mcal_CK_t)
+     ,.mcal_CK_c                       (mcal_CK_c)
      ,.mcal_C                          (mcal_C) 
      ,.mcal_ODT                        (mcal_ODT)
      ,.mcal_PAR                        (mcal_PAR)
@@ -751,7 +758,7 @@ localparam tWTR_S_HOST = (LRDIMM_MODE=="ON") ? tWTR_S + LRDIMM_DELAY : tWTR_S;
 localparam tWTR_L_HOST = (LRDIMM_MODE=="ON") ? tWTR_L + LRDIMM_DELAY : tWTR_L;
 localparam tRTW_HOST   = (LRDIMM_MODE=="ON") ? tRTW + LRDIMM_DELAY : tRTW;
 
-ddr4_v2_1_1_mc # (
+ddr4_v2_2_0_mc # (
     .ABITS            (ADDR_WIDTH)
    ,.COLBITS          (COL_WIDTH)
    ,.BABITS           (BANK_WIDTH)
@@ -775,6 +782,7 @@ ddr4_v2_1_1_mc # (
    ,.DBAW             (DATA_BUF_ADDR_WIDTH)
    ,.NUMREF           (NUMREF)
    ,.RANKS            (RANKS)
+   ,.RANK_SLOT        (RANK_SLOT)
    ,.ORDERING         (ORDERING)
    ,.TXN_FIFO_BYPASS  (TXN_FIFO_BYPASS)
    ,.TXN_FIFO_PIPE    (TXN_FIFO_PIPE)
@@ -785,6 +793,8 @@ ddr4_v2_1_1_mc # (
    ,.STARVE_COUNT_WIDTH (STARVE_COUNT_WIDTH)   
    ,.DDR4_CLAMSHELL     (DDR4_CLAMSHELL)
    ,.MEM_CONFIG       (MEMORY_CONFIGURATION)
+   ,.REG_CTRL         (REG_CTRL)
+   ,.PARTIAL_RECONFIG (PARTIAL_RECONFIG)
    ,.tFAW             (tFAW)
    ,.tFAW_dlr         (tFAW_dlr)
    ,.tRTW             (tRTW_HOST)
@@ -825,6 +835,8 @@ ddr4_v2_1_1_mc # (
    ,.tCWL     (tCWL)
 
    // Outputs to PHY
+   ,.mcCKt    (mcCKt)
+   ,.mcCKc    (mcCKc)
    ,.mc_ACT_n (mc_ACT_n)
    ,.mc_RAS_n (mc_RAS_n)
    ,.mc_CAS_n (mc_CAS_n)
@@ -910,7 +922,7 @@ ddr4_v2_1_1_mc # (
   assign wrDataOffset = 1'b0;
   wire sr_req; // unused ui output port
 
-  ddr4_v2_1_1_ui #
+  ddr4_v2_2_0_ui #
     (
      .MEM                                (DRAM_TYPE),
      .TCQ                                (TCQ),
@@ -1043,7 +1055,7 @@ ddr4_v2_1_1_mc # (
 
 // Calibration Logic 
 
-ddr4_v2_1_1_cal_top # (
+ddr4_v2_2_0_cal_top # (
     .ABITS          (ADDR_WIDTH)
    ,.BABITS         (BANK_WIDTH)
    ,.BGBITS         (BANK_GROUP_WIDTH)
@@ -1195,6 +1207,8 @@ ddr4_v2_1_1_cal_top # (
    ,.wrDataEn                    (wrDataEn) // to MC and UI
 
    // mc
+   ,.mcCKt                       (mcCKt)
+   ,.mcCKc                       (mcCKc)
    ,.mc_ACT_n                    (mc_ACT_n)
    ,.mc_RAS_n                    (8'b0)
    ,.mc_CAS_n                    (8'b0)
@@ -1216,6 +1230,8 @@ ddr4_v2_1_1_cal_top # (
    ,.winBuf                      (winBuf)
    ,.winRank                     (winRank_phy)
 
+   ,.mcal_CK_t                   (mcal_CK_t)
+   ,.mcal_CK_c                   (mcal_CK_c)
    ,.mcal_ACT_n                  (mcal_ACT_n)
    ,.mcal_CAS_n                  (mcal_CAS_n)
    ,.mcal_RAS_n                  (mcal_RAS_n)
@@ -1349,6 +1365,10 @@ ddr4_v2_1_1_cal_top # (
     rst_r1    <= #TCQ div_clk_rst;
   end
 
+wire LMB_UE_riu, LMB_CE_riu;
+(* keep = "TRUE" , ASYNC_REG = "TRUE" *) reg LMB_UE_r1, LMB_CE_r1,LMB_UE_r2,LMB_CE_r2;
+reg LMB_UE_r3, LMB_CE_r3;
+
 ddr4_0_ddr4_cal_riu #
   (
     .MCS_ECC_ENABLE   (MCS_ECC_ENABLE)
@@ -1369,47 +1389,57 @@ ddr4_0_ddr4_cal_riu #
     ,.io_addr_strobe_clb2riu_riuclk     (io_addr_strobe_clb2riu_riuclk)
     ,.io_address_riuclk                 (io_address_riuclk)
     ,.io_write_data_riuclk              (io_write_data_riuclk)
-    ,.LMB_UE             (ddr4_mcs_lmb_ue)
-    ,.LMB_CE             (ddr4_mcs_lmb_ce)
+    ,.LMB_UE             (LMB_UE_riu)
+    ,.LMB_CE             (LMB_CE_riu)
     ,.io_write_strobe_riuclk            (io_write_strobe_riuclk)
     ,.ub_rst_out_riuclk                 (ub_rst_out_riuclk)
 );
 
-
+//Generation of MCS ECC pulse in Fabric clock domain
+  always @(posedge div_clk) begin
+    LMB_UE_r1 <= #TCQ LMB_UE_riu;
+    LMB_CE_r1 <= #TCQ LMB_CE_riu;
+    LMB_UE_r2 <= #TCQ LMB_UE_r1;
+    LMB_CE_r2 <= #TCQ LMB_CE_r1;
+    LMB_UE_r3 <= #TCQ LMB_UE_r2;
+    LMB_CE_r3 <= #TCQ LMB_CE_r2;
+    ddr4_mcs_lmb_ce <= #TCQ (~LMB_CE_r3) & LMB_CE_r2;
+    ddr4_mcs_lmb_ue <= #TCQ (~LMB_UE_r3) & LMB_UE_r2;
+  end
 
   localparam INSERT_DELAY = 0; // Insert delay for simulations
   localparam HANDSHAKE_MAX_DELAYf2r = 5000; // RIU Clock Max frequency 200MHz
   localparam STATIC_MAX_DELAY = 10000; // Max delay for static signals
   localparam SYNC_MTBF = 2; // Synchronizer Depth based on MTBF
 
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ)  u_en_vtc_sync       (riu_clk, en_vtc_in, en_vtc_riuclk);
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ)  u_fab_rst_sync      (riu_clk, rst_r1, fab_rst_sync);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ)  u_en_vtc_sync       (riu_clk, en_vtc_in, en_vtc_riuclk);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ)  u_fab_rst_sync      (riu_clk, rst_r1, fab_rst_sync);
 
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 32, INSERT_DELAY, HANDSHAKE_MAX_DELAYf2r, TCQ) u_io_read_data_sync (riu_clk, io_read_data, io_read_data_riuclk); // MAN - can we remove this sync
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 32, INSERT_DELAY, HANDSHAKE_MAX_DELAYf2r, TCQ) u_io_read_data_sync (riu_clk, io_read_data, io_read_data_riuclk); // MAN - can we remove this sync
 
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, HANDSHAKE_MAX_DELAYf2r, TCQ)  u_io_ready_lvl_sync (riu_clk, io_ready_lvl, io_ready_lvl_riuclk);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, HANDSHAKE_MAX_DELAYf2r, TCQ)  u_io_ready_lvl_sync (riu_clk, io_ready_lvl, io_ready_lvl_riuclk);
 
   localparam HANDSHAKE_MAX_DELAYr2f = 3000; // Fabric Clock Max frequency 333MHz
 
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_phy_ready_sync     (div_clk, phy_ready_riuclk, phy_ready);
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_bisc_complete_sync  (div_clk, bisc_complete_riuclk, bisc_complete);
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_riu2clb_valid_sync     (div_clk, riu2clb_valid_r1_riuclk, riu2clb_valid);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_phy_ready_sync     (div_clk, phy_ready_riuclk, phy_ready);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_bisc_complete_sync  (div_clk, bisc_complete_riuclk, bisc_complete);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_riu2clb_valid_sync     (div_clk, riu2clb_valid_r1_riuclk, riu2clb_valid);
 
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_fixdly_rdy_low (div_clk, phy2clb_fixdly_rdy_low_riuclk, phy2clb_fixdly_rdy_low); // DEBUG only
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_fixdly_rdy_upp (div_clk, phy2clb_fixdly_rdy_upp_riuclk, phy2clb_fixdly_rdy_upp); // DEBUG only
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_phy_rdy_low    (div_clk, phy2clb_phy_rdy_low_riuclk, phy2clb_phy_rdy_low); // DEBUG only
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_phy_rdy_upp    (div_clk, phy2clb_phy_rdy_upp_riuclk, phy2clb_phy_rdy_upp); // DEBUG only
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_fixdly_rdy_low (div_clk, phy2clb_fixdly_rdy_low_riuclk, phy2clb_fixdly_rdy_low); // DEBUG only
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_fixdly_rdy_upp (div_clk, phy2clb_fixdly_rdy_upp_riuclk, phy2clb_fixdly_rdy_upp); // DEBUG only
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_phy_rdy_low    (div_clk, phy2clb_phy_rdy_low_riuclk, phy2clb_phy_rdy_low); // DEBUG only
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 20, INSERT_DELAY, STATIC_MAX_DELAY, TCQ) u_phy2clb_phy_rdy_upp    (div_clk, phy2clb_phy_rdy_upp_riuclk, phy2clb_phy_rdy_upp); // DEBUG only
 
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 32, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ) u_io_addr_sync         (div_clk, io_address_riuclk, io_address); // MAN - can we remove this sync
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ)  u_io_write_strobe_sync (div_clk, io_write_strobe_riuclk, io_write_strobe);
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 32, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ) u_io_write_data_sync   (div_clk, io_write_data_riuclk, io_write_data);
-  ddr4_v2_1_1_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ) u_io_addr_strobe_lvl_sync (div_clk, io_addr_strobe_lvl_riuclk, io_addr_strobe_lvl);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 32, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ) u_io_addr_sync         (div_clk, io_address_riuclk, io_address); // MAN - can we remove this sync
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ)  u_io_write_strobe_sync (div_clk, io_write_strobe_riuclk, io_write_strobe);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 32, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ) u_io_write_data_sync   (div_clk, io_write_data_riuclk, io_write_data);
+  ddr4_v2_2_0_cal_sync #(SYNC_MTBF, 1, INSERT_DELAY, HANDSHAKE_MAX_DELAYr2f, TCQ) u_io_addr_strobe_lvl_sync (div_clk, io_addr_strobe_lvl_riuclk, io_addr_strobe_lvl);
 
 
 //synthesis translate_off
   generate
     if (MIG_PARAM_CHECKS  == "TRUE") begin
-       `include "ddr4_v2_1_1_ddr4_assert.vh"
+       `include "ddr4_v2_2_0_ddr4_assert.vh"
     end
   endgenerate   
 //synthesis translate_on

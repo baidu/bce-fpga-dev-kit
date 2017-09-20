@@ -1,18 +1,12 @@
-/*
- * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+//Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+//--------------------------------------------------------------------------------
+//Tool Version: Vivado v.2016.4 (lin64) Build 1733598 Wed Dec 14 22:35:42 MST 2016
+//Date        : Tue Mar 21 19:09:45 2017
+//Host        : bb-mco-cloud-storage2.bb01.baidu.com running 64-bit CentOS release 6.3 (Final)
+//Command     : generate_target rp_bd_wrapper.bd
+//Design      : rp_bd_wrapper
+//Purpose     : IP block netlist
+//--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 `include "rp_if_define.vh"
 
@@ -189,6 +183,35 @@ module rp_wrapper(
    `endif
 `endif
 
+`ifdef USE_DDR4_C0
+   assign ddr_status[0] = 1'b1;
+   assign ddr_status[4] = c0_init_calib_complete;
+`else
+   assign ddr_status[0] = 1'b0;
+   assign ddr_status[4] = 1'b0;
+`endif
+`ifdef USE_DDR4_C1
+   assign ddr_status[1] = 1'b1;
+   assign ddr_status[5] = c1_init_calib_complete;
+`else
+   assign ddr_status[1] = 1'b0;
+   assign ddr_status[5] = 1'b0;
+`endif
+`ifdef USE_DDR4_C2
+   assign ddr_status[2] = 1'b1;
+   assign ddr_status[6] = c2_init_calib_complete;
+`else
+   assign ddr_status[2] = 1'b0;
+   assign ddr_status[6] = 1'b0;
+`endif
+`ifdef USE_DDR4_C3
+   assign ddr_status[3] = 1'b1;
+   assign ddr_status[7] = c3_init_calib_complete;
+`else
+   assign ddr_status[3] = 1'b0;
+   assign ddr_status[7] = 1'b0;
+`endif
+
 `ifndef RP_AXI_MASTER
    assign M_AXI_arvalid = 1'b0;
    assign M_AXI_awvalid = 1'b0;
@@ -199,17 +222,17 @@ module rp_wrapper(
 
    pr_region_dbg_bridge pr_region_dbg_bridge_i (
       .clk(s_axi_aclk),  // input wire clk
-      .drck(drck),        // input wire drck
-      .shift(shift),      // input wire shift
-      .tdi(tdi),          // input wire tdi
-      .update(update),    // input wire update
-      .sel(sel),          // input wire sel
-      .tdo(tdo),          // output wire tdo
-      .tms(tms),          // input wire tms
-      .tck(tck),          // input wire tck
-      .runtest(runtest),  // input wire runtest
-      .reset(reset),      // input wire reset
-      .capture(capture),  // input wire capture
-      .bscanid(bscanid)  // output wire [31 : 0] bscanid
+      .S_BSCAN_capture(S_BSCAN_capture),  // input wire capture
+      .S_BSCAN_drck(S_BSCAN_drck),        // input wire drck
+      .S_BSCAN_reset(S_BSCAN_reset),      // input wire reset
+      .S_BSCAN_runtest(S_BSCAN_runtest),  // input wire runtest
+      .S_BSCAN_sel(S_BSCAN_sel),          // input wire sel
+      .S_BSCAN_shift(S_BSCAN_shift),      // input wire shift
+      .S_BSCAN_tck(S_BSCAN_tck),          // input wire tck
+      .S_BSCAN_tdi(S_BSCAN_tdi),          // input wire tdi
+      .S_BSCAN_tdo(S_BSCAN_tdo),          // output wire tdo
+      .S_BSCAN_tms(S_BSCAN_tms),          // input wire tms
+      .S_BSCAN_update(S_BSCAN_update),    // input wire update
+      .S_BSCAN_bscanid_en(S_BSCAN_bscanid_en)  // input wire bscanid_en
    );
 endmodule

@@ -23,6 +23,7 @@ link_design -mode default -part $part -top $topModuleName
 set_property HD.RECONFIGURABLE 1 [get_cells $updateInstName]
 read_checkpoint -cell $updateInstName $synthDir/$updateName/${updateName}_synth.dcp -strict
 # Read in the constraints for the new RP if needed
+read_xdc -quiet $commonDir/constraints/pblock.xdc
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     read_xdc -quiet $xdcfile
 }

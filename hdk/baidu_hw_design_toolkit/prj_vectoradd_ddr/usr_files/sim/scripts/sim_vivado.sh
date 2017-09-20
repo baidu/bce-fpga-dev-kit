@@ -43,5 +43,37 @@ cd ${SIMSCRIPT_DIR}/../sim_vivado
 
 xvlog --sv ${DEFINE_PARA} -m64 --initfile ${XILINX_VIVADO}/data/xsim/ip/xsim_ip.ini --work xil_defaultlib --relax -f ${SIMSCRIPT_DIR}/top.vivado.v.f
 xvhdl -m64 --initfile ${XILINX_VIVADO}/data/xsim/ip/xsim_ip.ini --relax -prj ${SIMSCRIPT_DIR}/top.vivado.vhd.prj
-xelab -m64 --initfile ${XILINX_VIVADO}/data/xsim/ip/xsim_ip.ini --debug typical --relax --mt 8 -L xil_defaultlib -L microblaze_v10_0_1 -L lib_cdc_v1_0_2 -L proc_sys_reset_v5_0_10 -L lmb_v10_v3_0_9 -L lmb_bram_if_cntlr_v4_0_10 -L blk_mem_gen_v8_3_5 -L iomodule_v3_0_6 -L generic_baseblocks_v2_1_0 -L axi_infrastructure_v1_1_0 -L axi_register_slice_v2_1_11 -L fifo_generator_v13_1_3 -L axi_data_fifo_v2_1_10 -L axi_crossbar_v2_1_12 -L xbip_utils_v3_0_7 -L axi_utils_v2_0_3 -L xbip_pipe_v3_0_3 -L xbip_dsp48_wrapper_v3_0_4 -L xbip_dsp48_addsub_v3_0_3 -L xbip_dsp48_multadd_v3_0_3 -L xbip_bram18k_v3_0_3 -L mult_gen_v12_0_12 -L floating_point_v7_1_3 -L util_vector_logic_v2_0 -L axi_clock_converter_v2_1_10 -L axi_protocol_converter_v2_1_11 -L axi_dwidth_converter_v2_1_11 -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_behav xil_defaultlib.tb xil_defaultlib.glbl -log elaborate.log
+xelab -m64 --initfile ${XILINX_VIVADO}/data/xsim/ip/xsim_ip.ini --debug typical --relax --mt 8 \
+   -L xil_defaultlib \
+   -L unisims_ver \
+   -L unimacro_ver \
+   -L secureip \
+   -L xpm \
+   -L fifo_generator_v13_1_4 \
+   -L axi_crossbar_v2_1_13 \
+   -L axi_dwidth_converter_v2_1_12 \
+   -L axi_infrastructure_v1_1_0 \
+   -L axi_register_slice_v2_1_12 \
+   -L axi_data_fifo_v2_1_11 \
+   -L blk_mem_gen_v8_3_6 \
+   -L axi_clock_converter_v2_1_11 \
+   -L util_vector_logic_v2_0_1 \
+   -L microblaze_v10_0_1 \
+   -L lib_cdc_v1_0_2 \
+   -L proc_sys_reset_v5_0_10 \
+   -L lmb_v10_v3_0_9 \
+   -L lmb_bram_if_cntlr_v4_0_10 \
+   -L iomodule_v3_0_6 \
+   -L generic_baseblocks_v2_1_0 \
+   -L xbip_utils_v3_0_7 \
+   -L axi_utils_v2_0_3 \
+   -L xbip_pipe_v3_0_3 \
+   -L xbip_dsp48_wrapper_v3_0_4 \
+   -L xbip_dsp48_addsub_v3_0_3 \
+   -L xbip_dsp48_multadd_v3_0_3 \
+   -L xbip_bram18k_v3_0_3 \
+   -L mult_gen_v12_0_12 \
+   -L floating_point_v7_1_3 \
+   -L axi_protocol_converter_v2_1_11 \
+   --snapshot tb_behav xil_defaultlib.tb xil_defaultlib.glbl -log elaborate.log
 xsim tb_behav -R -tclbatch ${SIMSCRIPT_DIR}/tb_wave.tcl -log simulate.log

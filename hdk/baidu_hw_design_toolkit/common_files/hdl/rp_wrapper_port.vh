@@ -166,6 +166,8 @@
     C3_DDR4_ck_t,
     C3_DDR4_dqs_t,
 
+    ddr_status,
+
     s_axi_aclk,
     pe_clk,
     pe_clk_rst,
@@ -176,18 +178,18 @@
     usr_irq_req,
 
     // Debug core signals.
-    drck,
-    shift,
-    tdi,
-    update,
-    sel,
-    tdo,
-    tms,
-    tck,
-    runtest,
-    reset,
-    capture,
-    bscanid);
+    S_BSCAN_drck,
+    S_BSCAN_shift,
+    S_BSCAN_tdi,
+    S_BSCAN_update,
+    S_BSCAN_sel,
+    S_BSCAN_tdo,
+    S_BSCAN_tms,
+    S_BSCAN_tck,
+    S_BSCAN_runtest,
+    S_BSCAN_reset,
+    S_BSCAN_capture,
+    S_BSCAN_bscanid_en);
 
   input [63:0]S_AXI_araddr;
   input [1:0]S_AXI_arburst;
@@ -357,6 +359,8 @@
   output [0:0]C3_DDR4_ck_t;
   inout [8:0]C3_DDR4_dqs_t;
 
+  output [7:0] ddr_status;
+
   input s_axi_aclk;
   input s_axi_aresetn;
 
@@ -368,18 +372,19 @@
   output [15:0]usr_irq_req;
 
   // Debug core signals.
-  input  drck;
-  input  shift;
-  input  tdi;
-  input  update;
-  input  sel;
-  output  tdo;
-  input  tms;
-  input  tck;
-  input  runtest;
-  input  reset;
-  input  capture;
-  output  [31 : 0] bscanid;
+  input  S_BSCAN_drck;
+  input  S_BSCAN_shift;
+  input  S_BSCAN_tdi;
+  input  S_BSCAN_update;
+  input  S_BSCAN_sel;
+  output  S_BSCAN_tdo;
+  input  S_BSCAN_tms;
+  input  S_BSCAN_tck;
+  input  S_BSCAN_runtest;
+  input  S_BSCAN_reset;
+  input  S_BSCAN_capture;
+  input  S_BSCAN_bscanid_en;
+  //output  [31 : 0] bscanid;
 
   wire [63:0]S_AXI_araddr;
   wire [1:0]S_AXI_arburst;
@@ -558,16 +563,19 @@
   wire [0:0]C3_DDR4_ck_t;
   wire [8:0]C3_DDR4_dqs_t;
 
+  wire [7:0] ddr_status;
+
   // Debug core signals.
-  wire drck;
-  wire shift;
-  wire tdi;
-  wire update;
-  wire sel;
-  wire tdo;
-  wire tms;
-  wire tck;
-  wire runtest;
-  wire reset;
-  wire capture;
-  wire [31 : 0] bscanid;
+  wire S_BSCAN_drck;
+  wire S_BSCAN_shift;
+  wire S_BSCAN_tdi;
+  wire S_BSCAN_update;
+  wire S_BSCAN_sel;
+  wire S_BSCAN_tdo;
+  wire S_BSCAN_tms;
+  wire S_BSCAN_tck;
+  wire S_BSCAN_runtest;
+  wire S_BSCAN_reset;
+  wire S_BSCAN_capture;
+  wire S_BSCAN_bscanid_en;
+  //wire [31 : 0] bscanid;

@@ -33,9 +33,23 @@ module mig_wrapper (
       .reset_rtl(reset_rtl)
    );
 `else
+   rp_app_mig rp_mig_bd_i(
+      `include "mig_wrapper_if_app.vh"
+      `include "mig_wrapper_if_ddr.vh"
+      .reset_rtl(reset_rtl)
+   );
+`endif
+
+endmodule
+
+module rp_app_mig (
+   `include "mig_wrapper_port_app.vh"
+   `include "mig_wrapper_port_ddr.vh"
+   input reset_rtl
+);
 
    `ifdef USE_DDR4_C0
-      ddr4_0 ddr4_c0_i(
+      ddr4_0 ddr4_0(
          .sys_rst                           (reset_rtl),
          .c0_sys_clk_p                      (C0_SYS_CLK_clk_p),
          .c0_sys_clk_n                      (C0_SYS_CLK_clk_n),
@@ -80,7 +94,7 @@ module mig_wrapper (
    `endif
 
    `ifdef USE_DDR4_C1
-      ddr4_0 ddr4_c1_i(
+      ddr4_0 ddr4_1(
          .sys_rst                           (reset_rtl),
          .c0_sys_clk_p                      (C1_SYS_CLK_clk_p),
          .c0_sys_clk_n                      (C1_SYS_CLK_clk_n),
@@ -125,7 +139,7 @@ module mig_wrapper (
    `endif
 
    `ifdef USE_DDR4_C2
-      ddr4_0 ddr4_c2_i(
+      ddr4_0 ddr4_2(
          .sys_rst                           (reset_rtl),
          .c0_sys_clk_p                      (C2_SYS_CLK_clk_p),
          .c0_sys_clk_n                      (C2_SYS_CLK_clk_n),
@@ -170,7 +184,7 @@ module mig_wrapper (
    `endif
 
    `ifdef USE_DDR4_C3
-      ddr4_0 ddr4_c3_i(
+      ddr4_0 ddr4_3(
          .sys_rst                           (reset_rtl),
          .c0_sys_clk_p                      (C3_SYS_CLK_clk_p),
          .c0_sys_clk_n                      (C3_SYS_CLK_clk_n),
@@ -213,5 +227,5 @@ module mig_wrapper (
          .dbg_bus                           (c3_dbg_bus)
       );
    `endif
-`endif
+
 endmodule

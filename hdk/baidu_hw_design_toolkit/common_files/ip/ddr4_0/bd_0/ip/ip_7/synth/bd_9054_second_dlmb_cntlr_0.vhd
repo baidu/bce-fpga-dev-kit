@@ -47,14 +47,14 @@
 -- DO NOT MODIFY THIS FILE.
 
 -- IP VLNV: xilinx.com:ip:lmb_bram_if_cntlr:4.0
--- IP Revision: 10
+-- IP Revision: 11
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
-LIBRARY lmb_bram_if_cntlr_v4_0_10;
-USE lmb_bram_if_cntlr_v4_0_10.lmb_bram_if_cntlr;
+LIBRARY lmb_bram_if_cntlr_v4_0_11;
+USE lmb_bram_if_cntlr_v4_0_11.lmb_bram_if_cntlr;
 
 ENTITY bd_9054_second_dlmb_cntlr_0 IS
   PORT (
@@ -189,11 +189,11 @@ ARCHITECTURE bd_9054_second_dlmb_cntlr_0_arch OF bd_9054_second_dlmb_cntlr_0 IS
     );
   END COMPONENT lmb_bram_if_cntlr;
   ATTRIBUTE X_CORE_INFO : STRING;
-  ATTRIBUTE X_CORE_INFO OF bd_9054_second_dlmb_cntlr_0_arch: ARCHITECTURE IS "lmb_bram_if_cntlr,Vivado 2016.4";
+  ATTRIBUTE X_CORE_INFO OF bd_9054_second_dlmb_cntlr_0_arch: ARCHITECTURE IS "lmb_bram_if_cntlr,Vivado 2017.1";
   ATTRIBUTE CHECK_LICENSE_TYPE : STRING;
   ATTRIBUTE CHECK_LICENSE_TYPE OF bd_9054_second_dlmb_cntlr_0_arch : ARCHITECTURE IS "bd_9054_second_dlmb_cntlr_0,lmb_bram_if_cntlr,{}";
   ATTRIBUTE CORE_GENERATION_INFO : STRING;
-  ATTRIBUTE CORE_GENERATION_INFO OF bd_9054_second_dlmb_cntlr_0_arch: ARCHITECTURE IS "bd_9054_second_dlmb_cntlr_0,lmb_bram_if_cntlr,{x_ipProduct=Vivado 2016.4,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_bram_if_cntlr,x_ipVersion=4.0,x_ipCoreRevision=10,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=kintexu,C_HIGHADDR=0x0000000000017FFF,C_BASEADDR=0x0000000000010000,C_NUM_LMB=1,C_MASK=0x00000000C0010000,C_MASK1=0x0000000000800000,C_MASK2=0x0000000000800000,C_MASK3=0x0000000000800000,C_LMB_AWIDTH=32,C_LMB_DWIDTH=32,C_ECC=0,C_INTERCONNECT=0,C_FAULT_INJECT=0,C_CE_FAILING_R" & 
+  ATTRIBUTE CORE_GENERATION_INFO OF bd_9054_second_dlmb_cntlr_0_arch: ARCHITECTURE IS "bd_9054_second_dlmb_cntlr_0,lmb_bram_if_cntlr,{x_ipProduct=Vivado 2017.1,x_ipVendor=xilinx.com,x_ipLibrary=ip,x_ipName=lmb_bram_if_cntlr,x_ipVersion=4.0,x_ipCoreRevision=11,x_ipLanguage=VERILOG,x_ipSimLanguage=MIXED,C_FAMILY=kintexu,C_HIGHADDR=0x0000000000017FFF,C_BASEADDR=0x0000000000010000,C_NUM_LMB=1,C_MASK=0x00000000C0010000,C_MASK1=0x0000000000800000,C_MASK2=0x0000000000800000,C_MASK3=0x0000000000800000,C_LMB_AWIDTH=32,C_LMB_DWIDTH=32,C_ECC=0,C_INTERCONNECT=0,C_FAULT_INJECT=0,C_CE_FAILING_R" & 
 "EGISTERS=0,C_UE_FAILING_REGISTERS=0,C_ECC_STATUS_REGISTERS=0,C_ECC_ONOFF_REGISTER=0,C_ECC_ONOFF_RESET_VALUE=1,C_CE_COUNTER_WIDTH=0,C_WRITE_ACCESS=2,C_BRAM_AWIDTH=32,C_S_AXI_CTRL_ADDR_WIDTH=32,C_S_AXI_CTRL_DATA_WIDTH=32}";
   ATTRIBUTE X_INTERFACE_INFO : STRING;
   ATTRIBUTE X_INTERFACE_INFO OF LMB_Clk: SIGNAL IS "xilinx.com:signal:clock:1.0 CLK.LMB_Clk CLK";

@@ -46,8 +46,8 @@
 -- 
 -- DO NOT MODIFY THIS FILE.
 
--- IP VLNV: xilinx.com:ip:ddr4:2.1
--- IP Revision: 1
+-- IP VLNV: xilinx.com:ip:ddr4:2.2
+-- IP Revision: 0
 
 -- The following code must appear in the VHDL architecture header.
 

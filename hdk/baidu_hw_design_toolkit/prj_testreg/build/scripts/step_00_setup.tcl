@@ -39,7 +39,7 @@ set usrIPPath  $usrDir/usr_ip
 set usrIncPath $usrDir/include
 
 # Use DDR Channel Setting
-set USE_DDR4_C0 0
+set USE_DDR4_C0 1
 set USE_DDR4_C1 0
 set USE_DDR4_C2 0
 set USE_DDR4_C3 0

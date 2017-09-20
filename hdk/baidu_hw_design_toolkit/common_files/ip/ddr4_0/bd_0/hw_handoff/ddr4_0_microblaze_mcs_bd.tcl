@@ -20,7 +20,7 @@ set script_folder [_tcl::get_script_folder]
 ################################################################
 # Check if script is running in correct Vivado version.
 ################################################################
-set scripts_vivado_version 2016.4
+set scripts_vivado_version 2017.1
 set current_vivado_version [version -short]
 
 if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
@@ -87,7 +87,7 @@ if { $run_remote_bd_flow == 1 } {
   }
 
   # Check if design exists on disk within project
-  set list_existing_designs [get_files */${design_name}.bd]
+  set list_existing_designs [get_files -quiet */${design_name}.bd]
   if { $list_existing_designs ne "" } {
      catch {common::send_msg_id "BD_TCL-112" "ERROR" "The design <$design_name> already exists in this project at location:
     $list_existing_designs"}
@@ -190,7 +190,7 @@ CONFIG.C_MASK {0x0000000080010000} \
  ] $ilmb_cntlr
 
   # Create instance: iomodule_0, and set properties
-  set iomodule_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:iomodule:3.0 iomodule_0 ]
+  set iomodule_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:iomodule:3.1 iomodule_0 ]
   set_property -dict [ list \
 CONFIG.C_INSTANCE {iomodule} \
 CONFIG.C_INTC_ADDR_WIDTH {17} \
@@ -207,12 +207,6 @@ CONFIG.C_USE_IO_BUS {1} \
   set lmb_bram_I [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 lmb_bram_I ]
   set_property -dict [ list \
 CONFIG.Memory_Type {True_Dual_Port_RAM} \
-CONFIG.use_bram_block {BRAM_Controller} \
- ] $lmb_bram_I
-
-  # Need to retain value_src of defaults
-  set_property -dict [ list \
-CONFIG.use_bram_block.VALUE_SRC {DEFAULT} \
  ] $lmb_bram_I
 
   # Create instance: microblaze_I, and set properties
@@ -253,12 +247,6 @@ CONFIG.C_MASK {0x0000000080010000} \
   set second_lmb_bram_I [ create_bd_cell -type ip -vlnv xilinx.com:ip:blk_mem_gen:8.3 second_lmb_bram_I ]
   set_property -dict [ list \
 CONFIG.Memory_Type {True_Dual_Port_RAM} \
-CONFIG.use_bram_block {BRAM_Controller} \
- ] $second_lmb_bram_I
-
-  # Need to retain value_src of defaults
-  set_property -dict [ list \
-CONFIG.use_bram_block.VALUE_SRC {DEFAULT} \
  ] $second_lmb_bram_I
 
   # Create interface connections

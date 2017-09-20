@@ -22,7 +22,8 @@ link_design -mode default -part $part -top $topModuleName
 # Read in this version of the update checkpoint and associated constraints.
 set_property HD.RECONFIGURABLE 1 [get_cells $updateInstName]
 read_checkpoint -cell $updateInstName $synthDir/$updateName/${updateName}_synth.dcp -strict
-# Read in the constraints for the new RP if needed
+#Read in the constraints for the new RP if needed
+read_xdc -quiet $commonDir/constraints/pblock.xdc
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     read_xdc -quiet $xdcfile
 }
@@ -50,9 +51,9 @@ file mkdir $bitDir/$updateName
 # Generate bitfiles
 write_bitstream -force -bin_file -file $bitDir/$updateName/${updateName}.bit > $bitDir/$updateName/${updateName}_write_bitstream.log
 write_debug_probes $bitDir/$updateName/${updateName}.ltx
-#exec rm -rf $bitDir/$updateName/${updateName}.bit 
-#exec rm -rf $bitDir/$updateName/${updateName}.bin 
-#exec rm -rf $bitDir/$updateName/${updateName}.ltx 
+exec rm -rf $bitDir/$updateName/${updateName}.bit
+exec rm -rf $bitDir/$updateName/${updateName}.bin
+exec rm -rf $bitDir/$updateName/${updateName}.ltx
 
 #generate meta_file for target_file
 set target_file1 $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin

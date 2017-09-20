@@ -20,7 +20,7 @@ set script_folder [_tcl::get_script_folder]
 ################################################################
 # Check if script is running in correct Vivado version.
 ################################################################
-set scripts_vivado_version 2016.4
+set scripts_vivado_version 2017.1
 set current_vivado_version [version -short]
 
 if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
@@ -328,8 +328,11 @@ CONFIG.M03_HAS_DATA_FIFO {1} \
 CONFIG.M03_HAS_REGSLICE {4} \
 CONFIG.NUM_MI {4} \
 CONFIG.NUM_SI {2} \
+CONFIG.S00_HAS_DATA_FIFO {2} \
 CONFIG.S00_HAS_REGSLICE {4} \
+CONFIG.S01_HAS_DATA_FIFO {2} \
 CONFIG.S01_HAS_REGSLICE {4} \
+CONFIG.STRATEGY {2} \
  ] $axi_interconnect_1
 
   # Create instance: axi_register_slice_0, and set properties
@@ -444,85 +447,6 @@ CONFIG.LOGO_FILE {data/sym_notgate.png} \
   create_bd_addr_seg -range 0x80000000 -offset 0x000180000000 [get_bd_addr_spaces S_AXI] [get_bd_addr_segs C3_DDR4_M_AXI/Reg] SEG_C3_DDR4_M_AXI_Reg
   create_bd_addr_seg -range 0x00010000 -offset 0x00000000 [get_bd_addr_spaces S_AXI_LITE] [get_bd_addr_segs axislave_cu_apctrl_v1_0_0/s00_axi/reg0] SEG_axislave_cu_apctrl_v1_0_0_reg0
 
-  # Perform GUI Layout
-  regenerate_bd_layout -layout_string {
-   guistr: "# # String gsaved with Nlview 6.6.5b  2016-09-06 bk=1.3687 VDI=39 GEI=35 GUI=JA:1.6
-#  -string -flagsOSRD
-preplace port s_axi_aclk -pg 1 -y 610 -defaultsOSRD
-preplace port c2_ddr4_ui_clk -pg 1 -y 830 -defaultsOSRD
-preplace port S_AXI_LITE -pg 1 -y 100 -defaultsOSRD
-preplace port C2_DDR4_M_AXI -pg 1 -y 780 -defaultsOSRD
-preplace port c1_ddr4_ui_clk_sync_rst -pg 1 -y 780 -defaultsOSRD
-preplace port C1_DDR4_M_AXI -pg 1 -y 710 -defaultsOSRD
-preplace port c3_ddr4_ui_clk -pg 1 -y 930 -defaultsOSRD
-preplace port c1_ddr4_ui_clk -pg 1 -y 730 -defaultsOSRD
-preplace port c0_ddr4_ui_clk -pg 1 -y 630 -defaultsOSRD
-preplace port c2_ddr4_ui_clk_sync_rst -pg 1 -y 880 -defaultsOSRD
-preplace port S_AXI -pg 1 -y 570 -defaultsOSRD
-preplace port usr_clk_rst -pg 1 -y 10 -defaultsOSRD
-preplace port c3_ddr4_ui_clk_sync_rst -pg 1 -y 980 -defaultsOSRD
-preplace port C0_DDR4_M_AXI -pg 1 -y 690 -defaultsOSRD
-preplace port s_axi_aresetn -pg 1 -y 590 -defaultsOSRD
-preplace port C3_DDR4_M_AXI -pg 1 -y 900 -defaultsOSRD
-preplace port i_soft_rst_n -pg 1 -y 390 -defaultsOSRD
-preplace port usr_clk -pg 1 -y 470 -defaultsOSRD
-preplace port c0_ddr4_ui_clk_sync_rst -pg 1 -y 680 -defaultsOSRD
-preplace portBus usr_irq_req -pg 1 -y 10 -defaultsOSRD
-preplace portBus usr_irq_ack -pg 1 -y 530 -defaultsOSRD
-preplace inst util_vector_logic_0 -pg 1 -lvl 2 -y 400 -defaultsOSRD
-preplace inst axi_register_slice_0 -pg 1 -lvl 5 -y 780 -defaultsOSRD
-preplace inst util_vector_logic_1 -pg 1 -lvl 3 -y 680 -defaultsOSRD
-preplace inst example_0 -pg 1 -lvl 3 -y 200 -defaultsOSRD
-preplace inst axi_register_slice_1 -pg 1 -lvl 5 -y 900 -defaultsOSRD
-preplace inst util_vector_logic_2 -pg 1 -lvl 3 -y 780 -defaultsOSRD
-preplace inst axi_register_slice_2 -pg 1 -lvl 1 -y -20 -defaultsOSRD
-preplace inst axi_register_slice_3 -pg 1 -lvl 2 -y 570 -defaultsOSRD
-preplace inst util_vector_logic_3 -pg 1 -lvl 3 -y 880 -defaultsOSRD
-preplace inst util_vector_logic_4 -pg 1 -lvl 3 -y 980 -defaultsOSRD
-preplace inst axi_interconnect_1 -pg 1 -lvl 4 -y 720 -defaultsOSRD
-preplace inst axislave_cu_apctrl_v1_0_0 -pg 1 -lvl 2 -y 160 -defaultsOSRD
-preplace netloc S_AXI_LITE_1 1 0 1 -20
-preplace netloc i_soft_rst_n_1 1 0 2 NJ 390 N
-preplace netloc axislave_cu_apctrl_0_arrayu_len_vld 1 2 1 890
-preplace netloc M03_ARESETN_1 1 3 2 1240 980 1580J
-preplace netloc axi_register_slice_0_M_AXI 1 5 1 NJ
-preplace netloc s_axi_aclk_1 1 0 4 -10 -90 450 -90 910 -90 1250
-preplace netloc axi_interconnect_1_M01_AXI 1 4 2 NJ 710 NJ
-preplace netloc s_axi_aresetn_1 1 0 4 0 160 440J 340 830J 400 1240
-preplace netloc c3_ddr4_ui_clk1_1 1 0 5 NJ 830 NJ 830 NJ 830 1230 950 1560J
-preplace netloc c1_ddr4_ui_clk_1 1 0 4 NJ 730 NJ 730 NJ 730 NJ
-preplace netloc axislave_cu_apctrl_v1_0_0_o_interrpt_rdy 1 2 4 890J 10 NJ 10 N 10 NJ
-preplace netloc usr_irq_ack_1 1 0 2 10 120 N
-preplace netloc example_0_ap_done 1 1 2 460 -10 920
-preplace netloc axislave_cu_apctrl_0_ap_start 1 2 1 N
-preplace netloc util_vector_logic_0_Res 1 2 1 820
-preplace netloc example_0_m_axi_a_V 1 3 1 1260
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr 1 2 1 870
-preplace netloc axi_interconnect_1_M02_AXI 1 4 1 1560
-preplace netloc c3_ddr4_ui_clk_1 1 0 5 NJ 930 NJ 930 NJ 930 1250 940 1570J
-preplace netloc c1_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 780 NJ 780 NJ
-preplace netloc M02_ARESETN_1 1 3 2 1260 930 1540J
-preplace netloc example_0_ap_idle 1 1 2 470J 0 900J
-preplace netloc example_0_ap_ready 1 1 2 480 10 880
-preplace netloc c3_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 980 NJ 980 NJ
-preplace netloc c1_ddr4_ui_clk1_1 1 0 4 0J 640 NJ 640 870J 630 1220J
-preplace netloc axislave_cu_apctrl_0_array_len 1 2 1 850
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr_vld 1 2 1 N
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr 1 2 1 860
-preplace netloc axi_interconnect_1_M03_AXI 1 4 1 1550
-preplace netloc M00_ARESETN_1 1 3 1 1230J
-preplace netloc axi_register_slice_1_M_AXI 1 5 1 NJ
-preplace netloc axi_interconnect_1_M00_AXI 1 4 2 NJ 690 NJ
-preplace netloc c2_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 880 NJ 880 NJ
-preplace netloc axislave_cu_apctrl_0_C_array_baseaddr 1 2 1 840
-preplace netloc axislave_cu_apctrl_0_B_array_baseaddr_vld 1 2 1 N
-preplace netloc axislave_cu_apctrl_0_A_array_baseaddr_vld 1 2 1 N
-preplace netloc axi_register_slice_2_M_AXI 1 1 1 440
-preplace netloc c0_ddr4_ui_clk_sync_rst_1 1 0 3 NJ 680 NJ 680 NJ
-preplace netloc M01_ARESETN_1 1 3 1 1220J
-levelinfo -pg 1 -40 330 650 1070 1400 1690 1820 -top -120 -bot 1020
-",
-}
 
   # Restore current instance
   current_bd_instance $oldCurInst

@@ -35,8 +35,12 @@ ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_us_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_auto_us_1.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_ila_0_0.v
 ${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd.v
-
-
+${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_0_0.v
+${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_1_0.v
+${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_2_0.v
+${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_3_0.v
+${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_4_0.v
+${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_5_0.v
 
 ${SIMSCRIPT_DIR}/../../usr_rtl/card_addr_translate.v
 

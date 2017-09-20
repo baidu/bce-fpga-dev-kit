@@ -58,7 +58,7 @@
 // \   \   \/     Version            : 2.1
 //  \   \         Application        : MIG
 //  /   /         Filename           : ddr4_0_phy.sv
-// /___/   /\     Date Last Modified : $Date: 2016/09/16 $
+// /___/   /\     Date Last Modified : $Date: 2017/02/08 $
 // \   \  /  \    Date Created       : Thu Apr 18 2013
 //  \___\/\___\
 //
@@ -104,6 +104,8 @@ module ddr4_0_phy (
   inout  [71:0]                                    ddr4_dq,
   inout  [8:0]                                    ddr4_dqs_c,
   inout  [8:0]                                    ddr4_dqs_t,
+  input  [7:0]                                 mcal_CK_t,
+  input  [7:0]                                 mcal_CK_c,
   input  [7 : 0]                                  mcal_ACT_n,
   input  [7:0]                                    mcal_CAS_n,
   input  [7:0]                                    mcal_RAS_n,
@@ -217,6 +219,8 @@ ddr4_0_phy_ddr4
     .ddr4_dqs_c                 (ddr4_dqs_c),
     .ddr4_dqs_t                 (ddr4_dqs_t),
 
+    .mcal_CK_t                  (mcal_CK_t),
+    .mcal_CK_c                  (mcal_CK_c),
     .mcal_ACT_n                 (mcal_ACT_n),
     .mcal_RAS_n                 (mcal_RAS_n),
     .mcal_CAS_n                 (mcal_CAS_n),
