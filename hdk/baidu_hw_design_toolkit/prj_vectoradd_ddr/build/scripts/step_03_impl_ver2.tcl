@@ -22,7 +22,7 @@ link_design -mode default -part $part -top $topModuleName
 # Read in this version of the update checkpoint and associated constraints.
 set_property HD.RECONFIGURABLE 1 [get_cells $updateInstName]
 read_checkpoint -cell $updateInstName $synthDir/$updateName/${updateName}_synth.dcp -strict
-#Read in the constraints for the new RP if needed
+# Read in the constraints for the new RP if needed
 read_xdc -quiet $commonDir/constraints/pblock.xdc
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     read_xdc -quiet $xdcfile
@@ -32,6 +32,7 @@ foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
 # options can be added here as desired. A checkpoint is written after each
 # step for convenience.
 opt_design > $implDir/$updateName/${topModuleName}_opt_design.log
+#source scripts/dbg_timing.tcl
 write_checkpoint -force $implDir/$updateName/${topModuleName}_opt_design.dcp
 place_design > $implDir/$updateName/${topModuleName}_place_design.log
 write_checkpoint -force $implDir/$updateName/${topModuleName}_place_design.dcp
@@ -52,8 +53,8 @@ file mkdir $bitDir/$updateName
 write_bitstream -force -bin_file -file $bitDir/$updateName/${updateName}.bit > $bitDir/$updateName/${updateName}_write_bitstream.log
 write_debug_probes $bitDir/$updateName/${updateName}.ltx
 exec rm -rf $bitDir/$updateName/${updateName}.bit
-exec rm -rf $bitDir/$updateName/${updateName}.bin
-exec rm -rf $bitDir/$updateName/${updateName}.ltx
+exec rm -rf $bitDir/$updateName/${updateName}.bin 
+exec rm -rf $bitDir/$updateName/${updateName}.ltx 
 
 #generate meta_file for target_file
 set target_file1 $bitDir/$updateName/${updateName}_pr_region_partial_clear.bin
@@ -81,6 +82,7 @@ set timestamp [exec date "+%Y-%m-%d %H:%M:%S"]
 set fp_define [open $meta_file w]
 puts $fp_define "{\"md5sum\":\"${md5_result1}\",\"timestamp\":\"${timestamp}\",\"my_top_route_design_dcp_md5sum\":\"${md5_result2}\",\"my_top_static_routed_dcp_md5sum\":\"${md5_result3}\"}"
 close $fp_define
+
 
 # Error and Message Reporting
 set warningCount [get_msg_config -severity {Warning} -count]

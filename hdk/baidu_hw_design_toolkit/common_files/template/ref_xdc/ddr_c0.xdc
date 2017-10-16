@@ -132,13 +132,13 @@ set_property PACKAGE_PIN AU36 [get_ports {C0_DDR4_dqs_t[8]}]
 set_property PACKAGE_PIN AU37 [get_ports {C0_DDR4_dqs_c[8]}]
 
 #set false path for usr reset
-set_false_path -through [get_nets -of_objects [get_pins rp_i/*/c0_ddr4_ui_clk_sync_rst]]
+set_false_path -through [get_nets -hierarchical -filter NAME=~*ddr4_0/*c0_ddr4_ui_clk_sync_rst]
 
 #pblock
 create_pblock ddr_c0_pblock
 resize_pblock [get_pblocks ddr_c0_pblock] -add { \
     CLOCKREGION_X2Y0:CLOCKREGION_X2Y3 \
 }
-add_cells_to_pblock ddr_c0_pblock [get_cells rp_i/mig_wrapper_i/rp_mig_bd_i/ddr4_0]
+add_cells_to_pblock ddr_c0_pblock [get_cells -hierarchical -filter NAME=~*ddr4_0]
 set_property PARENT pblock_die_0 [get_pblocks ddr_c0_pblock]
 set_property SNAPPING_MODE ON [get_pblocks ddr_c0_pblock]

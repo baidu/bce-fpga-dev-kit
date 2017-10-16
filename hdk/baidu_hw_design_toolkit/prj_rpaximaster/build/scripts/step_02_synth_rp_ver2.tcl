@@ -10,11 +10,22 @@ file mkdir $synthDir/$updateName
 
 # Run OOC Synthesis for the static portion of the design
 puts "# HD INFO: Running OOC synthesis for the RP portion of the design for $updateName"
-update_compile_order -fileset sources_1
-synth_design -top $updateModuleName -part $part -mode out_of_context -keep_equivalent_registers -flatten_hierarchy rebuilt > $synthDir/$updateName/${updateName}_synth.log
-write_checkpoint -force $synthDir/$updateName/${updateName}_synth.dcp
+reset_run rp_wrapper_synth_1
+launch_runs rp_wrapper_synth_1
+wait_on_run rp_wrapper_synth_1
 
-# Error and Message Reporting
+# Copy the log file to the synthesis directory
+file copy -force $projDir/${projName}.runs/rp_wrapper_synth_1/runme.log $synthDir/$updateName/${updateName}_synth.log
+
+# Report ooc synthesis pass/fail and warning/error counts
+#if {[catch {exec grep -B 1 -A 1 "synth_design completed successfully" $synthDir/$updateName/${updateName}_synth.log} returnVal]} {
+#  puts "Synthesis failed. Pass string not found."
+#  error "Synthesis failed. Pass string not found."
+#} else {
+  # Copy the post synthesis .dcp file to the synthesis directory
+file copy -force $projDir/${projName}.runs/rp_wrapper_synth_1/rp_wrapper.dcp $synthDir/$updateName/${updateName}_synth.dcp
+
+  # Error and Message Reporting
 #  set warningCount [lindex $returnVal 2]
 #  set criticalCount [lindex $returnVal 4]
 #  set errorCount [lindex $returnVal 8]

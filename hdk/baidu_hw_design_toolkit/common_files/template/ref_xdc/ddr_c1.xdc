@@ -132,13 +132,13 @@ set_property PACKAGE_PIN BA19 [get_ports {C1_DDR4_dq[70]}]
 set_property PACKAGE_PIN BA18 [get_ports {C1_DDR4_dq[71]}]
 
 #set false path for usr reset
-set_false_path -through [get_nets -of_objects [get_pins rp_i/*/c1_ddr4_ui_clk_sync_rst]]
+set_false_path -through [get_nets -hierarchical -filter NAME=~*ddr4_1/*c0_ddr4_ui_clk_sync_rst]
 
 #pblock
 create_pblock ddr_c1_pblock
 resize_pblock [get_pblocks ddr_c1_pblock] -add { \
     CLOCKREGION_X4Y2:CLOCKREGION_X4Y4 \
 }
-add_cells_to_pblock ddr_c1_pblock [get_cells rp_i/mig_wrapper_i/rp_mig_bd_i/ddr4_1]
+add_cells_to_pblock ddr_c1_pblock [get_cells -hierarchical -filter NAME=~*ddr4_1]
 set_property PARENT pblock_die_0 [get_pblocks ddr_c1_pblock]
 set_property SNAPPING_MODE ON [get_pblocks ddr_c1_pblock]

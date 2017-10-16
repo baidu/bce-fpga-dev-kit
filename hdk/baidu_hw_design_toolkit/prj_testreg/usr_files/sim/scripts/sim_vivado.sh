@@ -40,25 +40,20 @@ mkdir sim_vivado
 
 cd ${SIMSCRIPT_DIR}/../sim_vivado
 
-#   -L axi_infrastructure_v1_1_0    \
-#   -L axi_register_slice_v2_1_11   \
-#   -L axi_data_fifo_v2_1_10        \
-#   -L blk_mem_gen_v8_3_5           \
-
 xvlog --sv ${DEFINE_PARA} -m64 --initfile ${XILINX_VIVADO}/data/xsim/ip/xsim_ip.ini --work xil_defaultlib --relax -f ${SIMSCRIPT_DIR}/top.vivado.v.f
 xelab -m64 --initfile ${XILINX_VIVADO}/data/xsim/ip/xsim_ip.ini --debug typical --relax --mt 8  \
    -L xil_defaultlib               \
    -L generic_baseblocks_v2_1_0    \
+   -L axi_infrastructure_v1_1_0    \
+   -L axi_register_slice_v2_1_11   \
+   -L axi_crossbar_v2_1_12         \
+   -L axi_data_fifo_v2_1_10        \
+   -L blk_mem_gen_v8_3_5           \
+   -L fifo_generator_v13_1_3       \
+   -L axi_dwidth_converter_v2_1_11 \
    -L unisims_ver                  \
    -L unimacro_ver                 \
    -L secureip                     \
    -L xpm                          \
-   -L fifo_generator_v13_1_4       \
-   -L axi_crossbar_v2_1_13         \
-   -L axi_dwidth_converter_v2_1_12 \
-   -L axi_infrastructure_v1_1_0    \
-   -L axi_register_slice_v2_1_12   \
-   -L axi_data_fifo_v2_1_11        \
-   -L blk_mem_gen_v8_3_6           \
    --snapshot tb_behav xil_defaultlib.tb xil_defaultlib.glbl -log elaborate.log
 xsim tb_behav -R -tclbatch ${SIMSCRIPT_DIR}/tb_wave.tcl -log simulate.log

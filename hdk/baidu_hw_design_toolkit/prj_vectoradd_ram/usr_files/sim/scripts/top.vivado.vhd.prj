@@ -2,5 +2,7 @@
 vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_axi_bram_ctrl_0_0.vhd"
 vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/example_ap_fadd_6_full_dsp_32.vhd"
 vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_example_0_0.vhd"
+vhdl util_vector_logic_v2_0 "${SIMSCRIPT_DIR}/../ipi_simfiles/util_vector_logic.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_0_0.vhd"
 
 nosort

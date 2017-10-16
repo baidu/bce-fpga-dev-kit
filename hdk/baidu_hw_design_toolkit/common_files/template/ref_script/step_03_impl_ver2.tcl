@@ -32,6 +32,7 @@ foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
 # options can be added here as desired. A checkpoint is written after each
 # step for convenience.
 opt_design > $implDir/$updateName/${topModuleName}_opt_design.log
+#source scripts/dbg_timing.tcl
 write_checkpoint -force $implDir/$updateName/${topModuleName}_opt_design.dcp
 place_design > $implDir/$updateName/${topModuleName}_place_design.log
 write_checkpoint -force $implDir/$updateName/${topModuleName}_place_design.dcp

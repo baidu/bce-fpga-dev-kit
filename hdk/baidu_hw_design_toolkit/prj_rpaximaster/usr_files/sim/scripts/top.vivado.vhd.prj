@@ -1,3 +1,12 @@
 # compile vhdl design source files
+vhdl util_vector_logic_v2_0 "${SIMSCRIPT_DIR}/../ipi_simfiles/util_vector_logic.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_0_0.vhd"
 vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_axi_cdma_0_0.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_0_0.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_1_0.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_2_0.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_3_0.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_4_0.vhd"
+vhdl xil_defaultlib "${SIMSCRIPT_DIR}/../ipi_simfiles/rp_bd_util_vector_logic_5_0.vhd"
+
 nosort
