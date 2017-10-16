@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-#include "fpga_cloud.h"
+#include <llapi.h>
 #include <assert.h>
+#include <pthread.h>
+#include <string.h>
+
 #include "./timing.h"
 
-using namespace fpga::cloud::api;
+using namespace baidu::fpga::llapi;
 using fpga::rsa::api::StopWatch;
 
 bool g_failed = false;

@@ -34,7 +34,7 @@ struct bce_fpga_device {
 extern struct bce_fpga_device g_bce_fpga_devices[NR_MAX_SLOTS];
 
 /**
- * @brief   Read register in 32-bit
+ * @brief   Read rp/user register in 32-bit
  *
  * @param [in]  slot    : slot number
  * @param [in]  addr    : register offset
@@ -47,10 +47,10 @@ extern struct bce_fpga_device g_bce_fpga_devices[NR_MAX_SLOTS];
  * @author  miaotianxiang@baidu.com
  * @date    2017-08-25
  **/
-int reg_read_32(int slot, uint64_t addr, uint32_t *value);
+int user_reg_read_32(int slot, uint64_t addr, uint32_t *value);
 
 /**
- * @brief   Write register in 32-bit
+ * @brief   Write rp/user register in 32-bit
  *
  * @param [in] slot     : slot number
  * @param [in] addr     : register offset
@@ -63,7 +63,39 @@ int reg_read_32(int slot, uint64_t addr, uint32_t *value);
  * @author  miaotianxiang@baidu.com
  * @date    2017-08-25
  **/
-int reg_write_32(int slot, uint64_t addr, uint32_t value);
+int user_reg_write_32(int slot, uint64_t addr, uint32_t value);
+
+/**
+ * @brief   Read mgmt register in 32-bit
+ *
+ * @param [in]  slot    : slot number
+ * @param [in]  addr    : register offset
+ * @param [out] value   : output value
+ *
+ * @return  return 0 on success, or error code while failed
+ *
+ * @note
+ *
+ * @author  miaotianxiang@baidu.com
+ * @date    2017-08-25
+ **/
+int mgmt_reg_read_32(int slot, uint64_t addr, uint32_t *value);
+
+/**
+ * @brief   Write mgmt register in 32-bit
+ *
+ * @param [in] slot     : slot number
+ * @param [in] addr     : register offset
+ * @param [in] value    : input value
+ *
+ * @return  return 0 on success, or error code while failed
+ *
+ * @note
+ *
+ * @author  miaotianxiang@baidu.com
+ * @date    2017-08-25
+ **/
+int mgmt_reg_write_32(int slot, uint64_t addr, uint32_t value);
 
 /**
  * @brief   DMA between host main memory and FPGA DDR

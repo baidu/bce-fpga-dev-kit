@@ -559,6 +559,7 @@ struct xdma_dev {
     int user_bar_idx;                /* BAR index of user logic */
     int config_bar_idx;              /* BAR index of XDMA config logic */
     int bypass_bar_idx;              /* BAR index of XDMA bypass logic */
+    int user_reg_bar_idx;            /* BAR index of rp/user reg */
     int regions_in_use;              /* flag if dev was in use during probe() */
     int got_regions;                 /* flag if probe() obtained the regions */
 

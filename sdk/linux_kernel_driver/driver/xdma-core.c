@@ -1890,7 +1890,7 @@ static void identify_bars(struct xdma_dev *lro, int *bar_id_list, int num_bars, 
         if (config_bar_pos == 0) {
             lro->bypass_bar_idx = bar_id_list[1];
         } else if (config_bar_pos == 1) {
-            /* XXX we are here */
+            /* XXX we are here in V1.4 and before */
             lro->user_bar_idx = bar_id_list[0];
         } else {
             dbg_init("case 2\n");
@@ -1899,8 +1899,10 @@ static void identify_bars(struct xdma_dev *lro, int *bar_id_list, int num_bars, 
         break;
     case 3:
         if (config_bar_pos == 1) {
+            /* XXX we are here in V1.5*/
             lro->user_bar_idx = bar_id_list[0];
-            lro->bypass_bar_idx = bar_id_list[2];
+            /*lro->bypass_bar_idx = bar_id_list[2];*/
+            lro->user_reg_bar_idx = bar_id_list[2];
         } else {
             dbg_init("case 3\n");
             dbg_init("XDMA config BAR in unexpected position (%d)", config_bar_pos);
@@ -4266,6 +4268,7 @@ static struct xdma_dev *alloc_dev_instance(struct pci_dev *pdev)
     lro->config_bar_idx = -1;
     lro->user_bar_idx = -1;
     lro->bypass_bar_idx = -1;
+    lro->user_reg_bar_idx = -1;
     lro->irq_line = -1;
 
     /* create a device to driver reference */

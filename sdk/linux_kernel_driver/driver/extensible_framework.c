@@ -76,7 +76,7 @@ static long do_axi_slave_dma(struct xdma_dev *lro)
     unsigned long vaddr = 0;
     dma_addr_t paddr = 0;
     /* XXX: refer to https://github.com/Cwndmiao/bce-fpga-dev-kit/tree/master/sdk/doc#bar_layout */
-    void *reg = lro->bar[lro->user_bar_idx] + (64 << 10);
+    void *reg = lro->bar[lro->user_reg_bar_idx];
     struct xdma_irq *user_irq = &lro->user_irq[0];
     unsigned long flags;
     static DEFINE_MUTEX(axi_slave_dma_mutex);

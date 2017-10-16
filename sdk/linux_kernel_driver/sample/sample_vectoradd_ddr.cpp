@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-#include "fpga_cloud.h"
+#include <llapi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <assert.h>
 
-using namespace fpga::cloud::api;
+using namespace baidu::fpga::llapi;
 
 const float float_a_array[8] = {
     1.0f, 2.0f, 3.0f, 4.0f, 1.0f, 2.0f, 3.0f, 4.0f,
@@ -47,27 +54,37 @@ int main(int argc, char **argv)
     assert(ret == 0);
 
     /* wr reg float_a_addr */
-    ret = reg_write_32(0, 64 * 1024 + 4, float_a_addr);
+    ret = user_reg_write_32(0, 4, float_a_addr);
     assert(ret == 0);
     /* wr reg float_b_addr */
-    ret = reg_write_32(0, 64 * 1024 + 8, float_b_addr);
+    ret = user_reg_write_32(0, 8, float_b_addr);
     assert(ret == 0);
     /* wr reg float_c_addr */
-    ret = reg_write_32(0, 64 * 1024 + 12, float_c_addr);
+    ret = user_reg_write_32(0, 12, float_c_addr);
     assert(ret == 0);
     /* wr reg float_array_len */
-    ret = reg_write_32(0, 64 * 1024 + 16, 8);
+    ret = user_reg_write_32(0, 16, 8);
     assert(ret == 0);
     /* wr reg start_pe */
-    ret = reg_write_32(0, 64 * 1024, 1);
+    ret = user_reg_write_32(0, 0, 1);
     assert(ret == 0);
 
     /* rd reg polling_pe_status */
+    /*
     uint32_t status;
     do {
         ret = reg_read_32(0, 64 * 1024 + 36, &status);
         assert(ret == 0);
     } while (status == 0);
+    */
+    {
+        char buf[4];
+        int fd = open("/dev/xdma0_events_0", O_RDONLY);
+        assert(fd > 0);
+        ret = read(fd, buf, sizeof(buf));
+        assert(ret != -1);
+        close(fd);
+    }
 
     /* DMA float_c_array from FPGA */
     ret = fpga_memcpy(0,
