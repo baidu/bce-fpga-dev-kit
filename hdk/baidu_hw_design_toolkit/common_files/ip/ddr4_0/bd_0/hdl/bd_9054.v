@@ -1,8 +1,8 @@
-//Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
+//Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
-//Tool Version: Vivado v.2017.1 (lin64) Build 1846317 Fri Apr 14 18:54:47 MDT 2017
-//Date        : Thu Aug 17 18:51:04 2017
-//Host        : bb-mco-cloud-storage2.bb01.baidu.com running 64-bit CentOS release 6.3 (Final)
+//Tool Version: Vivado v.2016.4 (lin64) Build 1733598 Wed Dec 14 22:35:42 MST 2016
+//Date        : Sat Jul  1 18:05:30 2017
+//Host        : BBhost_test1514 running 64-bit CentOS release 6.3 (Final)
 //Command     : generate_target bd_9054.bd
 //Design      : bd_9054
 //Purpose     : IP block netlist

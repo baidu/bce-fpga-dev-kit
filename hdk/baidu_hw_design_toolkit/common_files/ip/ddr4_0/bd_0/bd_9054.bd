@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xBCE55F39397D5E69" bd:bdsource="SBD" bd:device="xcku115-flvf1924-2-e" bd:isScoped="true" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2017.1" bd:top="bd_9054" bd:version="1.00.a">
+<bd:repository xmlns:bd="http://www.xilinx.com/bd" bd:BoundaryCRC="0xBCE55F39397D5E69" bd:bdsource="SBD" bd:device="xcku115-flvf1924-2-e" bd:isScoped="true" bd:isValidated="true" bd:synthFlowMode="None" bd:tool_version="2016.4" bd:top="bd_9054" bd:version="1.00.a">
 
   <spirit:component xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009">
     <spirit:vendor>xilinx.com</spirit:vendor>
@@ -237,7 +237,7 @@
       </spirit:componentInstance>
       <spirit:componentInstance>
         <spirit:instanceName>iomodule_0</spirit:instanceName>
-        <spirit:componentRef spirit:library="ip" spirit:name="iomodule" spirit:vendor="xilinx.com" spirit:version="3.1"/>
+        <spirit:componentRef spirit:library="ip" spirit:name="iomodule" spirit:vendor="xilinx.com" spirit:version="3.0"/>
         <spirit:configurableElementValues>
           <spirit:configurableElementValue spirit:referenceId="bd:xciName">bd_9054_iomodule_0_0</spirit:configurableElementValue>
           <spirit:configurableElementValue spirit:referenceId="C_INSTANCE">iomodule</spirit:configurableElementValue>

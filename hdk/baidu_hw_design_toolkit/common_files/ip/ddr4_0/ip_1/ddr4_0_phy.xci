@@ -7,7 +7,7 @@
   <spirit:componentInstances>
     <spirit:componentInstance>
       <spirit:instanceName>ddr4_0_phy</spirit:instanceName>
-      <spirit:componentRef spirit:vendor="xilinx.com" spirit:library="ip" spirit:name="ddr4_phy" spirit:version="2.2"/>
+      <spirit:componentRef spirit:vendor="xilinx.com" spirit:library="ip" spirit:name="ddr4_phy" spirit:version="2.1"/>
       <spirit:configurableElementValues>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.ADDR_WIDTH">17</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.AXI_ADDR_WIDTH">0</spirit:configurableElementValue>
@@ -37,13 +37,30 @@
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.DQS_WIDTH">9</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.DQ_WIDTH">72</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.EN_OTHER_PN_CLOCK_PARAM">{{7{2&apos;b01}}, {2{2&apos;b00}}, {2{2&apos;b01}}} </spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.INIT">{                            15&apos;b111111111111111,                                                                                15&apos;b111111111111111,                                                                                15&apos;b111111111111111,                                                                                15&apos;b111111111111111,                                                                                15&apos;b111111111111111,                                                   
-                             15&apos;b111111111111111,                                                                                15&apos;b111111111111111,                                                                                15&apos;b110111111111111,                                                                                15&apos;b111111111111111,                                                                                15&apos;b111111111111111,                                                   
-                             15&apos;b111111111111111                                                                                }</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.IOBTYPE">                                                                                  39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,                                                                                  39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,                                                                                  39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,                                                                                  39&apos;b
-000_011_011_011_011_111_111_011_011_011_011_000_011,                                                                                  39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,                                                                                  39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,                                                                                  39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,                                  
-                                                39&apos;b001_001_001_001_001_001_001_001_001_001_001_001_001,                                                                                  39&apos;b001_001_001_001_001_101_101_001_001_001_001_000_000,                                                                                  39&apos;b000_011_011_011_011_111_111_011_011_011_011_001_011,                                                                                  39&apos;b000_011_011_011_011_111_111_011_01
-1_011_011_001_011  </spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.INIT">{                            15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b110111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111,
+                                                                               15&apos;b111111111111111
+                                                                               }</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.IOBTYPE">  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_000_011,  
+                                                                               39&apos;b001_001_001_001_001_001_001_001_001_001_001_001_001,  
+                                                                               39&apos;b001_001_001_001_001_101_101_001_001_001_001_000_000,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_001_011,  
+                                                                               39&apos;b000_011_011_011_011_111_111_011_011_011_011_001_011  </spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.IS_CUSTOM">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.LR_WIDTH">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.MEM_COMP_WIDTH">16</spirit:configurableElementValue>
@@ -64,17 +81,44 @@
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.PING_PONG_PHY">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.PLL_WIDTH">3</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.RANK_WIDTH">1</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.RXTX_BITSLICE_EN">{13&apos;b0111101111101,                                                                                13&apos;b0111101111101,                                                                                13&apos;b0111101111101,                                                                                13&apos;b0111101111101,                                                                                13&apos;b0111101111101,                                                                                13&apos;b01111
-01111101,                                                                                13&apos;b0111101111101,                                                                                13&apos;b1111111111111,                                                                                13&apos;b1111101111100,                                                                                13&apos;b0111101111111,                                                                                13&apos;b0111101111111  
-                                                                              }</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.RX_DATA_TYPE">{ 15&apos;b011110_11_11110_01,                                                                                15&apos;b011110_11_11110_01,                                                                                15&apos;b011110_11_11110_01,                                                                                15&apos;b011110_11_11110_01,                                                                                15&apos;b011110_11_11110_01,                                                               
-                 15&apos;b011110_11_11110_01,                                                                                15&apos;b011110_11_11110_01,                                                                                15&apos;b111111_11_11111_11,                                                                                15&apos;b111111_11_11110_00,                                                                                15&apos;b011110_11_11111_01,                                                
-                                15&apos;b011110_11_11111_01                                                                                }</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.RXTX_BITSLICE_EN">{13&apos;b0111101111101,
+                                                                               13&apos;b0111101111101,
+                                                                               13&apos;b0111101111101,
+                                                                               13&apos;b0111101111101,
+                                                                               13&apos;b0111101111101,
+                                                                               13&apos;b0111101111101,
+                                                                               13&apos;b0111101111101,
+                                                                               13&apos;b1111111111111,
+                                                                               13&apos;b1111101111100,
+                                                                               13&apos;b0111101111111,
+                                                                               13&apos;b0111101111111
+                                                                               }</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.RX_DATA_TYPE">{ 15&apos;b011110_11_11110_01,
+                                                                               15&apos;b011110_11_11110_01,
+                                                                               15&apos;b011110_11_11110_01,
+                                                                               15&apos;b011110_11_11110_01,
+                                                                               15&apos;b011110_11_11110_01,
+                                                                               15&apos;b011110_11_11110_01,
+                                                                               15&apos;b011110_11_11110_01,
+                                                                               15&apos;b111111_11_11111_11,
+                                                                               15&apos;b111111_11_11110_00,
+                                                                               15&apos;b011110_11_11111_01,
+                                                                               15&apos;b011110_11_11111_01
+                                                                               }</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.SELF_CALIBRATE">{11{2&apos;b11}} </spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.SYSCLK_CENTER_INFO">FALSE</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.Slot">1</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.TX_OUTPUT_PHASE_90">{ 13&apos;b0000011000000,                                                                                13&apos;b0000011000000,                                                                                13&apos;b0000011000000,                                                                                13&apos;b0000011000000,                                                                                13&apos;b0000011000000,                                                                                13&apos;b0000
-011000000,                                                                                13&apos;b0000011000000,                                                                                13&apos;b1111111111111,                                                                                13&apos;b1111111111100,                                                                                13&apos;b0000011000010,                                                                                13&apos;b0000011000010 
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.TX_OUTPUT_PHASE_90">{ 13&apos;b0000011000000,
+                                                                               13&apos;b0000011000000,
+                                                                               13&apos;b0000011000000,
+                                                                               13&apos;b0000011000000,
+                                                                               13&apos;b0000011000000,
+                                                                               13&apos;b0000011000000,
+                                                                               13&apos;b0000011000000,
+                                                                               13&apos;b1111111111111,
+                                                                               13&apos;b1111111111100,
+                                                                               13&apos;b0000011000010,
+                                                                               13&apos;b0000011000010
                                                                                }</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.USE_CS_PORT">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.USE_DM_PORT">1</spirit:configurableElementValue>
@@ -124,7 +168,6 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Default_Bank_Selections">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.IS_FROM_PHY">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.No_Controller">1</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PARTIAL_RECONFIG_FLOW_MIG">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Phy_Only">Complete_Memory_Controller</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.RECONFIG_XSDB_SAVE_RESTORE">false</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Simulation_Mode">BFM</spirit:configurableElementValue>
@@ -602,8 +645,8 @@
         <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.OUTPUTDIR">.</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SELECTEDSIMMODEL"/>
         <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SHAREDDIR">.</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SWVERSION">2017.1</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SYNTHESISFLOW">GLOBAL</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SWVERSION">2016.4</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SYNTHESISFLOW">OUT_OF_CONTEXT</spirit:configurableElementValue>
       </spirit:configurableElementValues>
       <spirit:vendorExtensions>
         <xilinx:componentInstanceExtensions>
@@ -642,7 +685,6 @@
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.CUSTOM_PART_ATTRIBUTES" xilinx:valueSource="propagated"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Debug_Signal" xilinx:valueSource="propagated"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.IS_FROM_PHY" xilinx:valueSource="propagated"/>
-            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.PARTIAL_RECONFIG_FLOW_MIG" xilinx:valueSource="propagated"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Phy_Only" xilinx:valueSource="propagated"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.RECONFIG_XSDB_SAVE_RESTORE" xilinx:valueSource="propagated"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Simulation_Mode" xilinx:valueSource="propagated"/>

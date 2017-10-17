@@ -339,7 +339,7 @@
         mcal_DQSOut,
         mcal_DQSOut,
         mcal_ADR[127:120],
-        mcal_CK_t[7:0],
+        8'b01010101,
         mcal_DQSOut,
         mcal_DQSOut 
     } 
@@ -354,7 +354,7 @@
         8'bx,
         8'bx,
         mcal_ADR[135:128],
-        mcal_CK_c[7:0],
+        8'bx,
         8'bx,
         8'bx 
     } 

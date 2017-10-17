@@ -90,9 +90,9 @@
 (*
 
   X_MIG_OLYMPUS = 1,  
-  X_ULTRASCALE_IO_FLOW = "xilinx.com:ip:ddr4_phy:2.2",
+  X_ULTRASCALE_IO_FLOW = "xilinx.com:ip:ddr4_phy:2.1",
   LIVE_DESIGN = 0,
-  MEM_CORE_VER = "xilinx.com:ip:mem:1.4",
+  MEM_CORE_VER = "xilinx.com:ip:mem:1.3",
   PhyIP_CUSTOM_PART_ATTRIBUTES = "NONE",
   ControllerType = "ddr4_sdram",
   PhyIP_TimePeriod = 833,
@@ -109,7 +109,6 @@
   PhyIP_isCKEShared = "false",
   PhyIP_DataMask = "NO_DM_NO_DBI",
   PhyIP_MemoryVoltage = "1.2V",
-  PhyIP_PARTIAL_RECONFIG_FLOW_MIG = "false",
   
   PhyIP_SELF_REFRESH = "false",
   PhyIP_SAVE_RESTORE = "false",
@@ -177,7 +176,6 @@ module ddr4_0_ddr4 #
 
     parameter DM_DBI                          = "NODM_NODBI",
 
-    parameter         PARTIAL_RECONFIG        = "Disable", // Partial Reconfig enablement
     parameter         USE_CS_PORT             = 1,
     parameter         NUMREF                  = 1,
     parameter         REG_CTRL                = "OFF",
@@ -519,7 +517,7 @@ module ddr4_0_ddr4 #
   assign c0_ddr4_ui_clk_sync_rst = div_clk_rst_r1;
 
 
-  ddr4_v2_2_0_infrastructure #
+  ddr4_v2_1_1_infrastructure #
     (
      .CLKIN_PERIOD_MMCM   (CLKIN_PERIOD_MMCM),
      .CLKFBOUT_MULT_MMCM  (CLKFBOUT_MULT_MMCM),
@@ -590,7 +588,6 @@ ddr4_0_ddr4_mem_intfc #
      .SLOT0_FUNC_CS         (SLOT0_FUNC_CS),
      .SLOT1_FUNC_CS         (SLOT1_FUNC_CS),
 
-     .PARTIAL_RECONFIG      (PARTIAL_RECONFIG),
      .REG_CTRL              (REG_CTRL),
      .LRDIMM_MODE           (LRDIMM_MODE),
      .DDR4_DB_HIF_RTT_NOM   (DDR4_DB_HIF_RTT_NOM),
