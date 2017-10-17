@@ -62,6 +62,7 @@ static const std::string EXPECTED_CLEAR_SUFFIX = "partial_clear.bin";
 static std::map<std::string, uint32_t> g_static_dcp_md5sum_2_version = {
     { "e41a401bcf6637eb0cf79643660df28c", 0x00000103 },
     { "6e60f7d0e98a415c81b456adbd2da5b7", 0x00000104 },
+    { "c7f986830e00332ce9a0d52b9dc9e1a3", 0x00000105 },
 };
 
 static std::string md5sum_hex_2_std_string(const unsigned char hex[16])
