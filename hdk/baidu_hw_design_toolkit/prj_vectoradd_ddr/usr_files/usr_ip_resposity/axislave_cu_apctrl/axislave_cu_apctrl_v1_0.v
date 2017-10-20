@@ -1,78 +1,64 @@
-/*
- * Copyright (C) 2017 Baidu, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 `timescale 1 ns / 1 ps
 
-   module axislave_cu_apctrl_v1_0 #
-   (
-      // Users to add parameters here
-      parameter integer INTERRPT_WIDTH = 16,
-      // User parameters ends
-      // Do not modify the parameters beyond this line
+	module axislave_cu_apctrl_v1_0 #
+	(
+		// Users to add parameters here
+		parameter integer INTERRPT_WIDTH = 16,
+		// User parameters ends
+		// Do not modify the parameters beyond this line
 
 
-      // Parameters of Axi Slave Bus Interface S00_AXI
-      parameter integer C_S00_AXI_DATA_WIDTH   = 32,
-      parameter integer C_S00_AXI_ADDR_WIDTH   = 16
-   )
-   (
-      // Users to add ports here
-      output   [INTERRPT_WIDTH-1:0]   o_interrpt_rdy,
-       input   [INTERRPT_WIDTH-1:0]   i_interrpt_done,
-      // User ports ends
-      // Do not modify the ports beyond this line
+		// Parameters of Axi Slave Bus Interface S00_AXI
+		parameter integer C_S00_AXI_DATA_WIDTH	= 32,
+		parameter integer C_S00_AXI_ADDR_WIDTH	= 16
+	)
+	(
+		// Users to add ports here
+		output	[INTERRPT_WIDTH-1:0]	o_interrpt_rdy,
+	    input	[INTERRPT_WIDTH-1:0]	i_interrpt_done,
+		// User ports ends
+		// Do not modify the ports beyond this line
 
 
-      // Ports of Axi Slave Bus Interface S00_AXI
-      input wire  s00_axi_aclk,
-      input wire  s00_axi_aresetn,
-      input wire [C_S00_AXI_ADDR_WIDTH-1 : 0] s00_axi_awaddr,
-      input wire [2 : 0] s00_axi_awprot,
-      input wire  s00_axi_awvalid,
-      output wire  s00_axi_awready,
-      input wire [C_S00_AXI_DATA_WIDTH-1 : 0] s00_axi_wdata,
-      input wire [(C_S00_AXI_DATA_WIDTH/8)-1 : 0] s00_axi_wstrb,
-      input wire  s00_axi_wvalid,
-      output wire  s00_axi_wready,
-      output wire [1 : 0] s00_axi_bresp,
-      output wire  s00_axi_bvalid,
-      input wire  s00_axi_bready,
-      input wire [C_S00_AXI_ADDR_WIDTH-1 : 0] s00_axi_araddr,
-      input wire [2 : 0] s00_axi_arprot,
-      input wire  s00_axi_arvalid,
-      output wire  s00_axi_arready,
-      output wire [C_S00_AXI_DATA_WIDTH-1 : 0] s00_axi_rdata,
-      output wire [1 : 0] s00_axi_rresp,
-      output wire  s00_axi_rvalid,
-      input wire  s00_axi_rready,
+		// Ports of Axi Slave Bus Interface S00_AXI
+		input wire  s00_axi_aclk,
+		input wire  s00_axi_aresetn,
+		input wire [C_S00_AXI_ADDR_WIDTH-1 : 0] s00_axi_awaddr,
+		input wire [2 : 0] s00_axi_awprot,
+		input wire  s00_axi_awvalid,
+		output wire  s00_axi_awready,
+		input wire [C_S00_AXI_DATA_WIDTH-1 : 0] s00_axi_wdata,
+		input wire [(C_S00_AXI_DATA_WIDTH/8)-1 : 0] s00_axi_wstrb,
+		input wire  s00_axi_wvalid,
+		output wire  s00_axi_wready,
+		output wire [1 : 0] s00_axi_bresp,
+		output wire  s00_axi_bvalid,
+		input wire  s00_axi_bready,
+		input wire [C_S00_AXI_ADDR_WIDTH-1 : 0] s00_axi_araddr,
+		input wire [2 : 0] s00_axi_arprot,
+		input wire  s00_axi_arvalid,
+		output wire  s00_axi_arready,
+		output wire [C_S00_AXI_DATA_WIDTH-1 : 0] s00_axi_rdata,
+		output wire [1 : 0] s00_axi_rresp,
+		output wire  s00_axi_rvalid,
+		input wire  s00_axi_rready,
 
-      output     ap_start,
-      input      ap_done,
-      input      ap_idle,
-      input      ap_ready,
+        output     ap_start,
+        input      ap_done,
+        input      ap_idle,
+        input      ap_ready,
 
-      output     [31:0] A_array_baseaddr,
-      output     [31:0] B_array_baseaddr,
-      output     [31:0] C_array_baseaddr,
-      output     [15:0] array_len,
-      output     A_array_baseaddr_vld,
-      output     B_array_baseaddr_vld,
-      output     C_array_baseaddr_vld,
-      output     arrayu_len_vld,
-      output     soft_rst_n
-   );
+        output     [31:0] A_array_baseaddr,
+        output     [31:0] B_array_baseaddr,
+        output     [31:0] C_array_baseaddr,
+        output     [15:0] array_len,
+        output     A_array_baseaddr_vld,
+        output     B_array_baseaddr_vld,
+        output     C_array_baseaddr_vld,
+        output     arrayu_len_vld,
+        output     soft_rst_n
+	);
 
 // axi addr has 6 bit, which means there are 16 registers (each is 32bit-width)
 // reg 0   : Write-Only, start command
@@ -85,131 +71,131 @@
 // reg 9   : Read-Only, polling register
 // reg 10  : Write-Only, soft reset
 
-   reg polling_r;
-   wire [31:0] slv_reg0;
-   wire [31:0] slv_reg1;
-   wire [31:0] slv_reg2;
-   wire [31:0] slv_reg3;
-   wire [31:0] slv_reg4;
-   wire [31:0] slv_reg5;
-   wire [31:0] slv_reg6;
-   wire [31:0] slv_reg7;
+	reg polling_r;
+    wire [31:0] slv_reg0;
+    wire [31:0] slv_reg1;
+    wire [31:0] slv_reg2;
+    wire [31:0] slv_reg3;
+    wire [31:0] slv_reg4;
+    wire [31:0] slv_reg5;
+    wire [31:0] slv_reg6;
+    wire [31:0] slv_reg7;
 
 // Instantiation of Axi Bus Interface S00_AXI
-   axislave_cu_apctrl_v1_0_S00_AXI # (
-      .C_S_AXI_DATA_WIDTH(C_S00_AXI_DATA_WIDTH),
-      .C_S_AXI_ADDR_WIDTH(C_S00_AXI_ADDR_WIDTH)
-   ) axislave_cu_apctrl_v1_0_S00_AXI_inst (
-      .S_AXI_ACLK(s00_axi_aclk),
-      .S_AXI_ARESETN(s00_axi_aresetn),
-      .S_AXI_AWADDR(s00_axi_awaddr),
-      .S_AXI_AWPROT(s00_axi_awprot),
-      .S_AXI_AWVALID(s00_axi_awvalid),
-      .S_AXI_AWREADY(s00_axi_awready),
-      .S_AXI_WDATA(s00_axi_wdata),
-      .S_AXI_WSTRB(s00_axi_wstrb),
-      .S_AXI_WVALID(s00_axi_wvalid),
-      .S_AXI_WREADY(s00_axi_wready),
-      .S_AXI_BRESP(s00_axi_bresp),
-      .S_AXI_BVALID(s00_axi_bvalid),
-      .S_AXI_BREADY(s00_axi_bready),
-      .S_AXI_ARADDR(s00_axi_araddr),
-      .S_AXI_ARPROT(s00_axi_arprot),
-      .S_AXI_ARVALID(s00_axi_arvalid),
-      .S_AXI_ARREADY(s00_axi_arready),
-      .S_AXI_RDATA(s00_axi_rdata),
-      .S_AXI_RRESP(s00_axi_rresp),
-      .S_AXI_RVALID(s00_axi_rvalid),
-      .S_AXI_RREADY(s00_axi_rready),
+	axislave_cu_apctrl_v1_0_S00_AXI # ( 
+		.C_S_AXI_DATA_WIDTH(C_S00_AXI_DATA_WIDTH),
+		.C_S_AXI_ADDR_WIDTH(C_S00_AXI_ADDR_WIDTH)
+	) axislave_cu_apctrl_v1_0_S00_AXI_inst (
+		.S_AXI_ACLK(s00_axi_aclk),
+		.S_AXI_ARESETN(s00_axi_aresetn),
+		.S_AXI_AWADDR(s00_axi_awaddr),
+		.S_AXI_AWPROT(s00_axi_awprot),
+		.S_AXI_AWVALID(s00_axi_awvalid),
+		.S_AXI_AWREADY(s00_axi_awready),
+		.S_AXI_WDATA(s00_axi_wdata),
+		.S_AXI_WSTRB(s00_axi_wstrb),
+		.S_AXI_WVALID(s00_axi_wvalid),
+		.S_AXI_WREADY(s00_axi_wready),
+		.S_AXI_BRESP(s00_axi_bresp),
+		.S_AXI_BVALID(s00_axi_bvalid),
+		.S_AXI_BREADY(s00_axi_bready),
+		.S_AXI_ARADDR(s00_axi_araddr),
+		.S_AXI_ARPROT(s00_axi_arprot),
+		.S_AXI_ARVALID(s00_axi_arvalid),
+		.S_AXI_ARREADY(s00_axi_arready),
+		.S_AXI_RDATA(s00_axi_rdata),
+		.S_AXI_RRESP(s00_axi_rresp),
+		.S_AXI_RVALID(s00_axi_rvalid),
+		.S_AXI_RREADY(s00_axi_rready),
 
-      .slv_reg0(slv_reg0),
-      .slv_reg1(slv_reg1),
-      .slv_reg2(slv_reg2),
-      .slv_reg3(slv_reg3),
-      .slv_reg4(slv_reg4),
-      .slv_reg5(slv_reg5),
-      .slv_reg6(slv_reg6),
-      .slv_reg7(slv_reg7),
-      .polling(polling_r)
-   );
-
+        .slv_reg0(slv_reg0),
+        .slv_reg1(slv_reg1),
+        .slv_reg2(slv_reg2),
+        .slv_reg3(slv_reg3),
+        .slv_reg4(slv_reg4),
+        .slv_reg5(slv_reg5),
+        .slv_reg6(slv_reg6),
+        .slv_reg7(slv_reg7),
+        .polling(polling_r)
+	);
+	
    `ifdef VIVADO_SIM
        localparam INTERRUPT_CNT = 16'hff;
    `else
        localparam INTERRUPT_CNT = 16'hffff;
    `endif
 
-   // Add user logic here
-   localparam START_CMD_ADDR = 14'h0;
-   localparam SOFT_RST_CMD_ADDR = 14'hA;
-   localparam integer ADDR_LSB = (C_S00_AXI_DATA_WIDTH/32) + 1;
-   // localparam integer OPT_MEM_ADDR_BITS = 3;
+	// Add user logic here
+    localparam START_CMD_ADDR = 14'h0;
+    localparam SOFT_RST_CMD_ADDR = 14'hA;
+	localparam integer ADDR_LSB = (C_S00_AXI_DATA_WIDTH/32) + 1;
+    // localparam integer OPT_MEM_ADDR_BITS = 3;
+    
+        reg ap_start_r;
+        reg ap_working_r;
+        reg soft_rst_r,soft_rst_r1,soft_rst_r2;
 
-   reg ap_start_r;
-   reg ap_working_r;
-   reg soft_rst_r,soft_rst_r1,soft_rst_r2;
+        assign A_array_baseaddr   = slv_reg1[31:5] ;
+        assign B_array_baseaddr   = slv_reg2[31:5];
+        assign C_array_baseaddr   = slv_reg3[31:5];
+        assign array_len          = slv_reg4[18:3];
+        assign ap_start           = ap_working_r;
+        assign A_array_baseaddr_vld = ap_working_r;
+        assign B_array_baseaddr_vld = ap_working_r;
+        assign C_array_baseaddr_vld = ap_working_r;
+        assign arrayu_len_vld       = ap_working_r;
+        assign soft_rst_n           = ~(soft_rst_r | soft_rst_r1 | soft_rst_r2);
 
-   assign A_array_baseaddr   = slv_reg1[31:5] ;
-   assign B_array_baseaddr   = slv_reg2[31:5];
-   assign C_array_baseaddr   = slv_reg3[31:5];
-   assign array_len          = slv_reg4[18:3];
-   assign ap_start           = ap_working_r;
-   assign A_array_baseaddr_vld = ap_working_r;
-   assign B_array_baseaddr_vld = ap_working_r;
-   assign C_array_baseaddr_vld = ap_working_r;
-   assign arrayu_len_vld       = ap_working_r;
-   assign soft_rst_n           = ~(soft_rst_r | soft_rst_r1 | soft_rst_r2);
+        always @(posedge s00_axi_aclk) begin
+           if (~s00_axi_aresetn) begin
+              ap_working_r <= 1'b0;
+           end
+           else if (~ap_working_r && ap_start_r) begin
+              ap_working_r <= 1'b1;
+           end
+           else if (ap_working_r && ap_done) begin
+              ap_working_r <= 1'b0;
+           end
+        end
 
-   always @(posedge s00_axi_aclk) begin
-      if (~s00_axi_aresetn) begin
-         ap_working_r <= 1'b0;
-      end
-      else if (~ap_working_r && ap_start_r) begin
-         ap_working_r <= 1'b1;
-      end
-      else if (ap_working_r && ap_done) begin
-         ap_working_r <= 1'b0;
-      end
-   end
+        always @(posedge s00_axi_aclk) begin
+           ap_start_r <= (~ap_working_r && s00_axi_awvalid && s00_axi_awready && (s00_axi_awaddr[C_S00_AXI_ADDR_WIDTH-1:ADDR_LSB] == START_CMD_ADDR));
+        end
+        
+        always @(posedge s00_axi_aclk) begin
+           soft_rst_r <= (s00_axi_awvalid && s00_axi_awready && (s00_axi_awaddr[C_S00_AXI_ADDR_WIDTH-1:ADDR_LSB] == SOFT_RST_CMD_ADDR));
+           soft_rst_r1 <= soft_rst_r;
+           soft_rst_r2 <= soft_rst_r1;
+        end        
+        
+        always @(posedge s00_axi_aclk) begin
+           if (~s00_axi_aresetn) begin
+              polling_r <= 1'b0;
+           end
+           /*else if (~ap_working_r && ap_start_r) begin
+              polling_r <= 1'b0;
+           end
+           else if (ap_done) begin
+              polling_r <= 1'b1;
+           end*/
+        end        
 
-   always @(posedge s00_axi_aclk) begin
-      ap_start_r <= (~ap_working_r && s00_axi_awvalid && s00_axi_awready && (s00_axi_awaddr[C_S00_AXI_ADDR_WIDTH-1:ADDR_LSB] == START_CMD_ADDR));
-   end
-
-   always @(posedge s00_axi_aclk) begin
-      soft_rst_r <= (s00_axi_awvalid && s00_axi_awready && (s00_axi_awaddr[C_S00_AXI_ADDR_WIDTH-1:ADDR_LSB] == SOFT_RST_CMD_ADDR));
-      soft_rst_r1 <= soft_rst_r;
-      soft_rst_r2 <= soft_rst_r1;
-   end
-
-   always @(posedge s00_axi_aclk) begin
-      if (~s00_axi_aresetn) begin
-         polling_r <= 1'b0;
-      end
-      /*else if (~ap_working_r && ap_start_r) begin
-         polling_r <= 1'b0;
-      end
-      else if (ap_done) begin
-         polling_r <= 1'b1;
-      end*/
-   end
-
-   reg [15:0] finish_cnt = 0; //256 us to cycle this counter
-   always@(posedge s00_axi_aclk) begin
+	reg [15:0] finish_cnt = 0; //256 us to cycle this counter
+	always@(posedge s00_axi_aclk) begin
         if (~s00_axi_aresetn) begin
            finish_cnt <= 'd0;
         end
-       else if (finish_cnt != 'd0) begin
+	    else if (finish_cnt != 'd0) begin
            finish_cnt <= finish_cnt + 'd1;
         end
         else if (ap_working_r && ap_done) begin
-         finish_cnt <= 'd1;
-       end
-   end
+		   finish_cnt <= 'd1;
+	    end
+	end
 
-   // interrupt management
-   reg vector_add_interrpt = 0;
-   always@(posedge s00_axi_aclk) begin
+	// interrupt management
+	reg vector_add_interrpt = 0;
+	always@(posedge s00_axi_aclk) begin
         if (~s00_axi_aresetn) begin
            vector_add_interrpt <= 'd0;
         end
@@ -217,20 +203,20 @@
         else if (finish_cnt == INTERRUPT_CNT) begin
            vector_add_interrpt <= 'd1;
         end
-       // keep usr_irq_req until ack is asserted
-       else if (i_interrpt_done[0]) begin
-         vector_add_interrpt <= 'd0;
-       end
-   end
-   assign   o_interrpt_rdy[0] = vector_add_interrpt;
-
+	    // keep usr_irq_req until ack is asserted
+	    else if (i_interrpt_done[0]) begin
+		   vector_add_interrpt <= 'd0;
+	    end
+	end
+	assign	o_interrpt_rdy[0] = vector_add_interrpt;
+    
     // other usr_irq_req[15:1] is not used
     generate
-      if (INTERRPT_WIDTH > 1) begin : interrpt
-          assign o_interrpt_rdy[INTERRPT_WIDTH-1 : 1] = 0;
-      end
+	   if (INTERRPT_WIDTH > 1) begin : interrpt
+ 	      assign o_interrpt_rdy[INTERRPT_WIDTH-1 : 1] = 0;
+	   end
     endgenerate
 
-   // User logic ends
+	// User logic ends
 
-   endmodule
+	endmodule

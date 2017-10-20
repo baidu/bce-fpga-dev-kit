@@ -269,11 +269,11 @@
   output[31:0]M_AXI_wstrb;
   output[0:0]M_AXI_wvalid;
 
-  input [15:0]S_AXI_LITE_araddr;
+  input [31:0]S_AXI_LITE_araddr;
   input [2:0]S_AXI_LITE_arprot;
   output S_AXI_LITE_arready;
   input S_AXI_LITE_arvalid;
-  input [15:0]S_AXI_LITE_awaddr;
+  input [31:0]S_AXI_LITE_awaddr;
   input [2:0]S_AXI_LITE_awprot;
   output S_AXI_LITE_awready;
   input S_AXI_LITE_awvalid;
@@ -461,11 +461,11 @@
   wire [31:0]M_AXI_wstrb;
   wire [0:0]M_AXI_wvalid;
 
-  wire [15:0]S_AXI_LITE_araddr;
+  wire [31:0]S_AXI_LITE_araddr;
   wire [2:0]S_AXI_LITE_arprot;
   wire S_AXI_LITE_arready;
   wire S_AXI_LITE_arvalid;
-  wire [15:0]S_AXI_LITE_awaddr;
+  wire [31:0]S_AXI_LITE_awaddr;
   wire [2:0]S_AXI_LITE_awprot;
   wire S_AXI_LITE_awready;
   wire S_AXI_LITE_awvalid;

@@ -3,7 +3,6 @@ source scripts/step_00_setup.tcl
 
 # Create the project
 puts "INFO: Creating your rp Project: Part = $part"
-#create_project -in_memory -part $part -force
 create_project -force $projName $projDir -part $part
 
 # Set the rtf Sandbox if needed.
@@ -12,6 +11,19 @@ if { $rtfSandbox != "none" } {
   puts "INFO: RTF Sandbox = ${rtfSandbox}"
   set_property ip_repo_paths  ${rtfSandbox} [current_fileset]
   update_ip_catalog -rebuild
+}
+
+#mkdir
+if { ![ file isdirectory $usrDir/include ] }  {
+    exec mkdir $usrDir/include
+}
+
+if { ![ file isdirectory $usrDir/usr_xdc ] }  {
+    exec mkdir $usrDir/usr_xdc
+}
+
+if { ![ file isdirectory $usrDir/usr_rtl ] }  {
+    exec mkdir $usrDir/usr_rtl
 }
 
 # Genearte Mig
@@ -24,12 +36,14 @@ if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_
        close_bd_design [get_bd_designs rp_mig_bd]
 
        # Set the appropriate OOC Synthesis settings for the .bd
-       set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
+       set_property GENERATE_SYNTH_CHECKPOINT 0 [get_files $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
+       generate_target all [get_files $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
+       set_property is_locked true [get_files $projDir/${projName}.srcs/sources_1/bd/rp_mig_bd/rp_mig_bd.bd]
     } else {
        set migxcifile $commonDir/ip/ddr4_0/ddr4_0.xci
        read_ip $migxcifile
-       set_property generate_synth_checkpoint false [get_files $migxcifile]
-       #generate_target all [get_files $migxcifile]
+       set_property GENERATE_SYNTH_CHECKPOINT 0 [get_files $migxcifile]
+       generate_target all [get_files $migxcifile]
        #export_ip_user_files -of_objects [get_files $migxcifile] -sync -force -quiet
     }
 }
@@ -39,11 +53,13 @@ if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_
 add_files -norecurse $commonDir/hdl
 add_files -norecurse $usrRtlPath
 add_files -norecurse $usrIncPath
-add_files -norecurse $commonDir/constraints
 
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     add_files -fileset constrs_1 -norecurse $xdcfile
 }
+add_file -fileset constrs_1 $commonDir/constraints/rp_wrapper_ooc.xdc
+set_property PROCESSING_ORDER EARLY [get_files rp_wrapper_ooc.xdc]
+set_property USED_IN {synthesis implementation OUT_OF_CONTEXT} [get_files rp_wrapper_ooc.xdc]
 
 # Add the xci file in usr_ip and generate IP core files
 set xcifile [split [exec find $usrDir/usr_ip | grep xci]]
@@ -60,13 +76,6 @@ source $scriptDir/ip_configs.tcl
 generate_target all [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci]
 export_ip_user_files -of_objects [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci] -sync -force -quiet
 #export_simulation -of_objects [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci]
-
-# Set the PR region as OOC
-create_fileset -blockset -define_from rp_wrapper rp_wrapper
-add_file -fileset rp_wrapper $commonDir/constraints/rp_wrapper_ooc.xdc
-set_property PROCESSING_ORDER EARLY [get_files rp_wrapper_ooc.xdc]
-set_property USED_IN {synthesis implementation OUT_OF_CONTEXT} [get_files rp_wrapper_ooc.xdc]
-update_compile_order -fileset rp_wrapper
 
 # Error and Message Reporting
 set warningCount [get_msg_config -severity {Warning} -count]
