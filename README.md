@@ -41,6 +41,7 @@
 
 | 版本 | 新增特性支持 | Bug修复 | 已知问题 |
 | :--: | :----------- | :------ | :------- |
+| V1.5 | * 将用户动态逻辑寄存器调整到独占的BAR 2，同时大小扩充为4MB | | |
 | V1.4 | * 管理工具bce_fpga_mgmt_tool支持ResetPartialLogic/ResetStaticLogic | * 修复了V1.3中“prj_rpaximaster示例工程在虚拟机中可能出现DMA失败”的问题 </br> * 修复了V1.3中“调试时Vivado中波形图显示异常”的问题 | |
 | V1.3 | * 支持管理工具bce_fpga_mgmt_tool | | * prj_rpaximaster示例工程在虚拟机中可能出现DMA失败 </br> * 调试时Vivado中波形图显示异常 |
 | V1.2 | * 支持rpaximaster </br> * 一个示例工程prj_rpaximaster | | |

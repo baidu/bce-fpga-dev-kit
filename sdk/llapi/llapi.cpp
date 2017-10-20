@@ -85,7 +85,39 @@ namespace llapi {
 
 struct bce_fpga_device g_bce_fpga_devices[NR_MAX_SLOTS];
 
-int reg_read_32(int slot, uint64_t addr, uint32_t *value)
+int user_reg_read_32(int slot, uint64_t addr, uint32_t *value)
+{
+    if ((slot < 0) || (slot >= NR_MAX_SLOTS)) {
+        return -1;
+    }
+    if (!g_bce_fpga_devices[slot].present) {
+        return -1;
+    }
+    if (!g_bce_fpga_devices[slot].pci_device.regions[2].memory) {
+        return -1;
+    }
+
+    *value = *(uint32_t *)((uint64_t)g_bce_fpga_devices[slot].pci_device.regions[2].memory + addr);
+    return 0;
+}
+
+int user_reg_write_32(int slot, uint64_t addr, uint32_t value)
+{
+    if ((slot < 0) || (slot >= NR_MAX_SLOTS)) {
+        return -1;
+    }
+    if (!g_bce_fpga_devices[slot].present) {
+        return -1;
+    }
+    if (!g_bce_fpga_devices[slot].pci_device.regions[2].memory) {
+        return -1;
+    }
+
+    *(uint32_t *)((uint64_t)g_bce_fpga_devices[slot].pci_device.regions[2].memory + addr) = value;
+    return 0;
+}
+
+int mgmt_reg_read_32(int slot, uint64_t addr, uint32_t *value)
 {
     if ((slot < 0) || (slot >= NR_MAX_SLOTS)) {
         return -1;
@@ -101,7 +133,7 @@ int reg_read_32(int slot, uint64_t addr, uint32_t *value)
     return 0;
 }
 
-int reg_write_32(int slot, uint64_t addr, uint32_t value)
+int mgmt_reg_write_32(int slot, uint64_t addr, uint32_t value)
 {
     if ((slot < 0) || (slot >= NR_MAX_SLOTS)) {
         return -1;
@@ -233,6 +265,14 @@ static int probe_all_slots()
         /* mmap BAR0 */
         ret = pci_device_map_range(dev, dev->regions[0].base_addr, dev->regions[0].size,
                                    PCI_DEV_MAP_FLAG_WRITABLE, &dev->regions[0].memory);
+        if (ret) {
+            //LOG(WARNING) << "Error calling pci_device_map_range";
+            ret = -1;
+            goto err_it;
+        }
+
+        ret = pci_device_map_range(dev, dev->regions[2].base_addr, dev->regions[2].size,
+                                   PCI_DEV_MAP_FLAG_WRITABLE, &dev->regions[2].memory);
         if (ret) {
             //LOG(WARNING) << "Error calling pci_device_map_range";
             ret = -1;

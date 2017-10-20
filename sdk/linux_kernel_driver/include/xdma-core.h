@@ -559,6 +559,7 @@ struct xdma_dev {
     int user_bar_idx;                /* BAR index of user logic */
     int config_bar_idx;              /* BAR index of XDMA config logic */
     int bypass_bar_idx;              /* BAR index of XDMA bypass logic */
+    int user_reg_bar_idx;            /* BAR index of rp/user reg */
     int regions_in_use;              /* flag if dev was in use during probe() */
     int got_regions;                 /* flag if probe() obtained the regions */
 
@@ -567,6 +568,7 @@ struct xdma_dev {
     int irq_line;                 /* flag if irq allocated successfully */
     int msi_enabled;              /* flag if msi was enabled for the device */
     int msix_enabled;             /* flag if msi-x was enabled for the device */
+    int irq_user_count;           /* user interrupt count */
     struct msix_entry entry[32];  /* msi-x vector/entry table */
     struct xdma_irq user_irq[16]; /* user IRQ management */
 

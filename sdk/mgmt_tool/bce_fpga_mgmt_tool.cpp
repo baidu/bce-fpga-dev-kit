@@ -62,6 +62,7 @@ static const std::string EXPECTED_CLEAR_SUFFIX = "partial_clear.bin";
 static std::map<std::string, uint32_t> g_static_dcp_md5sum_2_version = {
     { "e41a401bcf6637eb0cf79643660df28c", 0x00000103 },
     { "6e60f7d0e98a415c81b456adbd2da5b7", 0x00000104 },
+    { "8527bc67dcf71020ca295e0d872df7b0", 0x00000105 },
 };
 
 static std::string md5sum_hex_2_std_string(const unsigned char hex[16])
@@ -841,9 +842,9 @@ static int do_load_partial_logic()
     std::string fmt_time;
 
     LOG(INFO) << "Set decouple ...";
-    ret = llapi::reg_write_32(load_partial_logic.slot, 8, 1);
+    ret = llapi::mgmt_reg_write_32(load_partial_logic.slot, 8, 1);
     if (ret != 0) {
-        LOG(WARNING) << "Error in llapi::reg_write_32";
+        LOG(WARNING) << "Error in llapi::mgmt_reg_write_32";
         ret = -1;
         goto out;
     }
@@ -881,9 +882,9 @@ static int do_load_partial_logic()
     LOG(INFO) << "Download partial bin done";
 
     LOG(INFO) << "Unset decouple ...";
-    ret = llapi::reg_write_32(load_partial_logic.slot, 8, 0);
+    ret = llapi::mgmt_reg_write_32(load_partial_logic.slot, 8, 0);
     if (ret != 0) {
-        LOG(WARNING) << "Error in llapi::reg_write_32";
+        LOG(WARNING) << "Error in llapi::mgmt_reg_write_32";
         ret = -1;
         goto out;
     }
@@ -891,9 +892,9 @@ static int do_load_partial_logic()
     LOG(INFO) << "Unset decouple done";
 
     LOG(INFO) << "Reset ...";
-    ret = llapi::reg_write_32(load_partial_logic.slot, 248, 0);
+    ret = llapi::mgmt_reg_write_32(load_partial_logic.slot, 248, 0);
     if (ret != 0) {
-        LOG(WARNING) << "Error in llapi::reg_write_32";
+        LOG(WARNING) << "Error in llapi::mgmt_reg_write_32";
         ret = -1;
         goto out;
     }
@@ -905,10 +906,10 @@ static int do_load_partial_logic()
         unsigned char hex[16];
         std::string str = md5sum(load_partial_logic.clear_bin_path);
         md5sum_std_string_2_hex(str, hex);
-        llapi::reg_write_32(load_partial_logic.slot, 0x100, *(uint32_t *)&hex[0]);
-        llapi::reg_write_32(load_partial_logic.slot, 0x104, *(uint32_t *)&hex[4]);
-        llapi::reg_write_32(load_partial_logic.slot, 0x108, *(uint32_t *)&hex[8]);
-        llapi::reg_write_32(load_partial_logic.slot, 0x10c, *(uint32_t *)&hex[12]);
+        llapi::mgmt_reg_write_32(load_partial_logic.slot, 0x100, *(uint32_t *)&hex[0]);
+        llapi::mgmt_reg_write_32(load_partial_logic.slot, 0x104, *(uint32_t *)&hex[4]);
+        llapi::mgmt_reg_write_32(load_partial_logic.slot, 0x108, *(uint32_t *)&hex[8]);
+        llapi::mgmt_reg_write_32(load_partial_logic.slot, 0x10c, *(uint32_t *)&hex[12]);
     }
     LOG(INFO) << "Write clear bin md5 done";
 
@@ -951,7 +952,7 @@ static int do_load_partial_logic()
             load_partial_logic.partial_bin_path;
     g_db["slots"][load_partial_logic.slot]["last_clear_bin_path"] =
             load_partial_logic.clear_bin_path;
-    llapi::reg_read_32(load_partial_logic.slot, 4, &value);
+    llapi::mgmt_reg_read_32(load_partial_logic.slot, 4, &value);
     g_db["slots"][load_partial_logic.slot]["status_after_load"] = value;
 
 out:
@@ -1024,7 +1025,7 @@ static int do_reset_partial_logic()
                 g_bce_fpga_cmd.payload.reset_partial_logic;
 
     LOG(INFO) << "Reset partial logic ...";
-    llapi::reg_write_32(reset_partial_logic.slot, 248, 0);
+    llapi::mgmt_reg_write_32(reset_partial_logic.slot, 248, 0);
     LOG(INFO) << "Reset partial logic done";
 
     return 0;
@@ -1096,7 +1097,7 @@ static int do_reset_static_logic()
                 g_bce_fpga_cmd.payload.reset_static_logic;
 
     LOG(INFO) << "Reset static logic ...";
-    llapi::reg_write_32(reset_static_logic.slot, 252, 0);
+    llapi::mgmt_reg_write_32(reset_static_logic.slot, 252, 0);
     LOG(INFO) << "Reset static logic done";
 
     return 0;
@@ -1230,16 +1231,16 @@ static int prologue()
         if (llapi::g_bce_fpga_devices[i].present) {
             uint32_t value;
             g_db["slots"][i]["present"] = true;
-            llapi::reg_read_32(i, 4, &value);
+            llapi::mgmt_reg_read_32(i, 4, &value);
             g_db["slots"][i]["status"] = value;
-            llapi::reg_read_32(i, 0, &value);
+            llapi::mgmt_reg_read_32(i, 0, &value);
             g_db["slots"][i]["static_version"] = value;
 
             unsigned char hex[16];
-            llapi::reg_read_32(i, 0x100, (uint32_t *)&hex[0]);
-            llapi::reg_read_32(i, 0x104, (uint32_t *)&hex[4]);
-            llapi::reg_read_32(i, 0x108, (uint32_t *)&hex[8]);
-            llapi::reg_read_32(i, 0x10c, (uint32_t *)&hex[12]);
+            llapi::mgmt_reg_read_32(i, 0x100, (uint32_t *)&hex[0]);
+            llapi::mgmt_reg_read_32(i, 0x104, (uint32_t *)&hex[4]);
+            llapi::mgmt_reg_read_32(i, 0x108, (uint32_t *)&hex[8]);
+            llapi::mgmt_reg_read_32(i, 0x10c, (uint32_t *)&hex[12]);
             g_db["slots"][i]["last_clear_bin_md5sum"] = md5sum_hex_2_std_string(hex);
         }
     }
