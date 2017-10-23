@@ -39,7 +39,7 @@ module tb ();
 
    localparam CARD_A_BASEADDR = HOST_A_BASEADDR + 32'h80000000;
    localparam CARD_B_BASEADDR = CARD_A_BASEADDR + VECTOR_LEN_BYTES;
-   localparam CARD_C_BASEADDR = CARD_B_BASEADDR + VECTOR_LEN_BYTES;;
+   localparam CARD_C_BASEADDR = CARD_B_BASEADDR + VECTOR_LEN_BYTES;
 
    card_sim card_sim();
 
