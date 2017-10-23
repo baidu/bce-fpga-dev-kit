@@ -36,7 +36,7 @@ if { $IPI == 1 } {
     generate_target simulation [get_files [lindex $xcifile $a]]
 }
 }
-source $commonDir/template/ref_script/sim_env.tcl
+source $commonDir/sim/script/sim_env.tcl
 set_property target_simulator $SIMULATOR [current_project]
 if { $SIMULATOR == "xsim" } {
 	set_property -name {xsim.compile.xvlog.more_options} -value "$DEFINE_PARA" -objects [get_filesets sim_1]
