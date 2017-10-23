@@ -1,7 +1,6 @@
 # These paths need to be updated to match your environment
 set projName myProj
 set projDir "./projDir"
-set projGUIDir "./projGUIDir"
 set tempDir "./tempDir"
 set scriptDir "./scripts"
 set commonDir "../../common_files"
@@ -48,3 +47,8 @@ set USE_DDR4_C3 0
 set USE_AXI_DDR 0
 # RP has a AXI master to SP
 set USE_RP_AXI_MASTER 0
+# set DDR AXI ID WIDTH
+set C0_DDR4_AXIID_WIDTH 0
+set C1_DDR4_AXIID_WIDTH 0
+set C2_DDR4_AXIID_WIDTH 0
+set C3_DDR4_AXIID_WIDTH 0

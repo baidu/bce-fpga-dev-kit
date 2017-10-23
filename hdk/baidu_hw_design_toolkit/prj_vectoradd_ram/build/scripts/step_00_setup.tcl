@@ -39,11 +39,16 @@ set usrIPPath  $usrDir/usr_ip
 set usrIncPath $usrDir/include
 
 # Use DDR Channel Setting
-set USE_DDR4_C0 0
-set USE_DDR4_C1 0
-set USE_DDR4_C2 0
-set USE_DDR4_C3 0
+set USE_DDR4_C0 1
+set USE_DDR4_C1 1
+set USE_DDR4_C2 1
+set USE_DDR4_C3 1
 # Use AXI mig core
 set USE_AXI_DDR 1
 # RP has a AXI master to SP
 set USE_RP_AXI_MASTER 0
+# set DDR AXI ID WIDTH
+set C0_DDR4_AXIID_WIDTH 1
+set C1_DDR4_AXIID_WIDTH 1
+set C2_DDR4_AXIID_WIDTH 1
+set C3_DDR4_AXIID_WIDTH 1

@@ -19,7 +19,6 @@
         .C0_DDR4_S_AXI_araddr(C0_DDR4_S_AXI_araddr),
         .C0_DDR4_S_AXI_arburst(C0_DDR4_S_AXI_arburst),
         .C0_DDR4_S_AXI_arcache(C0_DDR4_S_AXI_arcache),
-        .C0_DDR4_S_AXI_arid(C0_DDR4_S_AXI_arid),
         .C0_DDR4_S_AXI_arlen(C0_DDR4_S_AXI_arlen),
         .C0_DDR4_S_AXI_arlock(C0_DDR4_S_AXI_arlock),
         .C0_DDR4_S_AXI_arprot(C0_DDR4_S_AXI_arprot),
@@ -30,7 +29,6 @@
         .C0_DDR4_S_AXI_awaddr(C0_DDR4_S_AXI_awaddr),
         .C0_DDR4_S_AXI_awburst(C0_DDR4_S_AXI_awburst),
         .C0_DDR4_S_AXI_awcache(C0_DDR4_S_AXI_awcache),
-        .C0_DDR4_S_AXI_awid(C0_DDR4_S_AXI_awid),
         .C0_DDR4_S_AXI_awlen(C0_DDR4_S_AXI_awlen),
         .C0_DDR4_S_AXI_awlock(C0_DDR4_S_AXI_awlock),
         .C0_DDR4_S_AXI_awprot(C0_DDR4_S_AXI_awprot),
@@ -38,12 +36,10 @@
         .C0_DDR4_S_AXI_awready(C0_DDR4_S_AXI_awready),
         .C0_DDR4_S_AXI_awsize(C0_DDR4_S_AXI_awsize),
         .C0_DDR4_S_AXI_awvalid(C0_DDR4_S_AXI_awvalid),
-        .C0_DDR4_S_AXI_bid(C0_DDR4_S_AXI_bid),
         .C0_DDR4_S_AXI_bready(C0_DDR4_S_AXI_bready),
         .C0_DDR4_S_AXI_bresp(C0_DDR4_S_AXI_bresp),
         .C0_DDR4_S_AXI_bvalid(C0_DDR4_S_AXI_bvalid),
         .C0_DDR4_S_AXI_rdata(C0_DDR4_S_AXI_rdata),
-        .C0_DDR4_S_AXI_rid(C0_DDR4_S_AXI_rid),
         .C0_DDR4_S_AXI_rlast(C0_DDR4_S_AXI_rlast),
         .C0_DDR4_S_AXI_rready(C0_DDR4_S_AXI_rready),
         .C0_DDR4_S_AXI_rresp(C0_DDR4_S_AXI_rresp),
@@ -59,6 +55,13 @@
         .c0_ddr4_ui_clk(c0_ddr4_ui_clk),
         .c0_ddr4_ui_clk_sync_rst(c0_ddr4_ui_clk_sync_rst),
         .c0_init_calib_complete(c0_init_calib_complete),
+
+        `ifdef C0_DDR4_AXIID
+        .C0_DDR4_S_AXI_arid(C0_DDR4_S_AXI_arid),
+        .C0_DDR4_S_AXI_rid(C0_DDR4_S_AXI_rid),
+        .C0_DDR4_S_AXI_awid(C0_DDR4_S_AXI_awid),
+        .C0_DDR4_S_AXI_bid(C0_DDR4_S_AXI_bid),
+        `endif
         `endif
 
         `ifdef USE_DDR4_C1
@@ -82,7 +85,6 @@
         .C1_DDR4_S_AXI_araddr(C1_DDR4_S_AXI_araddr),
         .C1_DDR4_S_AXI_arburst(C1_DDR4_S_AXI_arburst),
         .C1_DDR4_S_AXI_arcache(C1_DDR4_S_AXI_arcache),
-        .C1_DDR4_S_AXI_arid(C1_DDR4_S_AXI_arid),
         .C1_DDR4_S_AXI_arlen(C1_DDR4_S_AXI_arlen),
         .C1_DDR4_S_AXI_arlock(C1_DDR4_S_AXI_arlock),
         .C1_DDR4_S_AXI_arprot(C1_DDR4_S_AXI_arprot),
@@ -93,7 +95,6 @@
         .C1_DDR4_S_AXI_awaddr(C1_DDR4_S_AXI_awaddr),
         .C1_DDR4_S_AXI_awburst(C1_DDR4_S_AXI_awburst),
         .C1_DDR4_S_AXI_awcache(C1_DDR4_S_AXI_awcache),
-        .C1_DDR4_S_AXI_awid(C1_DDR4_S_AXI_awid),
         .C1_DDR4_S_AXI_awlen(C1_DDR4_S_AXI_awlen),
         .C1_DDR4_S_AXI_awlock(C1_DDR4_S_AXI_awlock),
         .C1_DDR4_S_AXI_awprot(C1_DDR4_S_AXI_awprot),
@@ -101,12 +102,10 @@
         .C1_DDR4_S_AXI_awready(C1_DDR4_S_AXI_awready),
         .C1_DDR4_S_AXI_awsize(C1_DDR4_S_AXI_awsize),
         .C1_DDR4_S_AXI_awvalid(C1_DDR4_S_AXI_awvalid),
-        .C1_DDR4_S_AXI_bid(C1_DDR4_S_AXI_bid),
         .C1_DDR4_S_AXI_bready(C1_DDR4_S_AXI_bready),
         .C1_DDR4_S_AXI_bresp(C1_DDR4_S_AXI_bresp),
         .C1_DDR4_S_AXI_bvalid(C1_DDR4_S_AXI_bvalid),
         .C1_DDR4_S_AXI_rdata(C1_DDR4_S_AXI_rdata),
-        .C1_DDR4_S_AXI_rid(C1_DDR4_S_AXI_rid),
         .C1_DDR4_S_AXI_rlast(C1_DDR4_S_AXI_rlast),
         .C1_DDR4_S_AXI_rready(C1_DDR4_S_AXI_rready),
         .C1_DDR4_S_AXI_rresp(C1_DDR4_S_AXI_rresp),
@@ -122,6 +121,12 @@
         .c1_ddr4_ui_clk(c1_ddr4_ui_clk),
         .c1_ddr4_ui_clk_sync_rst(c1_ddr4_ui_clk_sync_rst),
         .c1_init_calib_complete(c1_init_calib_complete),
+        `ifdef C1_DDR4_AXIID
+        .C1_DDR4_S_AXI_arid(C1_DDR4_S_AXI_arid),
+        .C1_DDR4_S_AXI_rid(C1_DDR4_S_AXI_rid),
+        .C1_DDR4_S_AXI_awid(C1_DDR4_S_AXI_awid),
+        .C1_DDR4_S_AXI_bid(C1_DDR4_S_AXI_bid),
+        `endif
         `endif
 
         `ifdef USE_DDR4_C2
@@ -145,7 +150,6 @@
         .C2_DDR4_S_AXI_araddr(C2_DDR4_S_AXI_araddr),
         .C2_DDR4_S_AXI_arburst(C2_DDR4_S_AXI_arburst),
         .C2_DDR4_S_AXI_arcache(C2_DDR4_S_AXI_arcache),
-        .C2_DDR4_S_AXI_arid(C2_DDR4_S_AXI_arid),
         .C2_DDR4_S_AXI_arlen(C2_DDR4_S_AXI_arlen),
         .C2_DDR4_S_AXI_arlock(C2_DDR4_S_AXI_arlock),
         .C2_DDR4_S_AXI_arprot(C2_DDR4_S_AXI_arprot),
@@ -156,7 +160,6 @@
         .C2_DDR4_S_AXI_awaddr(C2_DDR4_S_AXI_awaddr),
         .C2_DDR4_S_AXI_awburst(C2_DDR4_S_AXI_awburst),
         .C2_DDR4_S_AXI_awcache(C2_DDR4_S_AXI_awcache),
-        .C2_DDR4_S_AXI_awid(C2_DDR4_S_AXI_awid),
         .C2_DDR4_S_AXI_awlen(C2_DDR4_S_AXI_awlen),
         .C2_DDR4_S_AXI_awlock(C2_DDR4_S_AXI_awlock),
         .C2_DDR4_S_AXI_awprot(C2_DDR4_S_AXI_awprot),
@@ -164,12 +167,10 @@
         .C2_DDR4_S_AXI_awready(C2_DDR4_S_AXI_awready),
         .C2_DDR4_S_AXI_awsize(C2_DDR4_S_AXI_awsize),
         .C2_DDR4_S_AXI_awvalid(C2_DDR4_S_AXI_awvalid),
-        .C2_DDR4_S_AXI_bid(C2_DDR4_S_AXI_bid),
         .C2_DDR4_S_AXI_bready(C2_DDR4_S_AXI_bready),
         .C2_DDR4_S_AXI_bresp(C2_DDR4_S_AXI_bresp),
         .C2_DDR4_S_AXI_bvalid(C2_DDR4_S_AXI_bvalid),
         .C2_DDR4_S_AXI_rdata(C2_DDR4_S_AXI_rdata),
-        .C2_DDR4_S_AXI_rid(C2_DDR4_S_AXI_rid),
         .C2_DDR4_S_AXI_rlast(C2_DDR4_S_AXI_rlast),
         .C2_DDR4_S_AXI_rready(C2_DDR4_S_AXI_rready),
         .C2_DDR4_S_AXI_rresp(C2_DDR4_S_AXI_rresp),
@@ -185,6 +186,12 @@
         .c2_init_calib_complete(c2_init_calib_complete),
         .c2_ddr4_aresetn(1'b1),
         .c2_ddr4_interrupt(c2_ddr4_interrupt),
+        `ifdef C2_DDR4_AXIID
+        .C2_DDR4_S_AXI_arid(C2_DDR4_S_AXI_arid),
+        .C2_DDR4_S_AXI_rid(C2_DDR4_S_AXI_rid),
+        .C2_DDR4_S_AXI_awid(C2_DDR4_S_AXI_awid),
+        .C2_DDR4_S_AXI_bid(C2_DDR4_S_AXI_bid),
+        `endif
         `endif
 
         `ifdef USE_DDR4_C3
@@ -208,7 +215,6 @@
         .C3_DDR4_S_AXI_araddr(C3_DDR4_S_AXI_araddr),
         .C3_DDR4_S_AXI_arburst(C3_DDR4_S_AXI_arburst),
         .C3_DDR4_S_AXI_arcache(C3_DDR4_S_AXI_arcache),
-        .C3_DDR4_S_AXI_arid(C3_DDR4_S_AXI_arid),
         .C3_DDR4_S_AXI_arlen(C3_DDR4_S_AXI_arlen),
         .C3_DDR4_S_AXI_arlock(C3_DDR4_S_AXI_arlock),
         .C3_DDR4_S_AXI_arprot(C3_DDR4_S_AXI_arprot),
@@ -219,7 +225,6 @@
         .C3_DDR4_S_AXI_awaddr(C3_DDR4_S_AXI_awaddr),
         .C3_DDR4_S_AXI_awburst(C3_DDR4_S_AXI_awburst),
         .C3_DDR4_S_AXI_awcache(C3_DDR4_S_AXI_awcache),
-        .C3_DDR4_S_AXI_awid(C3_DDR4_S_AXI_awid),
         .C3_DDR4_S_AXI_awlen(C3_DDR4_S_AXI_awlen),
         .C3_DDR4_S_AXI_awlock(C3_DDR4_S_AXI_awlock),
         .C3_DDR4_S_AXI_awprot(C3_DDR4_S_AXI_awprot),
@@ -227,12 +232,10 @@
         .C3_DDR4_S_AXI_awready(C3_DDR4_S_AXI_awready),
         .C3_DDR4_S_AXI_awsize(C3_DDR4_S_AXI_awsize),
         .C3_DDR4_S_AXI_awvalid(C3_DDR4_S_AXI_awvalid),
-        .C3_DDR4_S_AXI_bid(C3_DDR4_S_AXI_bid),
         .C3_DDR4_S_AXI_bready(C3_DDR4_S_AXI_bready),
         .C3_DDR4_S_AXI_bresp(C3_DDR4_S_AXI_bresp),
         .C3_DDR4_S_AXI_bvalid(C3_DDR4_S_AXI_bvalid),
         .C3_DDR4_S_AXI_rdata(C3_DDR4_S_AXI_rdata),
-        .C3_DDR4_S_AXI_rid(C3_DDR4_S_AXI_rid),
         .C3_DDR4_S_AXI_rlast(C3_DDR4_S_AXI_rlast),
         .C3_DDR4_S_AXI_rready(C3_DDR4_S_AXI_rready),
         .C3_DDR4_S_AXI_rresp(C3_DDR4_S_AXI_rresp),
@@ -248,4 +251,10 @@
         .c3_init_calib_complete(c3_init_calib_complete),
         .c3_ddr4_aresetn(1'b1),
         .c3_ddr4_interrupt(c3_ddr4_interrupt),
+        `ifdef C3_DDR4_AXIID
+        .C3_DDR4_S_AXI_arid(C3_DDR4_S_AXI_arid),
+        .C3_DDR4_S_AXI_rid(C3_DDR4_S_AXI_rid),
+        .C3_DDR4_S_AXI_awid(C3_DDR4_S_AXI_awid),
+        .C3_DDR4_S_AXI_bid(C3_DDR4_S_AXI_bid),
+        `endif
         `endif

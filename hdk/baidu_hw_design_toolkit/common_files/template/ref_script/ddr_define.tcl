@@ -1,5 +1,13 @@
 source ./scripts/step_00_setup.tcl
 
+if { ![ file isdirectory $usrDir/include ] }  {
+    exec mkdir $usrDir/include
+}
+
+if { ![ file isdirectory $usrDir/usr_xdc ] }  {
+    exec mkdir $usrDir/usr_xdc
+}
+
 set refDir $commonDir/template/ref_xdc
 set usrXdcDir $usrDir/usr_xdc
 set ddrIncFile $usrDir/include/rp_if_define.vh
@@ -37,4 +45,22 @@ if { $USE_AXI_DDR == 1} {
 } else {
     puts $fp_define "`define APP_DDR 1"
 }
+
+puts $fp_define "`define C0_DDR4_AXIID_WIDTH $C0_DDR4_AXIID_WIDTH"
+if { $C0_DDR4_AXIID_WIDTH > 0} {
+    puts $fp_define "`define C0_DDR4_AXIID 1"
+}
+puts $fp_define "`define C1_DDR4_AXIID_WIDTH $C1_DDR4_AXIID_WIDTH"
+if { $C1_DDR4_AXIID_WIDTH > 0} {
+    puts $fp_define "`define C1_DDR4_AXIID 1"
+}
+puts $fp_define "`define C2_DDR4_AXIID_WIDTH $C2_DDR4_AXIID_WIDTH"
+if { $C2_DDR4_AXIID_WIDTH > 0} {
+    puts $fp_define "`define C2_DDR4_AXIID 1"
+}
+puts $fp_define "`define C3_DDR4_AXIID_WIDTH $C3_DDR4_AXIID_WIDTH"
+if { $C3_DDR4_AXIID_WIDTH > 0} {
+    puts $fp_define "`define C3_DDR4_AXIID 1"
+}
+
 close $fp_define

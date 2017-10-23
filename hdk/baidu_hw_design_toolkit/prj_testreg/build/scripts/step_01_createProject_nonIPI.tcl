@@ -14,6 +14,19 @@ if { $rtfSandbox != "none" } {
   update_ip_catalog -rebuild
 }
 
+#mkdir
+if { ![ file isdirectory $usrDir/include ] }  {
+    exec mkdir $usrDir/include
+}
+
+if { ![ file isdirectory $usrDir/usr_xdc ] }  {
+    exec mkdir $usrDir/usr_xdc
+}
+
+if { ![ file isdirectory $usrDir/usr_rtl ] }  {
+    exec mkdir $usrDir/usr_rtl
+}
+
 # Genearte Mig
 source $scriptDir/ddr_define.tcl
 if { ($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_DDR4_C3 == 1)} {
