@@ -45,12 +45,10 @@ $ cat step_00_setup.tcl
 执行仿真脚本
 ```bash
 $ cd ~/hdk/baidu_hw_design_toolkit/prj_testreg/usr_files/sim/script
-//寄存器仿真，只检查工程中的功能寄存器
+//寄存器仿真，只检查工程中的功能寄存器，使用xsim
 $ sh sim_vivado.sh  
-//增加对于ddr的仿真，采用快速ddr仿真模式
-$ sh sim_vivado.sh -d FAST_SIM -d USE_APP_DDR -d USE_DDR4_C0 -d USE_DDR 
-//增加对于ddr的仿真，采用标准ddr仿真模式
-$ sh sim_vivado.sh -d USE_APP_DDR -d USE_DDR4_C0 -d USE_DDR 
+//使用questasim进行仿真
+$ sh sim_vivado.sh -simulator questa -lib_map_path 预编译库的路径
 ```
 ## 仿真vectoradd_ddr工程
 首先确认testreg工程的当前ddr设置
