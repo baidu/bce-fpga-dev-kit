@@ -27,7 +27,6 @@ if { ![ file isdirectory $usrDir/usr_rtl ] }  {
 # Add source files and IPs to the project.
 # Add the top-level source files.
 add_files -norecurse $commonDir/hdl
-add_files -norecurse $usrIncPath
 add_files -norecurse $usrRtlPath
 
 # Add the PR region .bd design and associated wrapper. This file can be updated by
@@ -68,6 +67,7 @@ exec rm -f scripts/step_00_setup.tcl.bak
 # Genearte RP IF DEFINE
 source $scriptDir/ddr_define.tcl
 
+add_files -norecurse $usrIncPath
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
     add_files -fileset constrs_1 -norecurse $xdcfile
 }

@@ -3,7 +3,6 @@ source scripts/step_00_setup.tcl
 
 # Create the project
 puts "INFO: Creating your rp Project: Part = $part"
-#create_project -in_memory -part $part -force
 create_project -force $projName $projDir -part $part
 
 # Set the rtf Sandbox if needed.
@@ -65,14 +64,12 @@ for {set a 0} {$a < [llength $xcifile]} {incr a} {
    set_property generate_synth_checkpoint false [get_files [lindex $xcifile $a]]
    generate_target all [get_files [lindex $xcifile $a]]
    export_ip_user_files -of_objects [get_files [lindex $xcifile $a]] -sync -force -quiet
-   #export_simulation -of_objects [get_files [lindex $xcifile $a]]
 }
 
 # Add the debug bridge IP that will be added to the PR region
 source $scriptDir/ip_configs.tcl
 generate_target all [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci]
 export_ip_user_files -of_objects [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci] -sync -force -quiet
-#export_simulation -of_objects [get_files  $projDir/${projName}.srcs/sources_1/ip/pr_region_dbg_bridge/pr_region_dbg_bridge.xci]
 
 # Set the PR region as OOC
 create_fileset -blockset -define_from rp_wrapper rp_wrapper
