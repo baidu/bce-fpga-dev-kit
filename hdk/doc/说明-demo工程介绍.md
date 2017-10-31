@@ -5,12 +5,12 @@ testreg有两个基本功能，一个是定义了4个寄存器可供host从axi-l
 
 寄存器 | 位宽	 | 地址偏移 | R/W | 功能定义 
 ----|------|----|-----|-----
-test_reg1 | 32bit | 0x0 | RW | 测试寄存器，可通过工具包中的reg_read_32和reg_write_32读写。
-test_reg2 | 32bit | 0x4 | RW | 测试寄存器，可通过工具包中的reg_read_32和reg_write_32读写。
-test_reg3 | 32bit | 0x8 | R | 测试寄存器，数值为test_reg1和test_reg2两者相加的结果，可通过工具包中的reg_read_32读取。
-test_reg4 | 32bit | 0xC | R | 测试寄存器，数值为vio.probe_out0的输出，可通过工具包中的reg_read_32读取。
+test_reg1 | 32bit | 0x0 | RW | 测试寄存器，可通过工具包中的mmap_read和mmap_write读写。
+test_reg2 | 32bit | 0x4 | RW | 测试寄存器，可通过工具包中的mmap_read和mmap_write读写。
+test_reg3 | 32bit | 0x8 | R | 测试寄存器，数值为test_reg1和test_reg2两者相加的结果，可通过工具包中的mmap_read读取。
+test_reg4 | 32bit | 0xC | R | 测试寄存器，数值为vio.probe_out0的输出，可通过工具包中的mmap_read读取。
 
-*实际使用reg_read_32和reg_write_32时，访问的地址要在上述地址偏移的基础上加上65536*
+*实际使用mmap_read和mmap_write时，访问的path要试FPGA卡在系统中的具体设备号而定，可参考下面的使用例子。*
 
 testreg的第二个功能是将xdma的axi-dma请求转化成访问app-mig的请求，实现这个功能需要正确的配置工程的DDR模式。
 ```bash
@@ -31,21 +31,23 @@ testreg采用非IPI模式，usr_files/hdl中存储了工程的rtl文件，usr_fi
 
 ## 使用
 testreg工程的仿真、制作和配置步骤，可以参考[说明-进行FPGA云镜像开发的流程](./说明-进行FPGA云镜像开发的流程.md)
-配置完成后，可以执行reg_read_32和reg_write_32验证功能
+配置完成后，可以执行mmap_read和mmap_write验证功能。
 ```bash
 $ cd ~/sdk/linux_kernel_driver/sample/
-$ ./reg_read_32 0 65536
-read success, addr = 0000000000010000, value = 00000000
-$ ./reg_read_32 0 65540
-read success, addr = 0000000000010004, value = 00000000
-$ ./reg_read_32 0 65544
-read success, addr = 0000000000010008, value = 00000000
-$ ./reg_write_32 0 65536 100
-write success, addr = 0000000000010000, value = 00000100
-$ ./reg_read_32 0 65544
-read success, addr = 0000000000010008, value = 00000100
-$ ./reg_read_32 0 65548
-read success, addr = 000000000001000c, value = 11111111   //输出结果与当前vio.probe_out0相关，可在vivado中修改
+$ lspci | grep Xil
+0c:00.0 Serial controller: Xilinx Corporation Device 9038  //获取FPGA加速卡的bdf号，这里是0c:00.0，将用于下面的mmap_read和mmap_write执行参数。
+$ ./mmap_read /sys/bus/pci/devices/0000\:0c\:00.0/resource2 $((0x0))
+0
+$ ./mmap_read /sys/bus/pci/devices/0000\:0c\:00.0/resource2 $((0x4))
+0
+$ ./mmap_read /sys/bus/pci/devices/0000\:0c\:00.0/resource2 $((0x8))
+0
+$ ./mmap_write /sys/bus/pci/devices/0000\:0c\:00.0/resource2 $((0x0)) 100
+100
+$ ./mmap_read /sys/bus/pci/devices/0000\:0c\:00.0/resource2 $((0x8))
+100
+$ ./mmap_read /sys/bus/pci/devices/0000\:0c\:00.0/resource2 $((0x0))
+11111111   //输出结果与当前vio.probe_out0相关，可在vivado中修改
 ```
 
 # 2.vectoradd_ram demo工程

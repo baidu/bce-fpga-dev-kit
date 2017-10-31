@@ -89,7 +89,7 @@ $ ./bce_fpga_mgmt_tool LoadPartialLogic -S 0 -P ../../hdk/baidu_hw_design_toolki
 
 # 4.编译&执行测试程序
 
-进入sample目录，执行make。如果编译成功，当前目录下生成sample_user_irq等可执行文件，如下图所示。
+进入sample目录，执行make。如果编译成功，当前目录下生成sample_vectoradd_ddr等可执行文件，如下图所示。
 
 ```bash
 $ cd ~/sdk/linux_kernel_driver/sample
@@ -98,14 +98,14 @@ $ make
 
 <img src="./img/stepbystep/img04.png">  
 
-执行sudo ./sample_user_irq，输出如下结果，PE正确地执行了浮点向量加功能。sample_user_irq使用中断方式检查命令结果是否完成。
+执行sudo ./sample_vectoradd_ddr，输出如下结果，PE正确地执行了浮点向量加功能。sample_vectoradd_ddr使用中断方式检查命令结果是否完成。
 
 ```bash
-sudo ./sample_user_irq
+sudo ./sample_vectoradd_ddr
 ```
 
 <img src="./img/stepbystep/img05.png">  
-
+s
 # 5.调试FPGA镜像
 
 
