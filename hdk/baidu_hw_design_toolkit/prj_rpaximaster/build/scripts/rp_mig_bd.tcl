@@ -170,7 +170,6 @@ proc create_root_design { parentCell } {
       CONFIG.HAS_REGION {0} \
       CONFIG.HAS_RRESP {1} \
       CONFIG.HAS_WSTRB {1} \
-      CONFIG.ID_WIDTH {1} \
       CONFIG.MAX_BURST_LENGTH {256} \
       CONFIG.NUM_READ_OUTSTANDING {2} \
       CONFIG.NUM_READ_THREADS {1} \
@@ -184,6 +183,7 @@ proc create_root_design { parentCell } {
       CONFIG.WUSER_BITS_PER_BYTE {0} \
       CONFIG.WUSER_WIDTH {0} \
  ] $C0_DDR4_S_AXI
+  set_property CONFIG.ID_WIDTH $C0_DDR4_AXIID_WIDTH $C0_DDR4_S_AXI
   set C0_DDR4_S_AXI_CTRL [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 C0_DDR4_S_AXI_CTRL ]
   set_property -dict [ list \
 CONFIG.ADDR_WIDTH {32} \
@@ -265,7 +265,6 @@ CONFIG.WUSER_WIDTH {0} \
       CONFIG.HAS_REGION {0} \
       CONFIG.HAS_RRESP {1} \
       CONFIG.HAS_WSTRB {1} \
-      CONFIG.ID_WIDTH {1} \
       CONFIG.MAX_BURST_LENGTH {256} \
       CONFIG.NUM_READ_OUTSTANDING {2} \
       CONFIG.NUM_READ_THREADS {1} \
@@ -279,6 +278,7 @@ CONFIG.WUSER_WIDTH {0} \
       CONFIG.WUSER_BITS_PER_BYTE {0} \
       CONFIG.WUSER_WIDTH {0} \
  ] $C1_DDR4_S_AXI
+  set_property CONFIG.ID_WIDTH $C1_DDR4_AXIID_WIDTH $C1_DDR4_S_AXI
   set C1_DDR4_S_AXI_CTRL [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 C1_DDR4_S_AXI_CTRL ]
   set_property -dict [ list \
 CONFIG.ADDR_WIDTH {32} \
@@ -360,7 +360,6 @@ CONFIG.WUSER_WIDTH {0} \
       CONFIG.HAS_REGION {0} \
       CONFIG.HAS_RRESP {1} \
       CONFIG.HAS_WSTRB {1} \
-      CONFIG.ID_WIDTH {1} \
       CONFIG.MAX_BURST_LENGTH {256} \
       CONFIG.NUM_READ_OUTSTANDING {2} \
       CONFIG.NUM_READ_THREADS {1} \
@@ -374,6 +373,7 @@ CONFIG.WUSER_WIDTH {0} \
       CONFIG.WUSER_BITS_PER_BYTE {0} \
       CONFIG.WUSER_WIDTH {0} \
  ] $C2_DDR4_S_AXI
+  set_property CONFIG.ID_WIDTH $C2_DDR4_AXIID_WIDTH $C2_DDR4_S_AXI
   set C2_DDR4_S_AXI_CTRL [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 C2_DDR4_S_AXI_CTRL ]
   set_property -dict [ list \
 CONFIG.ADDR_WIDTH {32} \
@@ -455,7 +455,6 @@ CONFIG.WUSER_WIDTH {0} \
       CONFIG.HAS_REGION {0} \
       CONFIG.HAS_RRESP {1} \
       CONFIG.HAS_WSTRB {1} \
-      CONFIG.ID_WIDTH {1} \
       CONFIG.MAX_BURST_LENGTH {256} \
       CONFIG.NUM_READ_OUTSTANDING {2} \
       CONFIG.NUM_READ_THREADS {1} \
@@ -469,6 +468,7 @@ CONFIG.WUSER_WIDTH {0} \
       CONFIG.WUSER_BITS_PER_BYTE {0} \
       CONFIG.WUSER_WIDTH {0} \
  ] $C3_DDR4_S_AXI
+  set_property CONFIG.ID_WIDTH $C3_DDR4_AXIID_WIDTH $C3_DDR4_S_AXI
   set C3_DDR4_S_AXI_CTRL [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 C3_DDR4_S_AXI_CTRL ]
   set_property -dict [ list \
 CONFIG.ADDR_WIDTH {32} \

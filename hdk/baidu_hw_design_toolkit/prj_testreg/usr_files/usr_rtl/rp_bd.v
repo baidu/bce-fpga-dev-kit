@@ -441,7 +441,7 @@ axi_slave_bfm #(
    wire        w_cmd_fifo_full;
    wire        w_cmd_fifo_rd_en;
    wire        w_cmd_fifo_valid;
-
+   wire	       w_data_fifo_full;
    assign mem_wr_en      = mem_wr_datastrb != 'd0;
    assign mem_wr_byte    = (mem_wr_datastrb != {(64){1'b1}});
    assign mem_wr_cmd_rdy = ~w_cmd_fifo_full && ~w_data_fifo_full;

@@ -12,12 +12,60 @@ if { $rtfSandbox != "none" } {
   update_ip_catalog -rebuild
 }
 
-# Genearte DDR define
-source $scriptDir/ddr_define.tcl
+#mkdir
+if { ![ file isdirectory $usrDir/include ] }  {
+    exec mkdir $usrDir/include
+}
+if { ![ file isdirectory $usrDir/usr_xdc ] }  {
+    exec mkdir $usrDir/usr_xdc
+}
+if { ![ file isdirectory $usrDir/usr_rtl ] }  {
+    exec mkdir $usrDir/usr_rtl
+}
+
 
 # Add source files and IPs to the project.
 # Add the top-level source files.
 add_files -norecurse $commonDir/hdl
+add_files -norecurse $usrRtlPath
+
+# Add the PR region .bd design and associated wrapper. This file can be updated by
+# modifying the .bd design and using the following command to overwrite the existing
+# rp_bd.tcl file.
+#     - write_bd_tcl -force -no_ip_version ./scripts/rp_bd.tcl
+
+source $scriptDir/rp_bd.tcl
+validate_bd_design
+save_bd_design
+if { $USE_DDR4_C0 == 1} { set C0_DDR4_AXIID_WIDTH [get_property CONFIG.ID_WIDTH [get_bd_intf_ports C1_DDR4_M_AXI]] } else {set C0_DDR4_AXIID_WIDTH 0}
+if { $USE_DDR4_C1 == 1} { set C1_DDR4_AXIID_WIDTH [get_property CONFIG.ID_WIDTH [get_bd_intf_ports C1_DDR4_M_AXI]] } else {set C1_DDR4_AXIID_WIDTH 0}
+if { $USE_DDR4_C2 == 1} { set C2_DDR4_AXIID_WIDTH [get_property CONFIG.ID_WIDTH [get_bd_intf_ports C2_DDR4_M_AXI]] } else {set C2_DDR4_AXIID_WIDTH 0}
+if { $USE_DDR4_C3 == 1} { set C3_DDR4_AXIID_WIDTH [get_property CONFIG.ID_WIDTH [get_bd_intf_ports C3_DDR4_M_AXI]] } else {set C3_DDR4_AXIID_WIDTH 0}
+close_bd_design [get_bd_designs rp_bd]
+# Set the appropriate OOC Synthesis settings for the .bd
+set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_bd/rp_bd.bd]
+
+#generate DDR AXIID WIDTH VAR
+#open_bd_design { $projDir/${projName}.srcs/sources_1/bd/rp_bd/rp_bd.bd }
+#close_bd_design [get_bd_designs rp_bd]
+exec mv scripts/step_00_setup.tcl scripts/step_00_setup.tcl.bak
+set inFile [open scripts/step_00_setup.tcl.bak r]
+set outFile [open scripts/step_00_setup.tcl w]
+while {[gets $inFile lineIn] != -1} {
+   if {[regexp {C\d_DDR4_AXIID_WIDTH} $lineIn] == 0} {
+      puts $outFile $lineIn
+   }
+}
+close $inFile
+puts $outFile "set C0_DDR4_AXIID_WIDTH $C0_DDR4_AXIID_WIDTH"
+puts $outFile "set C1_DDR4_AXIID_WIDTH $C1_DDR4_AXIID_WIDTH"
+puts $outFile "set C2_DDR4_AXIID_WIDTH $C2_DDR4_AXIID_WIDTH"
+puts $outFile "set C3_DDR4_AXIID_WIDTH $C3_DDR4_AXIID_WIDTH"
+close $outFile
+exec rm -f scripts/step_00_setup.tcl.bak
+
+# Genearte RP IF DEFINE
+source $scriptDir/ddr_define.tcl
 add_files -norecurse $usrIncPath
 
 foreach xdcfile [glob -nocomplain $usrXdcPath/*] {
@@ -44,17 +92,6 @@ if {($USE_DDR4_C0 == 1) || ($USE_DDR4_C1 == 1) || ($USE_DDR4_C2 == 1) || ($USE_D
       export_ip_user_files -of_objects $migxcifile -sync -force -quiet
    }
 }
-
-# Add the PR region .bd design and associated wrapper. This file can be updated by
-# modifying the .bd design and using the following command to overwrite the existing
-# rp_bd.tcl file.
-#     - write_bd_tcl -force -no_ip_version ./scripts/rp_bd.tcl
-source $scriptDir/rp_bd.tcl
-validate_bd_design
-save_bd_design
-close_bd_design [get_bd_designs rp_bd]
-# Set the appropriate OOC Synthesis settings for the .bd
-set_property synth_checkpoint_mode None [get_files  $projDir/${projName}.srcs/sources_1/bd/rp_bd/rp_bd.bd]
 
 # Set the PR region as OOC
 create_fileset -blockset -define_from rp_wrapper rp_wrapper

@@ -19,7 +19,6 @@
    input [30:0]    C0_DDR4_S_AXI_araddr,
    input [1:0]     C0_DDR4_S_AXI_arburst,
    input [3:0]     C0_DDR4_S_AXI_arcache,
-   input [0:0]     C0_DDR4_S_AXI_arid,
    input [7:0]     C0_DDR4_S_AXI_arlen,
    input [0:0]     C0_DDR4_S_AXI_arlock,
    input [2:0]     C0_DDR4_S_AXI_arprot,
@@ -30,7 +29,6 @@
    input [30:0]    C0_DDR4_S_AXI_awaddr,
    input [1:0]     C0_DDR4_S_AXI_awburst,
    input [3:0]     C0_DDR4_S_AXI_awcache,
-   input [0:0]     C0_DDR4_S_AXI_awid,
    input [7:0]     C0_DDR4_S_AXI_awlen,
    input [0:0]     C0_DDR4_S_AXI_awlock,
    input [2:0]     C0_DDR4_S_AXI_awprot,
@@ -38,12 +36,10 @@
    output          C0_DDR4_S_AXI_awready,
    input [2:0]     C0_DDR4_S_AXI_awsize,
    input           C0_DDR4_S_AXI_awvalid,
-   output [0:0]    C0_DDR4_S_AXI_bid,
    input           C0_DDR4_S_AXI_bready,
    output [1:0]    C0_DDR4_S_AXI_bresp,
    output          C0_DDR4_S_AXI_bvalid,
    output [511:0]  C0_DDR4_S_AXI_rdata,
-   output [0:0]    C0_DDR4_S_AXI_rid,
    output          C0_DDR4_S_AXI_rlast,
    input           C0_DDR4_S_AXI_rready,
    output [1:0]    C0_DDR4_S_AXI_rresp,
@@ -59,6 +55,12 @@
    output          c0_init_calib_complete,
    input           c0_ddr4_aresetn,
    output          c0_ddr4_interrupt,
+   `ifdef C0_DDR4_AXIID
+   input [`C0_DDR4_AXIID_WIDTH-1:0]     C0_DDR4_S_AXI_arid,
+   input [`C0_DDR4_AXIID_WIDTH-1:0]     C0_DDR4_S_AXI_awid,
+   output [`C0_DDR4_AXIID_WIDTH-1:0]    C0_DDR4_S_AXI_bid,
+   output [`C0_DDR4_AXIID_WIDTH-1:0]    C0_DDR4_S_AXI_rid,
+   `endif
    `endif
 
    `ifdef USE_DDR4_C1
@@ -82,7 +84,6 @@
    input [30:0]    C1_DDR4_S_AXI_araddr,
    input [1:0]     C1_DDR4_S_AXI_arburst,
    input [3:0]     C1_DDR4_S_AXI_arcache,
-   input [0:0]     C1_DDR4_S_AXI_arid,
    input [7:0]     C1_DDR4_S_AXI_arlen,
    input [0:0]     C1_DDR4_S_AXI_arlock,
    input [2:0]     C1_DDR4_S_AXI_arprot,
@@ -93,7 +94,6 @@
    input [30:0]    C1_DDR4_S_AXI_awaddr,
    input [1:0]     C1_DDR4_S_AXI_awburst,
    input [3:0]     C1_DDR4_S_AXI_awcache,
-   input [0:0]     C1_DDR4_S_AXI_awid,
    input [7:0]     C1_DDR4_S_AXI_awlen,
    input [0:0]     C1_DDR4_S_AXI_awlock,
    input [2:0]     C1_DDR4_S_AXI_awprot,
@@ -101,12 +101,10 @@
    output          C1_DDR4_S_AXI_awready,
    input [2:0]     C1_DDR4_S_AXI_awsize,
    input           C1_DDR4_S_AXI_awvalid,
-   output [0:0]    C1_DDR4_S_AXI_bid,
    input           C1_DDR4_S_AXI_bready,
    output [1:0]    C1_DDR4_S_AXI_bresp,
    output          C1_DDR4_S_AXI_bvalid,
    output [511:0]  C1_DDR4_S_AXI_rdata,
-   output [0:0]    C1_DDR4_S_AXI_rid,
    output          C1_DDR4_S_AXI_rlast,
    input           C1_DDR4_S_AXI_rready,
    output [1:0]    C1_DDR4_S_AXI_rresp,
@@ -122,6 +120,12 @@
    output          c1_init_calib_complete,
    input           c1_ddr4_aresetn,
    output          c1_ddr4_interrupt,
+   `ifdef C1_DDR4_AXIID
+   input [`C1_DDR4_AXIID_WIDTH-1:0]     C1_DDR4_S_AXI_arid,
+   input [`C1_DDR4_AXIID_WIDTH-1:0]     C1_DDR4_S_AXI_awid,
+   output [`C1_DDR4_AXIID_WIDTH-1:0]    C1_DDR4_S_AXI_bid,
+   output [`C1_DDR4_AXIID_WIDTH-1:0]    C1_DDR4_S_AXI_rid,
+   `endif
    `endif
 
    `ifdef USE_DDR4_C2
@@ -145,7 +149,6 @@
    input [30:0]    C2_DDR4_S_AXI_araddr,
    input [1:0]     C2_DDR4_S_AXI_arburst,
    input [3:0]     C2_DDR4_S_AXI_arcache,
-   input [0:0]     C2_DDR4_S_AXI_arid,
    input [7:0]     C2_DDR4_S_AXI_arlen,
    input [0:0]     C2_DDR4_S_AXI_arlock,
    input [2:0]     C2_DDR4_S_AXI_arprot,
@@ -156,7 +159,6 @@
    input [30:0]    C2_DDR4_S_AXI_awaddr,
    input [1:0]     C2_DDR4_S_AXI_awburst,
    input [3:0]     C2_DDR4_S_AXI_awcache,
-   input [0:0]     C2_DDR4_S_AXI_awid,
    input [7:0]     C2_DDR4_S_AXI_awlen,
    input [0:0]     C2_DDR4_S_AXI_awlock,
    input [2:0]     C2_DDR4_S_AXI_awprot,
@@ -164,12 +166,10 @@
    output          C2_DDR4_S_AXI_awready,
    input [2:0]     C2_DDR4_S_AXI_awsize,
    input           C2_DDR4_S_AXI_awvalid,
-   output [0:0]    C2_DDR4_S_AXI_bid,
    input           C2_DDR4_S_AXI_bready,
    output [1:0]    C2_DDR4_S_AXI_bresp,
    output          C2_DDR4_S_AXI_bvalid,
    output [511:0]  C2_DDR4_S_AXI_rdata,
-   output [0:0]    C2_DDR4_S_AXI_rid,
    output          C2_DDR4_S_AXI_rlast,
    input           C2_DDR4_S_AXI_rready,
    output [1:0]    C2_DDR4_S_AXI_rresp,
@@ -185,6 +185,12 @@
    output          c2_init_calib_complete,
    input           c2_ddr4_aresetn,
    output          c2_ddr4_interrupt,
+   `ifdef C2_DDR4_AXIID   
+   input [`C2_DDR4_AXIID_WIDTH-1:0]     C2_DDR4_S_AXI_arid,
+   input [`C2_DDR4_AXIID_WIDTH-1:0]     C2_DDR4_S_AXI_awid,
+   output [`C2_DDR4_AXIID_WIDTH-1:0]    C2_DDR4_S_AXI_bid,
+   output [`C2_DDR4_AXIID_WIDTH-1:0]    C2_DDR4_S_AXI_rid,
+   `endif
    `endif
 
    `ifdef USE_DDR4_C3
@@ -208,7 +214,6 @@
    input [30:0]    C3_DDR4_S_AXI_araddr,
    input [1:0]     C3_DDR4_S_AXI_arburst,
    input [3:0]     C3_DDR4_S_AXI_arcache,
-   input [0:0]     C3_DDR4_S_AXI_arid,
    input [7:0]     C3_DDR4_S_AXI_arlen,
    input [0:0]     C3_DDR4_S_AXI_arlock,
    input [2:0]     C3_DDR4_S_AXI_arprot,
@@ -219,7 +224,6 @@
    input [30:0]    C3_DDR4_S_AXI_awaddr,
    input [1:0]     C3_DDR4_S_AXI_awburst,
    input [3:0]     C3_DDR4_S_AXI_awcache,
-   input [0:0]     C3_DDR4_S_AXI_awid,
    input [7:0]     C3_DDR4_S_AXI_awlen,
    input [0:0]     C3_DDR4_S_AXI_awlock,
    input [2:0]     C3_DDR4_S_AXI_awprot,
@@ -227,12 +231,10 @@
    output          C3_DDR4_S_AXI_awready,
    input [2:0]     C3_DDR4_S_AXI_awsize,
    input           C3_DDR4_S_AXI_awvalid,
-   output [0:0]    C3_DDR4_S_AXI_bid,
    input           C3_DDR4_S_AXI_bready,
    output [1:0]    C3_DDR4_S_AXI_bresp,
    output          C3_DDR4_S_AXI_bvalid,
    output [511:0]  C3_DDR4_S_AXI_rdata,
-   output [0:0]    C3_DDR4_S_AXI_rid,
    output          C3_DDR4_S_AXI_rlast,
    input           C3_DDR4_S_AXI_rready,
    output [1:0]    C3_DDR4_S_AXI_rresp,
@@ -248,4 +250,10 @@
    output          c3_init_calib_complete,
    input           c3_ddr4_aresetn,
    output          c3_ddr4_interrupt,
+   `ifdef C3_DDR4_AXIID
+   input [`C3_DDR4_AXIID_WIDTH-1:0]     C3_DDR4_S_AXI_arid,
+   input [`C3_DDR4_AXIID_WIDTH-1:0]     C3_DDR4_S_AXI_awid,
+   output [`C3_DDR4_AXIID_WIDTH-1:0]    C3_DDR4_S_AXI_bid,
+   output [`C3_DDR4_AXIID_WIDTH-1:0]    C3_DDR4_S_AXI_rid,
+   `endif
    `endif
